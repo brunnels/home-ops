@@ -43,6 +43,8 @@ spec:
         grpc_server_max_send_msg_size: 10485760 # 10 MiB
       storage:
         type: filesystem
+        bucketNames: # Workaround for https://github.com/grafana/loki/issues/19655
+          chunks: fnord
     backend:
       replicas: 0
     chunksCache:
