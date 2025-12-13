@@ -1,0 +1,252 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
+---
+clusterName: kubernetes
+
+talosVersion: "${talosVersion}"
+kubernetesVersion: "${kubernetesVersion}"
+
+endpoint: https://10.0.150.200:6443
+additionalApiServerCertSans: &sans
+  - "127.0.0.1"
+  - "10.0.150.200"
+  - "k8s.kraven.dev"
+  - "kdev-n1.lan.kraven.org"
+  - "kdev-n2.lan.kraven.org"
+  - "kdev-n3.lan.kraven.org"
+additionalMachineCertSans: *sans
+clusterPodNets: ["10.42.0.0/16"]
+clusterSvcNets: ["10.43.0.0/16"]
+
+# Disable built-in CNI to use Cilium
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: kdev-n1
+    ipAddress: 10.0.150.254
+    installDisk: /dev/disk/by-id/nvme-SK_hynix_BC511_HFM256GDJTNI-82A0A_NJ02N76261100320B
+    controlPlane: true
+    nodeLabels: &nodeLabels
+      intel.feature.node.kubernetes.io/gpu: "true"
+      nvidia.com/gpu.present: "true"
+#    volumes: &volumes
+#      - name: EPHEMERAL
+#        provisioning:
+#          diskSelector:
+#            match: system_disk
+#          minSize: 2GiB
+#          grow: true
+    userVolumes: &userVolumes
+      # non-ceph
+      - name: lpp-0
+        provisioning:
+          diskSelector:
+            match: disk.model != "FIKWOT FX991 1TB"
+          minSize: 900GiB
+      # remaining space on system disk
+#      - name: lpp-1
+#        provisioning:
+#          diskSelector:
+#            match: system_disk
+#          minSize: 64GiB
+    schematic: &schematic
+      customization:
+        extraKernelArgs:
+          - -init_on_alloc
+          - -init_on_free
+          - -selinux
+          - apparmor=0
+          - i915.enable_guc=3
+          - init_on_alloc=0
+          - init_on_free=0
+          - intel_iommu=on
+          - iommu=pt
+          - mitigations=off
+          - security=none
+          - sysctl.kernel.kexec_load_disabled=1
+          - talos.auditd.disabled=1
+          - net.ifnames=0
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/binfmt-misc
+            - siderolabs/crun
+            - siderolabs/ctr
+            - siderolabs/fuse3
+            - siderolabs/i915
+            - siderolabs/intel-ucode
+            - siderolabs/iscsi-tools
+            - siderolabs/lldpd
+            - siderolabs/mdadm
+            - siderolabs/mei
+            - siderolabs/nonfree-kmod-nvidia-production
+            - siderolabs/nut-client
+            - siderolabs/nvidia-container-toolkit-production
+            - siderolabs/nvme-cli
+            - siderolabs/thunderbolt
+            - siderolabs/uinput
+            - siderolabs/util-linux-tools
+    networkInterfaces: &networkInterfaces
+      - interface: bond0
+        mtu: 9000
+        bond:
+          mode: 802.3ad
+          lacpRate: fast
+          xmitHashPolicy: layer3+4
+          miimon: 1000
+          deviceSelectors:
+            - hardwareAddr: 58:47:ca:*
+              driver: i40e
+        vlans:
+          - vlanId: 150
+            dhcp: false
+            routes:
+              - network: 0.0.0.0/0
+                gateway: 10.0.150.1
+            mtu: 9000
+            vip:
+              ip: 10.0.150.200
+      - deviceSelector:
+          busPath: 1-1.0
+        dhcp: false
+        mtu: 65520
+        routes:
+          - network: 0.0.0.0/32
+            metric: 2048
+      - deviceSelector:
+          busPath: 0-1.0
+        dhcp: false
+        mtu: 65520
+        routes:
+          - network: 0.0.0.0/32
+            metric: 2048
+      - interface: eth0
+        dhcp: false
+      - interface: eth1
+        dhcp: false
+    extensionServices: &extensionServices
+      - name: nut-client
+        configFiles:
+          - content: MONITOR ${upsmonHost} 1 monuser secret slave
+            mountPath: /usr/local/etc/nut/upsmon.conf
+          - content: MODE=netclient
+            mountPath: /usr/local/etc/nut/nut.conf
+      - name: lldpd
+        configFiles:
+          - mountPath: /usr/local/etc/lldpd/lldpd.conf
+            content: |
+              configure lldpd portidsubtype ifname
+              configure system description "Talos Node"
+    extraManifests: &extraManifests
+      - "@./manifests/ethernetconfig.yaml"
+      - "@./manifests/watchdogtimerconfig.yaml"
+    patches:
+      - |-
+        # bond0
+        - op: add
+          path: /machine/network/interfaces/0/vlans/0/addresses
+          value: [10.0.150.254/24]
+
+        - op: add
+          path: /machine/network/interfaces/1/addresses
+          value: [169.254.255.101/32]
+        - op: add
+          path: /machine/network/interfaces/2/addresses
+          value: [169.254.255.101/32]
+
+        # kdev-n3
+        - value: 169.254.255.103/32
+          op: add
+          path: /machine/network/interfaces/1/routes/0/network
+
+        # kdev-n2
+        - value: 169.254.255.102/32
+          op: add
+          path: /machine/network/interfaces/2/routes/0/network
+
+  - hostname: kdev-n2
+    ipAddress: 10.0.150.253
+    installDisk: /dev/disk/by-id/nvme-BPX_8B71077C060891075911
+    controlPlane: true
+    nodeLabels: *nodeLabels
+#    volumes: *volumes
+    userVolumes: *userVolumes
+    schematic: *schematic
+    networkInterfaces: *networkInterfaces
+    extensionServices: *extensionServices
+    extraManifests: *extraManifests
+    patches:
+      - |-
+        # bond0
+        - op: add
+          path: /machine/network/interfaces/0/vlans/0/addresses
+          value: [10.0.150.253/24]
+
+        - op: add
+          path: /machine/network/interfaces/1/addresses
+          value: [169.254.255.102/32]
+        - op: add
+          path: /machine/network/interfaces/2/addresses
+          value: [169.254.255.102/32]
+
+        # kdev-n1
+        - value: 169.254.255.101/32
+          op: add
+          path: /machine/network/interfaces/1/routes/0/network
+
+        # kdev-n3
+        - value: 169.254.255.103/32
+          op: add
+          path: /machine/network/interfaces/2/routes/0/network
+
+  - hostname: kdev-n3
+    ipAddress: 10.0.150.252
+    installDisk: /dev/disk/by-id/nvme-Samsung_SSD_950_PRO_256GB_S2GLNCAGB26901M
+    controlPlane: true
+    nodeLabels: *nodeLabels
+#    volumes: *volumes
+    userVolumes: *userVolumes
+    schematic: *schematic
+    networkInterfaces: *networkInterfaces
+    extensionServices: *extensionServices
+    extraManifests: *extraManifests
+    patches:
+      - |-
+        # bond0
+        - op: add
+          path: /machine/network/interfaces/0/vlans/0/addresses
+          value: [10.0.150.252/24]
+
+        - op: add
+          path: /machine/network/interfaces/1/addresses
+          value: [169.254.255.103/32]
+        - op: add
+          path: /machine/network/interfaces/2/addresses
+          value: [169.254.255.103/32]
+
+        # kdev-n1
+        - value: 169.254.255.101/32
+          op: add
+          path: /machine/network/interfaces/1/routes/0/network
+
+        # kdev-n2
+        - value: 169.254.255.102/32
+          op: add
+          path: /machine/network/interfaces/2/routes/0/network
+
+# Global patches
+patches:
+  - "@./patches/global/machine-files.yaml"
+  - "@./patches/global/machine-kubelet.yaml"
+  - "@./patches/global/machine-modules.yaml"
+  - "@./patches/global/machine-network.yaml"
+  - "@./patches/global/machine-sysctls.yaml"
+  - "@./patches/global/machine-sysfs.yaml"
+  - "@./patches/global/machine-time.yaml"
+  - "@./patches/global/machine-udev.yaml"
+
+# Controller patches
+controlPlane:
+  patches:
+    - "@./patches/controller/admission-controller-patch.yaml"
+    - "@./patches/controller/cluster.yaml"
+    - "@./patches/controller/machine.yaml"
