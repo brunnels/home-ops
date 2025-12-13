@@ -53,6 +53,9 @@ spec:
       replicas: 0
     lokiCanary:
       enabled: false
+    memberlist:
+      service:
+        publishNotReadyAddresses: true
     read:
       replicas: 0
     resultsCache:
