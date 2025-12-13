@@ -12,7 +12,7 @@ _.python.venv = { path = "{{config_root}}/.venv", create = true }
 "aqua:cli/cli" = "2.74.2"
 "aqua:cloudflare/cloudflared" = "2025.6.1"
 "aqua:cue-lang/cue" = "0.13.1"
-"aqua:envsubst" = "1.4.3"
+"aqua:a8m/envsubst" = "1.4.3"
 "aqua:fluxcd/flux2" = "2.6.2"
 "aqua:getsops/sops" = "3.10.2"
 "aqua:go-task/task" = "3.44.0"
