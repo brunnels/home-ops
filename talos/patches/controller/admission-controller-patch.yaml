@@ -1,3 +1,6 @@
 ---
-- op: remove
-  path: /cluster/apiServer/admissionControl
+cluster:
+  allowSchedulingOnControlPlanes: true
+  apiServer:
+    admissionControl:
+      $$patch: delete

@@ -136,33 +136,27 @@ nodes:
             content: |
               configure lldpd portidsubtype ifname
               configure system description "Talos Node"
-    extraManifests: &extraManifests
+    patches:
       - "@./manifests/ethernetconfig.yaml"
       - "@./manifests/watchdogtimerconfig.yaml"
-    patches:
-      - |-
-        # bond0
-        - op: add
-          path: /machine/network/interfaces/0/vlans/0/addresses
-          value: [10.0.150.254/24]
-
-        - op: add
-          path: /machine/network/interfaces/1/addresses
-          value: [169.254.255.101/32]
-        - op: add
-          path: /machine/network/interfaces/2/addresses
-          value: [169.254.255.101/32]
-
-        # kdev-n3
-        - value: 169.254.255.103/32
-          op: add
-          path: /machine/network/interfaces/1/routes/0/network
-
-        # kdev-n2
-        - value: 169.254.255.102/32
-          op: add
-          path: /machine/network/interfaces/2/routes/0/network
-
+      - |
+        machine:
+          network:
+            interfaces:
+              - interface: bond0
+                vlans:
+                  - vlanId: 150
+                  - addresses: [10.0.150.254/24]
+              - deviceSelector:
+                  busPath: 1-1.0
+                addresses: [169.254.255.101/32]
+                routes:
+                  - network: 169.254.255.103/32
+              - deviceSelector:
+                  busPath: 0-1.0
+                addresses: [169.254.255.101/32]
+                routes:
+                  - network: 169.254.255.102/32
   - hostname: kdev-n2
     ipAddress: 10.0.150.253
     installDisk: /dev/disk/by-id/nvme-BPX_8B71077C060891075911
@@ -173,30 +167,27 @@ nodes:
     schematic: *schematic
     networkInterfaces: *networkInterfaces
     extensionServices: *extensionServices
-    extraManifests: *extraManifests
     patches:
-      - |-
-        # bond0
-        - op: add
-          path: /machine/network/interfaces/0/vlans/0/addresses
-          value: [10.0.150.253/24]
-
-        - op: add
-          path: /machine/network/interfaces/1/addresses
-          value: [169.254.255.102/32]
-        - op: add
-          path: /machine/network/interfaces/2/addresses
-          value: [169.254.255.102/32]
-
-        # kdev-n1
-        - value: 169.254.255.101/32
-          op: add
-          path: /machine/network/interfaces/1/routes/0/network
-
-        # kdev-n3
-        - value: 169.254.255.103/32
-          op: add
-          path: /machine/network/interfaces/2/routes/0/network
+      - "@./manifests/ethernetconfig.yaml"
+      - "@./manifests/watchdogtimerconfig.yaml"
+      - |
+        machine:
+          network:
+            interfaces:
+              - interface: bond0
+                vlans:
+                  - vlanId: 150
+                  - addresses: [10.0.150.253/24]
+              - deviceSelector:
+                  busPath: 1-1.0
+                addresses: [169.254.255.102/32]
+                routes:
+                  - network: 169.254.255.101/32
+              - deviceSelector:
+                  busPath: 0-1.0
+                addresses: [169.254.255.102/32]
+                routes:
+                  - network: 169.254.255.103/32
 
   - hostname: kdev-n3
     ipAddress: 10.0.150.252
@@ -208,31 +199,27 @@ nodes:
     schematic: *schematic
     networkInterfaces: *networkInterfaces
     extensionServices: *extensionServices
-    extraManifests: *extraManifests
     patches:
-      - |-
-        # bond0
-        - op: add
-          path: /machine/network/interfaces/0/vlans/0/addresses
-          value: [10.0.150.252/24]
-
-        - op: add
-          path: /machine/network/interfaces/1/addresses
-          value: [169.254.255.103/32]
-        - op: add
-          path: /machine/network/interfaces/2/addresses
-          value: [169.254.255.103/32]
-
-        # kdev-n1
-        - value: 169.254.255.101/32
-          op: add
-          path: /machine/network/interfaces/1/routes/0/network
-
-        # kdev-n2
-        - value: 169.254.255.102/32
-          op: add
-          path: /machine/network/interfaces/2/routes/0/network
-
+      - "@./manifests/ethernetconfig.yaml"
+      - "@./manifests/watchdogtimerconfig.yaml"
+      - |
+        machine:
+          network:
+            interfaces:
+              - interface: bond0
+                vlans:
+                  - vlanId: 150
+                  - addresses: [10.0.150.252/24]
+              - deviceSelector:
+                  busPath: 1-1.0
+                addresses: [169.254.255.103/32]
+                routes:
+                  - network: 169.254.255.101/32
+              - deviceSelector:
+                  busPath: 0-1.0
+                addresses: [169.254.255.103/32]
+                routes:
+                  - network: 169.254.255.102/32
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
