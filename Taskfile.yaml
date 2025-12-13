@@ -25,9 +25,7 @@ env:
 includes:
   bootstrap: .taskfiles/bootstrap
   talos: .taskfiles/talos
-  template: .taskfiles/template
   fetcher: .taskfiles/fetcher
-  volsync: .taskfiles/volsync
 
 tasks:
 

@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization.json
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: network
+components:
+  - ../../clusters/kdev
+  - ../../components/common
+replacements:
+  - path: ../../components/replacements/ks.yaml
+resources:
+  - ../../common/network/cloudflare-dns.yaml
+  - ../../common/network/cloudflare-tunnel.yaml
+  - ../../common/network/envoy-gateway.yaml
+  - ../../common/network/k8s-gateway.yaml
+#  - ./vpn-gateway.yaml

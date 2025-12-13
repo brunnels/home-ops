@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app local-path-provisioner
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 1h
+  values:
+    storageClass:
+      create: true
+      defaultClass: false
+      name: local-path
+      reclaimPolicy: Retain
+    nodePathMap:
+      - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
+        paths: ${LOCAL_PATH_PROVISIONER_NODE_PATHS}

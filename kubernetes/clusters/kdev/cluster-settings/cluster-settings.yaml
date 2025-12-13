@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.32.1/configmap-v1.json
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-settings
+data:
+  KS_RETRY_INTERVAL: "2m"
+  KS_TIMEOUT: "5m"
+
+  VAULT_PREFIX: "kdev"
+
+  TIMEZONE: "US/Central"
+  CLUSTER_CIDR: "10.42.0.0/16"
+  SERVICE_CIDR: "10.43.0.0/16"
+  LAN_CIDR: "10.0.150.128/24"
+  KUBE_DNS_ADDR: "10.43.0.10"
+  CLUSTER_API_ADDR: "10.0.150.200"
+  CLOUDFLARE_GATEWAY_ADDR: "10.0.150.130"
+  CLUSTER_GATEWAY_ADDR: "10.0.150.131"
+  CLUSTER_DNS_GATEWAY_ADDR: "10.0.150.132"
+  CLUSTER_BGP_ASN: "65531"
+
+  CEPH_DEVICE_PATH_FILTER: /dev/disk/by-path/pci-0000:02:00.0-nvme-*
+  CEPH_CLUSTER_CIDR: "169.254.255.0/24"
+
+  # should be a valid JSON array representing spec.nodePathMap[0].paths
+  LOCAL_PATH_PROVISIONER_NODE_PATHS: '["/var/mnt/lpp-0"]'
+
+  GIT_REPO: "github.com/brunnels/home-ops"
+  GIT_REPO_REF: "refs/heads/main"
+
+  VOLSYNC_PVC_STORAGECLASS: "ceph-block"
+  VOLSYNC_SNAPSHOTCLASS: "csi-ceph-blockpool"
+  VOLSYNC_CACHE_SNAPSHOTCLASS: "ceph-block"
+  VOLSYNC_STORAGECLASS: "ceph-block"
+  VOLSYNC_S3_BUCKET: "kdev-volsync"
+
+  SVC_VPN_ADDR: "10.0.150.133"
