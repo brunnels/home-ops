@@ -11,15 +11,10 @@ spec:
   interval: 1h
   values:
     autoDirectNodeRoutes: true
-    bandwidthManager:
-      enabled: true
-      bbr: true
     bpf:
-      datapathMode: netkit
       masquerade: true
-      preallocateMaps: true
-      tproxy: true
-    bpfClockProbe: true
+      # Ref: https://github.com/siderolabs/talos/issues/10002
+      hostLegacyRouting: true
     bgpControlPlane:
       enabled: true
     cgroup:
@@ -35,6 +30,8 @@ spec:
     endpointRoutes:
       enabled: true
     envoy:
+      enabled: false
+    gatewayAPI:
       enabled: false
     hubble:
       enabled: false
@@ -58,10 +55,8 @@ spec:
         enabled: true
         serviceMonitor:
           enabled: true
-      replicas: 2
+      replicas: 1
       rollOutPods: true
-    pmtuDiscovery:
-      enabled: true
     prometheus:
       enabled: true
       serviceMonitor:
@@ -89,3 +84,6 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
+    socketLB:
+      enabled: true
+      hostNamespaceOnly: true
