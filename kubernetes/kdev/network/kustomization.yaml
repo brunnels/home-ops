@@ -11,5 +11,6 @@ replacements:
 resources:
   - ../../common/network/cloudflare-dns.yaml
   - ../../common/network/cloudflare-tunnel.yaml
+  - ../../common/network/echo.yaml
   - ../../common/network/envoy-gateway.yaml
 #  - ./vpn-gateway.yaml

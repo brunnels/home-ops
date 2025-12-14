@@ -28,7 +28,9 @@ spec:
             envFrom:
               - secretRef:
                   name: *app
-            args: ["tunnel", "run"]
+            args:
+              - tunnel
+              - run
             probes:
               liveness: &probes
                 enabled: true
@@ -54,8 +56,8 @@ spec:
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
+        runAsUser: 1000
+        runAsGroup: 1000
     service:
       app:
         ports:

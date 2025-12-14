@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   interval: 1h
-  path: ./kubernetes/base/default/echo
+  path: ./kubernetes/base/network/echo
   postBuild:
     substitute:
       APP: *app
