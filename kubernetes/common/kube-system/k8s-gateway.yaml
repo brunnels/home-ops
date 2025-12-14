@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   interval: 1h
-  path: ./kubernetes/base/network/k8s-gateway
+  path: ./kubernetes/base/kube-system/k8s-gateway
   prune: true
   sourceRef:
     kind: GitRepository
