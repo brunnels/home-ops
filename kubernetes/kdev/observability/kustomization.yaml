@@ -12,6 +12,7 @@ resources:
   - ../../common/observability/gatus.yaml
   - ../../common/observability/grafana-instance.yaml
   - ../../common/observability/grafana-operator.yaml
+  - ../../common/observability/keda.yaml
   - ../../common/observability/kube-prometheus-stack.yaml
   - ../../common/observability/kube-state-metrics.yaml
 #  - ../../common/observability/loki.yaml
