@@ -1,0 +1,10 @@
+machine:
+  features:
+    hostDNS:
+      resolveMemberNames: true
+    kubernetesTalosAPIAccess:
+      allowedKubernetesNamespaces:
+        - system-upgrade
+      allowedRoles:
+        - os:admin
+      enabled: true

@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 ---
 clusterName: kubernetes
 
@@ -8,12 +9,11 @@ endpoint: https://10.0.150.200:6443
 additionalApiServerCertSans: &sans
   - "127.0.0.1"
   - "10.0.150.200"
-  - "kdev.lan.kraven.org"
+  - "k8s.kraven.dev"
   - "kdev-n1.lan.kraven.org"
   - "kdev-n2.lan.kraven.org"
   - "kdev-n3.lan.kraven.org"
 additionalMachineCertSans: *sans
-
 clusterPodNets: ["10.42.0.0/16"]
 clusterSvcNets: ["10.43.0.0/16"]
 
@@ -22,77 +22,203 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: "kdev-n1"
-    ipAddress: "10.0.150.254"
-    installDisk: "/dev/disk/by-id/nvme-FIKWOT_FX991_1TB_AA251140625"
-    machineSpec:
-      secureboot: false
-    talosImageURL: factory.talos.dev/installer/b9098bb8a09842c1f19ebfb525320fb9d0d05e324b4cf4f9f89b613b4576d832
+  - hostname: kdev-n1
+    ipAddress: 10.0.150.254
+    installDisk: /dev/disk/by-id/nvme-SK_hynix_BC511_HFM256GDJTNI-82A0A_NJ02N76261100320B
     controlPlane: true
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "58:47:ca:7a:e7:62"
+    nodeLabels: &nodeLabels
+      intel.feature.node.kubernetes.io/gpu: "true"
+      nvidia.com/gpu.present: "true"
+      node.kubernetes.io/gpu: "true"
+    userVolumes: &userVolumes
+      # non-ceph
+      - name: lpp-0
+        provisioning:
+          diskSelector:
+            match: disk.model != "FIKWOT FX991 1TB"
+          minSize: 900GiB
+    schematic: &schematic
+      customization:
+        extraKernelArgs:
+          - -init_on_alloc
+          - -init_on_free
+          - -selinux
+          - apparmor=0
+          - i915.enable_guc=3
+          - init_on_alloc=0
+          - init_on_free=0
+          - intel_iommu=on
+          - iommu=pt
+          - mitigations=off
+          - security=none
+          - sysctl.kernel.kexec_load_disabled=1
+          - talos.auditd.disabled=1
+          - net.ifnames=0
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/binfmt-misc
+            - siderolabs/crun
+            - siderolabs/ctr
+            - siderolabs/fuse3
+            - siderolabs/i915
+            - siderolabs/intel-ucode
+            - siderolabs/iscsi-tools
+            - siderolabs/lldpd
+            - siderolabs/mdadm
+            - siderolabs/mei
+            - siderolabs/nonfree-kmod-nvidia-production
+            - siderolabs/nut-client
+            - siderolabs/nvidia-container-toolkit-production
+            - siderolabs/nvme-cli
+            - siderolabs/thunderbolt
+            - siderolabs/uinput
+            - siderolabs/util-linux-tools
+    networkInterfaces: &networkInterfaces
+      - interface: bond0
+        mtu: 9000
+        bond:
+          mode: 802.3ad
+          lacpRate: fast
+          xmitHashPolicy: layer3+4
+          miimon: 1000
+          deviceSelectors:
+            - hardwareAddr: 58:47:ca:*
+              driver: i40e
         vlans:
           - vlanId: 150
-            addresses:
-              - "10.0.150.254/24"
-            mtu: 9000
+            dhcp: false
             routes:
-              - network: "0.0.0.0/0"
-                gateway: "10.0.150.1"
+              - network: 0.0.0.0/0
+                gateway: 10.0.150.1
+            mtu: 9000
             vip:
-              ip: "10.0.150.200"
-  - hostname: "kdev-n2"
-    ipAddress: "10.0.150.253"
-    installDisk: "/dev/disk/by-id/nvme-INTEL_SSDPEKKW256G7_BTPY64940M9C256D"
-    machineSpec:
-      secureboot: false
-    talosImageURL: factory.talos.dev/installer/b9098bb8a09842c1f19ebfb525320fb9d0d05e324b4cf4f9f89b613b4576d832
-    controlPlane: true
-    networkInterfaces:
+              ip: 10.0.150.200
       - deviceSelector:
-          hardwareAddr: "58:47:ca:7a:ec:46"
-        vlans:
-          - vlanId: 150
-            addresses:
-              - "10.0.150.253/24"
-            mtu: 9000
-            routes:
-              - network: "0.0.0.0/0"
-                gateway: "10.0.150.1"
-            vip:
-              ip: "10.0.150.200"
-  - hostname: "kdev-n3"
-    ipAddress: "10.0.150.252"
-    installDisk: "/dev/disk/by-id/nvme-Samsung_SSD_950_PRO_256GB_S2GLNCAGB26901M"
-    machineSpec:
-      secureboot: false
-    talosImageURL: factory.talos.dev/installer/b9098bb8a09842c1f19ebfb525320fb9d0d05e324b4cf4f9f89b613b4576d832
-    controlPlane: true
-    networkInterfaces:
+          busPath: 1-1.0
+        dhcp: false
+        mtu: 65520
       - deviceSelector:
-          hardwareAddr: "58:47:ca:7c:6c:16"
-        vlans:
-          - vlanId: 150
-            addresses:
-              - "10.0.150.252/24"
-            mtu: 9000
-            routes:
-              - network: "0.0.0.0/0"
-                gateway: "10.0.150.1"
-            vip:
-              ip: "10.0.150.200"
+          busPath: 0-1.0
+        dhcp: false
+        mtu: 65520
+      - interface: eth0
+        dhcp: false
+      - interface: eth1
+        dhcp: false
+    extensionServices: &extensionServices
+      - name: nut-client
+        configFiles:
+          - content: MONITOR ${upsmonHost} 1 monuser secret slave
+            mountPath: /usr/local/etc/nut/upsmon.conf
+          - content: MODE=netclient
+            mountPath: /usr/local/etc/nut/nut.conf
+      - name: lldpd
+        configFiles:
+          - mountPath: /usr/local/etc/lldpd/lldpd.conf
+            content: |
+              configure lldpd portidsubtype ifname
+              configure system description "Talos Node"
+    patches:
+      - "@./manifests/ethernetconfig.yaml"
+      - "@./manifests/watchdogtimerconfig.yaml"
+      - |
+        machine:
+          network:
+            interfaces:
+              - interface: bond0
+                vlans:
+                  - vlanId: 150
+                    addresses: [10.0.150.254/24]
+              - deviceSelector:
+                  busPath: 1-1.0
+                addresses: [169.254.255.101/32]
+                routes:
+                  - network: 169.254.255.103/32
+                    metric: 2048
+              - deviceSelector:
+                  busPath: 0-1.0
+                addresses: [169.254.255.101/32]
+                routes:
+                  - network: 169.254.255.102/32
+                    metric: 2048
+  - hostname: kdev-n2
+    ipAddress: 10.0.150.253
+    installDisk: /dev/disk/by-id/nvme-BPX_8B71077C060891075911
+    controlPlane: true
+    nodeLabels: *nodeLabels
+    userVolumes: *userVolumes
+    schematic: *schematic
+    networkInterfaces: *networkInterfaces
+    extensionServices: *extensionServices
+    patches:
+      - "@./manifests/ethernetconfig.yaml"
+      - "@./manifests/watchdogtimerconfig.yaml"
+      - |
+        machine:
+          network:
+            interfaces:
+              - interface: bond0
+                vlans:
+                  - vlanId: 150
+                    addresses: [10.0.150.253/24]
+              - deviceSelector:
+                  busPath: 1-1.0
+                addresses: [169.254.255.102/32]
+                routes:
+                  - network: 169.254.255.101/32
+                    metric: 2048
+              - deviceSelector:
+                  busPath: 0-1.0
+                addresses: [169.254.255.102/32]
+                routes:
+                  - network: 169.254.255.103/32
+                    metric: 2048
 
+  - hostname: kdev-n3
+    ipAddress: 10.0.150.252
+    installDisk: /dev/disk/by-id/nvme-Samsung_SSD_950_PRO_256GB_S2GLNCAGB26901M
+    controlPlane: true
+    nodeLabels: *nodeLabels
+    userVolumes: *userVolumes
+    schematic: *schematic
+    networkInterfaces: *networkInterfaces
+    extensionServices: *extensionServices
+    patches:
+      - "@./manifests/ethernetconfig.yaml"
+      - "@./manifests/watchdogtimerconfig.yaml"
+      - |
+        machine:
+          network:
+            interfaces:
+              - interface: bond0
+                vlans:
+                  - vlanId: 150
+                    addresses: [10.0.150.252/24]
+              - deviceSelector:
+                  busPath: 1-1.0
+                addresses: [169.254.255.103/32]
+                routes:
+                  - network: 169.254.255.101/32
+                    metric: 2048
+              - deviceSelector:
+                  busPath: 0-1.0
+                addresses: [169.254.255.103/32]
+                routes:
+                  - network: 169.254.255.102/32
+                    metric: 2048
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
   - "@./patches/global/machine-kubelet.yaml"
+  - "@./patches/global/machine-modules.yaml"
   - "@./patches/global/machine-network.yaml"
   - "@./patches/global/machine-sysctls.yaml"
+  - "@./patches/global/machine-sysfs.yaml"
   - "@./patches/global/machine-time.yaml"
+  - "@./patches/global/machine-udev.yaml"
 
 # Controller patches
 controlPlane:
   patches:
     - "@./patches/controller/cluster.yaml"
-
+    - "@./patches/controller/machine.yaml"
