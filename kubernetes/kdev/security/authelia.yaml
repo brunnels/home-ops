@@ -18,10 +18,10 @@ spec:
       namespace: database
     - name: security-pgo-cluster
   healthCheckExprs:
-    - apiVersion: dragonflydb.io/v1alpha1
-      kind: Dragonfly
-      inProgress: status.phase != 'ready'
-      current: status.phase == 'ready'
+#    - apiVersion: dragonflydb.io/v1alpha1
+#      kind: Dragonfly
+#      inProgress: status.phase != 'ready'
+#      current: status.phase == 'ready'
     - apiVersion: external-secrets.io/v1
       kind: ExternalSecret
       failed: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'False')
