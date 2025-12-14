@@ -98,6 +98,7 @@ spec:
         parentRefs:
           - name: envoy-external
             namespace: network
+            sectionName: https
     rbac:
       roles:
         gatus:
