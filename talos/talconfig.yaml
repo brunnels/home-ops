@@ -1,0 +1,98 @@
+---
+clusterName: kubernetes
+
+talosVersion: "${talosVersion}"
+kubernetesVersion: "${kubernetesVersion}"
+
+endpoint: https://10.0.150.200:6443
+additionalApiServerCertSans: &sans
+  - "127.0.0.1"
+  - "10.0.150.200"
+  - "kdev.lan.kraven.org"
+  - "kdev-n1.lan.kraven.org"
+  - "kdev-n2.lan.kraven.org"
+  - "kdev-n3.lan.kraven.org"
+additionalMachineCertSans: *sans
+
+clusterPodNets: ["10.42.0.0/16"]
+clusterSvcNets: ["10.43.0.0/16"]
+
+# Disable built-in CNI to use Cilium
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: "kdev-n1"
+    ipAddress: "10.0.150.254"
+    installDisk: "/dev/disk/by-id/nvme-FIKWOT_FX991_1TB_AA251140625"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/b9098bb8a09842c1f19ebfb525320fb9d0d05e324b4cf4f9f89b613b4576d832
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "58:47:ca:7a:e7:62"
+        vlans:
+          - vlanId: 150
+            addresses:
+              - "10.0.150.254/24"
+            mtu: 9000
+            routes:
+              - network: "0.0.0.0/0"
+                gateway: "10.0.150.1"
+            vip:
+              ip: "10.0.150.200"
+  - hostname: "kdev-n2"
+    ipAddress: "10.0.150.253"
+    installDisk: "/dev/disk/by-id/nvme-INTEL_SSDPEKKW256G7_BTPY64940M9C256D"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/b9098bb8a09842c1f19ebfb525320fb9d0d05e324b4cf4f9f89b613b4576d832
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "58:47:ca:7a:ec:46"
+        vlans:
+          - vlanId: 150
+            addresses:
+              - "10.0.150.253/24"
+            mtu: 9000
+            routes:
+              - network: "0.0.0.0/0"
+                gateway: "10.0.150.1"
+            vip:
+              ip: "10.0.150.200"
+  - hostname: "kdev-n3"
+    ipAddress: "10.0.150.252"
+    installDisk: "/dev/disk/by-id/nvme-Samsung_SSD_950_PRO_256GB_S2GLNCAGB26901M"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/b9098bb8a09842c1f19ebfb525320fb9d0d05e324b4cf4f9f89b613b4576d832
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "58:47:ca:7c:6c:16"
+        vlans:
+          - vlanId: 150
+            addresses:
+              - "10.0.150.252/24"
+            mtu: 9000
+            routes:
+              - network: "0.0.0.0/0"
+                gateway: "10.0.150.1"
+            vip:
+              ip: "10.0.150.200"
+
+# Global patches
+patches:
+  - "@./patches/global/machine-files.yaml"
+  - "@./patches/global/machine-kubelet.yaml"
+  - "@./patches/global/machine-network.yaml"
+  - "@./patches/global/machine-sysctls.yaml"
+  - "@./patches/global/machine-time.yaml"
+
+# Controller patches
+controlPlane:
+  patches:
+    - "@./patches/controller/cluster.yaml"
+
