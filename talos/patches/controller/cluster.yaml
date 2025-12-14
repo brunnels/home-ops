@@ -7,19 +7,23 @@ cluster:
       enable-aggregator-routing: true
       runtime-config: admissionregistration.k8s.io/v1beta1=true
       feature-gates: ImageVolume=true,MutatingAdmissionPolicy=true
-    admissionControl:
-      - name: PodSecurity
-        configuration:
-          apiVersion: pod-security.admission.config.k8s.io/v1beta1
-          kind: PodSecurityConfiguration
-          exemptions:
-            namespaces:
-              - storage
+#    admissionControl:
+#      - name: PodSecurity
+#        configuration:
+#          apiVersion: pod-security.admission.config.k8s.io/v1beta1
+#          kind: PodSecurityConfiguration
+#          exemptions:
+#            namespaces:
+#              - storage
   controllerManager:
     extraArgs:
       bind-address: 0.0.0.0
   coreDNS:
     disabled: true
+  discovery:
+    registries:
+      service:
+        disabled: false
   etcd:
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381

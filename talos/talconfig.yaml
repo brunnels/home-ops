@@ -29,6 +29,7 @@ nodes:
     nodeLabels: &nodeLabels
       intel.feature.node.kubernetes.io/gpu: "true"
       nvidia.com/gpu.present: "true"
+      node.kubernetes.io/gpu: "true"
     userVolumes: &userVolumes
       # non-ceph
       - name: lpp-0
