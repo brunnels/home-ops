@@ -84,7 +84,9 @@ releases:
         args:
           - -c
           - |
-            cat ../../kubernetes/base/network/envoy-gateway/externalsecret.yaml | envsubst \
+            cat ../../kubernetes/base/network/envoy-gateway/externalsecret.yaml \
+            | sed 's|\${SECRET_DOMAIN/\./-}|\${CERT_NAME}|g' \
+            | envsubst \
             | kubectl --context={{ requiredEnv "CLUSTER" }}  apply \
             --namespace=network --server-side --field-manager=kustomize-controller --filename -
         events:
@@ -94,7 +96,7 @@ releases:
         command: bash
         args:
           - -c
-          - until kubectl -n network get secrets | grep "-production-tls"; do sleep 5; done
+          - until kubectl -n network get secrets | grep "production-tls" &>/dev/null; do sleep 5; done
         events:
           - postsync
         showlogs: true
