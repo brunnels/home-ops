@@ -11,10 +11,15 @@ spec:
   interval: 1h
   values:
     autoDirectNodeRoutes: true
+    bandwidthManager:
+      enabled: true
+      bbr: true
     bpf:
+      datapathMode: netkit
       masquerade: true
-      # Ref: https://github.com/siderolabs/talos/issues/10002
-      hostLegacyRouting: true
+      preallocateMaps: true
+      tproxy: true
+    bpfClockProbe: true
     bgpControlPlane:
       enabled: true
     cgroup:
@@ -26,14 +31,13 @@ spec:
     dashboards:
       enabled: true
     devices: bond+
+    enableIPv4BIGTCP: true
     endpointRoutes:
       enabled: true
     envoy:
       enabled: false
-    gatewayAPI:
-      enabled: false
     hubble:
-      enabled: false
+      enabled: true
     ipam:
       mode: kubernetes
     ipv4NativeRoutingCIDR: "${CLUSTER_CIDR}"
@@ -46,7 +50,8 @@ spec:
     loadBalancer:
       algorithm: maglev
       mode: dsr
-    localRedirectPolicy: true
+    localRedirectPolicies:
+      enabled: true
     operator:
       dashboards:
         enabled: true
@@ -56,6 +61,8 @@ spec:
           enabled: true
       replicas: 1
       rollOutPods: true
+    pmtuDiscovery:
+      enabled: true
     prometheus:
       enabled: true
       serviceMonitor:
@@ -83,6 +90,8 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
+          - PERFMON
+          - BPF
     socketLB:
       enabled: true
       hostNamespaceOnly: true
