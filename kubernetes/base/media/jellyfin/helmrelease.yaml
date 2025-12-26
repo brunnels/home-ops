@@ -61,18 +61,12 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         supplementalGroups:
           - 44
-#    service:
-#      app:
-#        controller: *app
-#        type: LoadBalancer
-#        annotations:
-#          lbipam.cilium.io/ips: *loadBalancerIP
-#        externalTrafficPolicy: Cluster
-#        ports:
-#          http:
-#            port: *port
     service:
       app:
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: *loadBalancerIP
+        externalTrafficPolicy: Local
         ports:
           http:
             port: *port
