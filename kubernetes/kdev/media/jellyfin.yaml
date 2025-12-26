@@ -11,8 +11,6 @@ spec:
   components:
     - ../../../components/volsync
   dependsOn:
-    - name: csi-driver-nfs
-      namespace: storage
     - name: rook-ceph-cluster
       namespace: storage
     - name: volsync

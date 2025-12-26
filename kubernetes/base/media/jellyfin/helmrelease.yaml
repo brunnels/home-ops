@@ -89,25 +89,15 @@ spec:
       movies:
         globalMounts:
           - path: /media/movies
-        type: custom
-        volumeSpec:
-          csi:
-            driver: nfs.csi.k8s.io
-            volumeAttributes:
-              server: ${QNAP_HOSTNAME}
-              share: /movies
-              mountOptions: "nfsvers=4.1,sec=sys"
+        path: /movies
+        server: ${QNAP_HOSTNAME}
+        type: nfs
       tv:
         globalMounts:
           - path: /media/tv
-        type: custom
-        volumeSpec:
-          csi:
-            driver: nfs.csi.k8s.io
-            volumeAttributes:
-              server: ${QNAP_HOSTNAME}
-              share: /tv
-              mountOptions: "nfsvers=4.1,sec=sys"
+        path: /tv
+        server: ${QNAP_HOSTNAME}
+        type: nfs
       tmpfs:
         globalMounts:
           - path: /cache
