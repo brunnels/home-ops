@@ -12,10 +12,10 @@ spec:
   upgrade:
     crds: CreateReplace
     force: true
-  values:
-    controllers:
-      direwolf_operator:
-        containers:
-          operator:
-            env:
-              WOLF_IMAGE: ghcr.io/games-on-whales/wolf:dev-moonlight-fixes
+  values: []
+#    controllers:
+#      direwolf_operator:
+#        containers:
+#          operator:
+#            env:
+#              WOLF_IMAGE: ghcr.io/games-on-whales/wolf:dev-moonlight-fixes
