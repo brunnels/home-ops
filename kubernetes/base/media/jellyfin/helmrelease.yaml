@@ -19,7 +19,6 @@ spec:
       app:
         annotations:
           reloader.stakater.com/auto: "true"
-        runtimeClassName: nvidia
         containers:
           jellyfin:
             image:
