@@ -11,9 +11,9 @@ spec:
   interval: 1h
   dependsOn:
     - name: rook-ceph-cluster
-      namespace: rook-ceph
+      namespace: storage
     - name: volsync
-      namespace: volsync
+      namespace: storage
   values:
     controllers:
       app:
