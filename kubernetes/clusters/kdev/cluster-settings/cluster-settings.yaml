@@ -37,3 +37,4 @@ data:
   VOLSYNC_S3_BUCKET: "kdev-volsync"
 
   SVC_VPN_ADDR: "10.0.150.133"
+  SVC_JELLYFIN_ADDR: "10.0.150.134"
