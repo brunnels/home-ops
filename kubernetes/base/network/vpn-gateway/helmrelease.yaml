@@ -20,10 +20,6 @@ spec:
           gluetun:
             enabled: true
             type: gluetun
-            gluetun:
-              image:
-                repository: ghcr.io/qdm12/gluetun
-                tag: v3.41.0@sha256:6b54856716d0de56e5bb00a77029b0adea57284cf5a466f23aad5979257d3045
             env:
               TZ: "${TIMEZONE}"
               FIREWALL_ENABLED_DISABLING_IT_SHOOTS_YOU_IN_YOUR_FOOT: off
@@ -58,7 +54,6 @@ spec:
           gluetun:
             port: 80
             protocol: TCP
-
     settings:
       NOT_ROUTED_TO_GATEWAY_CIDRS: "${CLUSTER_CIDR} ${SERVICE_CIDR}"
       VPN_BLOCK_OTHER_TRAFFIC: true
@@ -78,12 +73,10 @@ spec:
       # if true then the gatewayLabel and gatewayAnnotation below will not be utilized and the
       # gateway will be injected into every pod in the routed_namespaces
       gatewayDefault: false
-
       # -- boolean: gatewayLabel and gatewayAnnotation controls the label/annotation key of which the value,
       #   by default, must be 'true' on the pod in order for the gateway sidecar to be injected.
       gatewayLabel: use-vpn-gateway
       gatewayAnnotation: ""
-
       # -- string: When a value is configured for the gatewayLabelValue or setGatewayAnnotationValue,
       #   the value of the label and/or annotation set on the gatewayLabel or gatewayAnnotation
       #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
