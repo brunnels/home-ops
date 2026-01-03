@@ -18,6 +18,7 @@ spec:
       main:
         containers:
           gluetun:
+            enabled: true
             type: gluetun
             gluetun:
               image:
