@@ -14,112 +14,183 @@ spec:
         name: angelnu-charts
   interval: 1h
   values:
-    global:
-      fullnameOverride: *app
-    image:
-      repository: ghcr.io/angelnu/pod-gateway
-      tag: v1.13.0@sha256:a5b032e15f7570493977b330a5a86dcffebb807d35685ad803e47afb62d105f2
+    controllers:
+      main:
+        containers:
+          gluetun:
+            type: gluetun
+            gluetun:
+              image:
+                repository: ghcr.io/qdm12/gluetun
+                tag: v3.41.0@sha256:6b54856716d0de56e5bb00a77029b0adea57284cf5a466f23aad5979257d3045
+            env:
+              TZ: "${TIMEZONE}"
+              FIREWALL: off
+              DOT: off
+              HTTP_CONTROL_SERVER_ADDRESS: ":80"
+              HTTP_CONTROL_SERVER_LOG: off
+              WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 15s
+              FIREWALL_VPN_INPUT_PORTS: "${INBOUND_PORTS}"
+            envFrom:
+              - secretRef:
+                  name: *app
+      webhook:
+        # -- string: Selector for namespace. boolean
+        # All the routed_namespaces will be matched
+        namespaceSelector:
+          type: custom
+          custom:
+            matchExpressions:
+              - key: kubernetes.io/metadata.name
+                operator: "In"
+                values: ${ROUTED_NAMESPACES}
+
+        # -- boolean: Default behaviour for new PODs in the evaluated namespace
+        # if true then the gatewayLabel and gatewayAnnotation below will not be utilized and the
+        # gateway will be injected into every pod in the routed_namespaces
+        gatewayDefault: false
+
+        # -- boolean: gatewayLabel and gatewayAnnotation controls the label/annotation key of which the value,
+        #   by default, must be 'true' on the pod in order for the gateway sidecar to be injected.
+        gatewayLabel: use-vpn-gateway
+        gatewayAnnotation: ""
+
+        # -- string: When a value is configured for the gatewayLabelValue or setGatewayAnnotationValue,
+        #   the value of the label and/or annotation set on the gatewayLabel or gatewayAnnotation
+        #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
+        gatewayLabelValue: ""
+        gatewayAnnotationValue:
+    networkpolicies:
+      vpn-gateway:
+        controller: main
+        policyTypes:
+          - Egress
+        rules:
+          egress:
+            - toCIDR:
+                - 0.0.0.0/0
+              toPorts:
+                - ports:
+                    - port: &vpn_port 1637
+                      protocol: UDP
+            - toEntities:
+                - cluster
+    publicPorts: ${PUBLIC_PORTS}
+    routed_namespaces: ${ROUTED_NAMESPACES}
     settings:
       NOT_ROUTED_TO_GATEWAY_CIDRS: "${CLUSTER_CIDR} ${SERVICE_CIDR}"
       VPN_BLOCK_OTHER_TRAFFIC: true
       VPN_LOCAL_CIDRS: "172.16.0.0/24 ${CLUSTER_CIDR} ${SERVICE_CIDR}"
       GATEWAY_ENABLE_DNSSEC: false
       VPN_INTERFACE: wg0
-      VPN_TRAFFIC_PORT: 1637
-    podAnnotations:
-      configmap.reloader.stakater.com/reload: *app
-      secret.reloader.stakater.com/reload: *app
-    publicPorts: ${PUBLIC_PORTS}
-    addons:
-      vpn:
-        enabled: true
-        type: gluetun
-        gluetun:
-          image:
-            repository: ghcr.io/qdm12/gluetun
-            tag: v3.41.0@sha256:6b54856716d0de56e5bb00a77029b0adea57284cf5a466f23aad5979257d3045
-        env:
-          TZ: "${TIMEZONE}"
-          FIREWALL_ENABLED_DISABLING_IT_SHOOTS_YOU_IN_YOUR_FOOT: off
-          DOT: off
-          HTTP_CONTROL_SERVER_ADDRESS: ":80"
-          HTTP_CONTROL_SERVER_LOG: off
-          WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 15s
-          FIREWALL_VPN_INPUT_PORTS: "${INBOUND_PORTS}"
-        envFrom:
-          - secretRef:
-              name: *app
-        resources:
-          requests:
-            cpu: 5m
-            memory: 64M
-          limits:
-            memory: 128M
-        securityContext:
-          capabilities: { add: ["NET_ADMIN"] }
-        # network policy is disabled because we need 2 CiliumNetworkPolicies
-        networkPolicy:
-          enabled: false
-    # all namespaces that will utilize the vpn should be added here
-    routed_namespaces: ${ROUTED_NAMESPACES}
-    webhook:
-      image:
-        repository: ghcr.io/angelnu/gateway-admision-controller
-        tag: v3.12.0@sha256:6f6ab596afd5fef0ca4648eadfb21cd37ba86fa5afa8b85edcc072976a61fbed
+      VPN_TRAFFIC_PORT: *vpn_port
 
-      # -- string: Selector for namespace. boolean
-      # All the routed_namespaces will be matched
-      namespaceSelector:
-        type: custom
-        custom:
-          matchExpressions:
-            - key: kubernetes.io/metadata.name
-              operator: "In"
-              values: ${ROUTED_NAMESPACES}
-
-      # -- boolean: Default behaviour for new PODs in the evaluated namespace
-      # if true then the gatewayLabel and gatewayAnnotation below will not be utilized and the
-      # gateway will be injected into every pod in the routed_namespaces
-      gatewayDefault: false
-
-      # -- boolean: gatewayLabel and gatewayAnnotation controls the label/annotation key of which the value,
-      #   by default, must be 'true' on the pod in order for the gateway sidecar to be injected.
-      gatewayLabel: use-vpn-gateway
-      gatewayAnnotation: ""
-
-      # -- string: When a value is configured for the gatewayLabelValue or setGatewayAnnotationValue,
-      #   the value of the label and/or annotation set on the gatewayLabel or gatewayAnnotation
-      #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
-      gatewayLabelValue: ""
-      gatewayAnnotationValue:
-  postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              kind: Service
-              name: *app
-            patch: |
-              - op: add
-                path: /spec/ports/-
-                value:
-                  name: gluetun
-                  port: 80
-                  protocol: TCP
-                  targetPort: gluetun
-          - target:
-              kind: Deployment
-              name: *app
-            patch: |
-              - op: add
-                path: /spec/template/spec/containers/1/ports
-                value: []
-          - target:
-              kind: Deployment
-              name: *app
-            patch: |
-              - op: add
-                path: /spec/template/spec/containers/1/ports/-
-                value:
-                  containerPort: 80
-                  name: gluetun
-                  protocol: TCP
+#    global:
+#      fullnameOverride: *app
+#    image:
+#      repository: ghcr.io/angelnu/pod-gateway
+#      tag: v1.13.0@sha256:a5b032e15f7570493977b330a5a86dcffebb807d35685ad803e47afb62d105f2
+#    settings:
+#      NOT_ROUTED_TO_GATEWAY_CIDRS: "${CLUSTER_CIDR} ${SERVICE_CIDR}"
+#      VPN_BLOCK_OTHER_TRAFFIC: true
+#      VPN_LOCAL_CIDRS: "172.16.0.0/24 ${CLUSTER_CIDR} ${SERVICE_CIDR}"
+#      GATEWAY_ENABLE_DNSSEC: false
+#      VPN_INTERFACE: wg0
+#      VPN_TRAFFIC_PORT: 1637
+#    podAnnotations:
+#      configmap.reloader.stakater.com/reload: *app
+#      secret.reloader.stakater.com/reload: *app
+#    publicPorts: ${PUBLIC_PORTS}
+#    addons:
+#      vpn:
+#        enabled: true
+#        type: gluetun
+#        gluetun:
+#          image:
+#            repository: ghcr.io/qdm12/gluetun
+#            tag: v3.41.0@sha256:6b54856716d0de56e5bb00a77029b0adea57284cf5a466f23aad5979257d3045
+#        env:
+#          TZ: "${TIMEZONE}"
+#          FIREWALL_ENABLED_DISABLING_IT_SHOOTS_YOU_IN_YOUR_FOOT: off
+#          DOT: off
+#          HTTP_CONTROL_SERVER_ADDRESS: ":80"
+#          HTTP_CONTROL_SERVER_LOG: off
+#          WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 15s
+#          FIREWALL_VPN_INPUT_PORTS: "${INBOUND_PORTS}"
+#        envFrom:
+#          - secretRef:
+#              name: *app
+#        resources:
+#          requests:
+#            cpu: 5m
+#            memory: 64M
+#          limits:
+#            memory: 128M
+#        securityContext:
+#          capabilities: { add: ["NET_ADMIN"] }
+#        # network policy is disabled because we need 2 CiliumNetworkPolicies
+#        networkPolicy:
+#          enabled: false
+#    # all namespaces that will utilize the vpn should be added here
+#    routed_namespaces: ${ROUTED_NAMESPACES}
+#    webhook:
+#      image:
+#        repository: ghcr.io/angelnu/gateway-admision-controller
+#        tag: v3.12.0@sha256:6f6ab596afd5fef0ca4648eadfb21cd37ba86fa5afa8b85edcc072976a61fbed
+#
+#      # -- string: Selector for namespace. boolean
+#      # All the routed_namespaces will be matched
+#      namespaceSelector:
+#        type: custom
+#        custom:
+#          matchExpressions:
+#            - key: kubernetes.io/metadata.name
+#              operator: "In"
+#              values: ${ROUTED_NAMESPACES}
+#
+#      # -- boolean: Default behaviour for new PODs in the evaluated namespace
+#      # if true then the gatewayLabel and gatewayAnnotation below will not be utilized and the
+#      # gateway will be injected into every pod in the routed_namespaces
+#      gatewayDefault: false
+#
+#      # -- boolean: gatewayLabel and gatewayAnnotation controls the label/annotation key of which the value,
+#      #   by default, must be 'true' on the pod in order for the gateway sidecar to be injected.
+#      gatewayLabel: use-vpn-gateway
+#      gatewayAnnotation: ""
+#
+#      # -- string: When a value is configured for the gatewayLabelValue or setGatewayAnnotationValue,
+#      #   the value of the label and/or annotation set on the gatewayLabel or gatewayAnnotation
+#      #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
+#      gatewayLabelValue: ""
+#      gatewayAnnotationValue:
+#  postRenderers:
+#    - kustomize:
+#        patches:
+#          - target:
+#              kind: Service
+#              name: *app
+#            patch: |
+#              - op: add
+#                path: /spec/ports/-
+#                value:
+#                  name: gluetun
+#                  port: 80
+#                  protocol: TCP
+#                  targetPort: gluetun
+#          - target:
+#              kind: Deployment
+#              name: *app
+#            patch: |
+#              - op: add
+#                path: /spec/template/spec/containers/1/ports
+#                value: []
+#          - target:
+#              kind: Deployment
+#              name: *app
+#            patch: |
+#              - op: add
+#                path: /spec/template/spec/containers/1/ports/-
+#                value:
+#                  containerPort: 80
+#                  name: gluetun
+#                  protocol: TCP

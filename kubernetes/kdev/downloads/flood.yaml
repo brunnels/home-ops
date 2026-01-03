@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-#    - ../../../components/envoy-gateway-oidc
+    - ../../../components/envoy-gateway-oidc
     - ../../../components/volsync
   dependsOn:
     - name: volsync
