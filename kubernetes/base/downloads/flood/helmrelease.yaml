@@ -131,8 +131,8 @@ spec:
                   set:
                     - name: "x-theme-park-app"
                       value: *app
-#                  remove: ["Accept-Encoding"]
-          - backendRefs:
+                  remove: ["Accept-Encoding"]
+            backendRefs:
               - name: *app
                 port: *port
     persistence:
