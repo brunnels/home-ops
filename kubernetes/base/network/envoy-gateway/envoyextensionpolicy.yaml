@@ -16,33 +16,36 @@ spec:
     - type: Inline
       inline: |
         function envoy_on_request(request_handle)
-          local app_name = request_handle:headers():get("x-theme-park-app")
-          if app_name then
-            request_handle:streamInfo():dynamicMetadata():set("envoy.filters.http.lua", "app_name", app_name)
+          local app = request_handle:headers():get("x-theme-park-app")
+          if app then
+            request_handle:streamInfo():dynamicMetadata():set("envoy.filters.http.lua", "app_name", app)
           end
         end
 
         function envoy_on_response(response_handle)
+          -- 1. Try to get app name from metadata
           local meta = response_handle:streamInfo():dynamicMetadata():get("envoy.filters.http.lua")
           local app_name = meta and meta["app_name"]
 
+          -- 2. Only proceed if we have an app name and it's HTML
           if app_name then
             local contentType = response_handle:headers():get("content-type") or ""
             if string.find(string.lower(contentType), "text/html") then
-              -- Capture the body length safely
+
+              -- 3. Get the body object
               local body = response_handle:body()
               if body then
-                local len = body:length()
-                if len > 0 then
+                -- Safely get the string and its length using Lua's native length operator
+                local content = body:getBytes(0, body:length())
+                if content and #content > 0 then
                   local css_url = "https://theme-park.kraven.dev/css/base/" .. app_name .. "/nord.css"
                   local inject_str = '<link rel="stylesheet" type="text/css" href="' .. css_url .. '"></head>'
 
-                  -- Get string, perform replace, and put it back
-                  local content = body:getBytes(0, len)
+                  -- 4. Perform the replacement
                   local new_content = string.gsub(content, "</[hH][eE][aA][dD]>", inject_str)
 
+                  -- 5. Set the new body and clear content-length
                   body:setBytes(new_content)
-                  -- Content-length must be removed so Envoy recalculates it
                   response_handle:headers():remove("content-length")
                 end
               end
