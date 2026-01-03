@@ -55,6 +55,9 @@ spec:
           - backendRefs:
               - name: *app
                 port: *port
+    persistence:
+      tmp:
+        type: emptyDir
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname
