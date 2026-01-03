@@ -10,4 +10,5 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./downloads-pgo-cluster.yaml
+  - ./flood.yaml
   - ./prowlarr.yaml
