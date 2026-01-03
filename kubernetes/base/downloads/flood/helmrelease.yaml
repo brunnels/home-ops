@@ -111,8 +111,6 @@ spec:
             scrapeTimeout: 10s
     route:
       app:
-        labels:
-          feature: theme-park
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Downloads
