@@ -27,23 +27,22 @@ spec:
           local app_name = meta and meta["app_name"]
 
           if app_name then
-            local content_type = response_handle:headers():get("content-type") or ""
-            if string.find(string.lower(content_type), "text/html") then
-              -- Get the body. Note: response_handle:body() can return nil
+            local contentType = response_handle:headers():get("content-type") or ""
+            if string.find(string.lower(contentType), "text/html") then
+              -- Capture the body length safely
               local body = response_handle:body()
               if body then
-                local length = body:length()
-                if length > 0 then
+                local len = body:length()
+                if len > 0 then
                   local css_url = "https://theme-park.kraven.dev/css/base/" .. app_name .. "/nord.css"
                   local inject_str = '<link rel="stylesheet" type="text/css" href="' .. css_url .. '"></head>'
 
-                  -- Get the content as a string
-                  local content = body:getBytes(0, length)
-                  -- Case-insensitive find and replace for </head>
+                  -- Get string, perform replace, and put it back
+                  local content = body:getBytes(0, len)
                   local new_content = string.gsub(content, "</[hH][eE][aA][dD]>", inject_str)
 
-                  -- Update the body and fix headers
                   body:setBytes(new_content)
+                  -- Content-length must be removed so Envoy recalculates it
                   response_handle:headers():remove("content-length")
                 end
               end
