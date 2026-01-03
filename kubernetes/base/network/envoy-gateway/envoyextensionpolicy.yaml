@@ -16,6 +16,9 @@ spec:
     - type: Inline
       inline: |
         function envoy_on_response(response_handle)
-          -- Just a test to see if headers work
-          response_handle:headers():set("x-lua-test", "active")
+          -- No parentheses on headers
+          local h = response_handle:headers()
+          if h then
+            h:add("x-lua-debug", "confirmed")
+          end
         end
