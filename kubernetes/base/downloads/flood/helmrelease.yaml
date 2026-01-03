@@ -125,13 +125,13 @@ spec:
           - name: envoy-internal
             namespace: network
         rules:
-          - filters:
-              - type: RequestHeaderModifier
-                requestHeaderModifier:
+#          - filters:
+#              - type: RequestHeaderModifier
+#                requestHeaderModifier:
 #                  set:
 #                    - name: "x-theme-park-app"
 #                      value: *app
-                  remove: ["Accept-Encoding"]
+#                  remove: ["Accept-Encoding"]
           - backendRefs:
               - name: *app
                 port: *port
