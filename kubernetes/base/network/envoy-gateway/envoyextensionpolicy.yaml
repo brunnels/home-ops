@@ -12,23 +12,35 @@ spec:
   lua:
     - type: Inline
       inline: |
+        function envoy_on_request(request_handle)
+          -- Use lowercase for header lookup to be safe
+          local app_name = request_handle:headers():get("x-theme-park-app")
+          if app_name then
+            request_handle:streamInfo():dynamicMetadata():set("envoy.filters.http.lua", "app_name", app_name)
+          end
+        end
+
         function envoy_on_response(response_handle)
-          -- 1. Buffer the body so we can modify it
-          -- We only do this for HTML content
-          local content_type = response_handle:headers():get("content-type")
-          if content_type and string.match(content_type, "text/html") then
-            local body = response_handle:body()
-            if body then
-              local search_str = "</head>"
-              local inject_str = '<link rel="stylesheet" type="text/css" href="https://theme-park.kraven.dev/css/base/flood/nord.css"></head>'
+          local meta = response_handle:streamInfo():dynamicMetadata():get("envoy.filters.http.lua")
+          local app_name = meta and meta["app_name"]
 
-              -- Perform the replacement
-              local original_body = body:getBytes(0, body:length())
-              local new_body = string.gsub(original_body, search_str, inject_str)
+          if app_name then
+            local content_type = response_handle:headers():get("content-type") or ""
+            -- Use string.find to catch "text/html; charset=utf-8"
+            if string.find(string.lower(content_type), "text/html") then
+              local body = response_handle:body()
+              if body then
+                -- Use a more robust search and replace
+                local css_url = "https://theme-park.kraven.dev/css/base/" .. app_name .. "/nord.css"
+                local inject_str = '<link rel="stylesheet" type="text/css" href="' .. css_url .. '"></head>'
 
-              -- Update body and clear content-length (Envoy will recalculate it)
-              response_handle:body():setBytes(new_body)
-              response_handle:headers():remove("content-length")
+                local original_body = body:getBytes(0, body:length())
+                -- Ensure we are replacing </head> correctly (case insensitive)
+                local new_body = string.gsub(original_body, "</[hH][eE][aA][dD]>", inject_str)
+
+                response_handle:body():setBytes(new_body)
+                response_handle:headers():remove("content-length")
+              end
             end
           end
         end
