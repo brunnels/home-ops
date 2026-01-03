@@ -8,4 +8,5 @@ components:
   - ../../components/common
 replacements:
   - path: ../../components/replacements/ks.yaml
-resources: []
+resources:
+  - ../../common/default/theme-park.yaml

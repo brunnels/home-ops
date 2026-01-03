@@ -21,9 +21,10 @@ data:
   CLUSTER_DNS_GATEWAY_ADDR: "10.0.150.132"
   CLUSTER_BGP_ASN: "65531"
 
-  CEPH_DEVICE_PATH_FILTER: /dev/disk/by-path/pci-0000:02:00.0-nvme-*
+  CEPH_DEVICE_PATH_FILTER: "/dev/disk/by-path/pci-0000:02:00.0-nvme-*"
   CEPH_CLUSTER_CIDR: "169.254.255.0/24"
 
+  THEME_PARK_THEME: "nord"
   # should be a valid JSON array representing spec.nodePathMap[0].paths
   LOCAL_PATH_PROVISIONER_NODE_PATHS: '["/var/mnt/lpp-0"]'
 

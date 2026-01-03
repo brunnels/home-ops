@@ -111,6 +111,8 @@ spec:
             scrapeTimeout: 10s
     route:
       app:
+        labels:
+          feature: theme-park
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Downloads
@@ -125,6 +127,13 @@ spec:
           - name: envoy-internal
             namespace: network
         rules:
+          - filters:
+              - type: RequestHeaderModifier
+                requestHeaderModifier:
+                  set:
+                    - name: "x-theme-park-app"
+                      value: *app
+                  remove: ["Accept-Encoding"]
           - backendRefs:
               - name: *app
                 port: *port
