@@ -139,18 +139,6 @@ spec:
             transmission:
               - path: /config
                 subPath: transmission-config
-      incomplete:
-        advancedMounts:
-          flood:
-            app:
-              - path: incomplete
-                subPath: flood
-            transmission:
-              - path: incomplete
-                subPath: flood
-        path: /downloads
-        server: ${QNAP_HOSTNAME}
-        type: nfs
       downloads:
         advancedMounts:
           flood:
@@ -163,3 +151,17 @@ spec:
         path: /downloads
         server: ${QNAP_HOSTNAME}
         type: nfs
+      incomplete:
+        advancedMounts:
+          flood:
+            app:
+              - path: incomplete
+                subPath: flood
+            transmission:
+              - path: incomplete
+                subPath: flood
+        path: /downloads
+        server: ${QNAP_HOSTNAME}
+        type: nfs
+      tmp:
+        type: emptyDir
