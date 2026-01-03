@@ -21,6 +21,7 @@ spec:
         end
 
         function envoy_on_response(response_handle)
+          response_handle:headers():set("x-lua-debug", "it-is-running")
           local meta = response_handle:streamInfo():dynamicMetadata():get("envoy.filters.http.lua")
           local app_name = meta and meta["app_name"]
 
