@@ -15,13 +15,6 @@ spec:
   lua:
     - type: Inline
       inline: |
-        function envoy_on_request(request_handle)
-          local app = request_handle:headers():get("x-theme-park-app")
-          if app then
-            request_handle:streamInfo():dynamicMetadata():set("envoy.filters.http.lua", "app_name", app)
-          end
-        end
-
         function envoy_on_response(response_handle)
           -- Just a test to see if headers work
           response_handle:headers():set("x-lua-test", "active")
