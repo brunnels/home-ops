@@ -60,21 +60,29 @@ spec:
         #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
         gatewayLabelValue: ""
         gatewayAnnotationValue:
+    global:
+      fullnameOverride: *app
     networkpolicies:
-      vpn-gateway:
+      main:
         controller: main
         policyTypes:
           - Egress
+          - Ingress
         rules:
           egress:
-            - toCIDR:
-                - 0.0.0.0/0
-              toPorts:
-                - ports:
-                    - port: &vpn_port 1637
-                      protocol: UDP
-            - toEntities:
-                - cluster
+            - to:
+                - ipBlock:
+                    cidr: 0.0.0.0/0
+              ports:
+                - port: &vpn_port 1637
+                  protocol: UDP
+            - to:
+                - ipBlock:
+                    cidr: ${CLUSTER_CIDR}
+          ingress:
+            - ports:
+                - protocol: TCP
+                  port: 80
     publicPorts: ${PUBLIC_PORTS}
     routed_namespaces: ${ROUTED_NAMESPACES}
     settings:
@@ -85,8 +93,7 @@ spec:
       VPN_INTERFACE: wg0
       VPN_TRAFFIC_PORT: *vpn_port
 
-#    global:
-#      fullnameOverride: *app
+
 #    image:
 #      repository: ghcr.io/angelnu/pod-gateway
 #      tag: v1.13.0@sha256:a5b032e15f7570493977b330a5a86dcffebb807d35685ad803e47afb62d105f2
