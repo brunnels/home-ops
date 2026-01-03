@@ -26,7 +26,7 @@ spec:
                 tag: v3.41.0@sha256:6b54856716d0de56e5bb00a77029b0adea57284cf5a466f23aad5979257d3045
             env:
               TZ: "${TIMEZONE}"
-              FIREWALL: off
+              FIREWALL_ENABLED_DISABLING_IT_SHOOTS_YOU_IN_YOUR_FOOT: off
               DOT: off
               HTTP_CONTROL_SERVER_ADDRESS: ":80"
               HTTP_CONTROL_SERVER_LOG: off
@@ -35,6 +35,10 @@ spec:
             envFrom:
               - secretRef:
                   name: *app
+            ports:
+              - containerPort: 80
+                name: gluetun
+                protocol: TCP
       webhook:
         # -- string: Selector for namespace. boolean
         # All the routed_namespaces will be matched
@@ -86,6 +90,19 @@ spec:
                   port: 80
     publicPorts: ${PUBLIC_PORTS}
     routed_namespaces: ${ROUTED_NAMESPACES}
+    service:
+      main:
+        controller: main
+        type: ClusterIP
+        clusterIP: None
+        ports:
+          http:
+            port: 4789
+            protocol: UDP
+          gluetun:
+            port: 80
+            protocol: TCP
+
     settings:
       NOT_ROUTED_TO_GATEWAY_CIDRS: "${CLUSTER_CIDR} ${SERVICE_CIDR}"
       VPN_BLOCK_OTHER_TRAFFIC: true
