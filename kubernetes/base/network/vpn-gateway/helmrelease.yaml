@@ -39,16 +39,6 @@ spec:
               - containerPort: 80
                 name: gluetun
                 protocol: TCP
-      webhook:
-        # -- string: Selector for namespace. boolean
-        # All the routed_namespaces will be matched
-        namespaceSelector:
-          type: custom
-          custom:
-            matchExpressions:
-              - key: kubernetes.io/metadata.name
-                operator: "In"
-                values: ${ROUTED_NAMESPACES}
     global:
       fullnameOverride: *app
     networkpolicies:
@@ -95,6 +85,13 @@ spec:
       VPN_INTERFACE: wg0
       VPN_TRAFFIC_PORT: *vpn_port
     webhook:
+      namespaceSelector:
+        type: custom
+        custom:
+          matchExpressions:
+            - key: kubernetes.io/metadata.name
+              operator: "In"
+              values: ${ROUTED_NAMESPACES}
       # -- boolean: Default behaviour for new PODs in the evaluated namespace
       # if true then the gatewayLabel and gatewayAnnotation below will not be utilized and the
       # gateway will be injected into every pod in the routed_namespaces
