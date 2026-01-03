@@ -12,3 +12,4 @@ resources:
   - ./downloads-pgo-cluster.yaml
   - ./flood.yaml
   - ./prowlarr.yaml
+  - ./sabnzbd.yaml

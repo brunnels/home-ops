@@ -144,10 +144,10 @@ spec:
           flood:
             app:
               - path: /downloads
-                subPath: flood
+                subPath: *app
             transmission:
               - path: /downloads
-                subPath: flood
+                subPath: *app
         path: /downloads
         server: ${QNAP_HOSTNAME}
         type: nfs
@@ -156,10 +156,10 @@ spec:
           flood:
             app:
               - path: incomplete
-                subPath: flood
+                subPath: *app
             transmission:
               - path: incomplete
-                subPath: flood
+                subPath: *app
         path: /downloads
         server: ${QNAP_HOSTNAME}
         type: nfs
