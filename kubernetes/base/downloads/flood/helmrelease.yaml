@@ -128,9 +128,9 @@ spec:
           - filters:
               - type: RequestHeaderModifier
                 requestHeaderModifier:
-                  set:
-                    - name: "x-theme-park-app"
-                      value: *app
+#                  set:
+#                    - name: "x-theme-park-app"
+#                      value: *app
                   remove: ["Accept-Encoding"]
           - backendRefs:
               - name: *app
