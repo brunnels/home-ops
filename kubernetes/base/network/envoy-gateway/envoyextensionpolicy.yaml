@@ -4,14 +4,14 @@ apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyExtensionPolicy
 metadata:
   name: inject-nord-theme-global
-  namespace: default
 spec:
   targetRefs:
     - group: gateway.networking.k8s.io
-      kind: HTTPRoute
-      labelSelector:
-        matchLabels:
-          feature: theme-park
+      kind: Gateway
+      name: envoy-external
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: envoy-internal
   lua:
     - type: Inline
       inline: |
