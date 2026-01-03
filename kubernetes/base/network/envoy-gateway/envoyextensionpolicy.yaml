@@ -23,32 +23,6 @@ spec:
         end
 
         function envoy_on_response(response_handle)
-          -- 1. Try to get app name from metadata
-          local meta = response_handle:streamInfo():dynamicMetadata():get("envoy.filters.http.lua")
-          local app_name = meta and meta["app_name"]
-
-          -- 2. Only proceed if we have an app name and it's HTML
-          if app_name then
-            local contentType = response_handle:headers():get("content-type") or ""
-            if string.find(string.lower(contentType), "text/html") then
-
-              -- 3. Get the body object
-              local body = response_handle:body()
-              if body then
-                -- Safely get the string and its length using Lua's native length operator
-                local content = body:getBytes(0, body:length())
-                if content and #content > 0 then
-                  local css_url = "https://theme-park.kraven.dev/css/base/" .. app_name .. "/nord.css"
-                  local inject_str = '<link rel="stylesheet" type="text/css" href="' .. css_url .. '"></head>'
-
-                  -- 4. Perform the replacement
-                  local new_content = string.gsub(content, "</[hH][eE][aA][dD]>", inject_str)
-
-                  -- 5. Set the new body and clear content-length
-                  body:setBytes(new_content)
-                  response_handle:headers():remove("content-length")
-                end
-              end
-            end
-          end
+          -- Just a test to see if headers work
+          response_handle:headers():set("x-lua-test", "active")
         end
