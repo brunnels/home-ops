@@ -103,7 +103,7 @@ spec:
         type: nfs
       downloads:
         globalMounts:
-          - path: /downloads
+          - path: /downloads/complete
             subPath: *app
         path: /downloads/${VAULT_PREFIX}/complete
         server: ${QNAP_HOSTNAME}
