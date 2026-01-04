@@ -16,8 +16,13 @@ spec:
     - type: Inline
       inline: |
         function envoy_on_request(request_handle)
-          request_handle:logInfo("envoy_on_request: header: content-type: " .. request_handle:headers():get("content-type"))
-          request_handle:logInfo("envoy_on_request: header: x-theme-park-app: " .. request_handle:headers():get("x-theme-park-app"))
+          local headers = request_handle:headers()
+          local authority = headers:get(":authority")
+          if authority == "flood.kraven.dev" then
+            for key, value in pairs(headers) do
+              request_handle:logInfo("Request Header: " .. key .. " = " .. value)
+            end
+          end
         end
         function envoy_on_response(request_handle)
           request_handle:logInfo("Lua script processing response")
