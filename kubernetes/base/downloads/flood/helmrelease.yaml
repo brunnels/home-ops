@@ -128,13 +128,6 @@ spec:
           - backendRefs:
               - name: *app
                 port: *port
-#            filters:
-#              - type: RequestHeaderModifier
-#                requestHeaderModifier:
-#                  set:
-#                    - name: "x-theme-park-app"
-#                      value: *app
-#                  remove: ["accept-encoding"]
     persistence:
       config:
         existingClaim: *app
