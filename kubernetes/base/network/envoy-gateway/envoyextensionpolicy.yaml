@@ -16,11 +16,8 @@ spec:
     - type: Inline
       inline: |
         function envoy_on_request(request_handle)
-          request_handle:logInfo("Lua script processing response for path: " .. request_handle:headers():get(":authority"))
-          local app = request_handle:headers():get("x-theme-park-app")
-          if app then
-            request_handle:logInfo("Found x-theme-park-app header: " .. app)
-          end
+          request_handle:logInfo("envoy_on_request: header: content-type: " .. request_handle:headers():get("content-type"))
+          request_handle:logInfo("envoy_on_request: header: x-theme-park-app: " .. request_handle:headers():get("x-theme-park-app"))
         end
         function envoy_on_response(request_handle)
           request_handle:logInfo("Lua script processing response")
