@@ -15,21 +15,48 @@ spec:
   lua:
     - type: Inline
       inline: |
-        -- Called on the request path.
         function envoy_on_request(request_handle)
-          -- Do something.
+            local app = request_handle:headers():get("x-theme-park-app")
         end
-        -- Called on the response path.
         function envoy_on_response(response_handle)
-          -- Do something.
+          local meta = response_handle:streamInfo():dynamicMetadata():get("envoy.filters.http.lua")
         end
-#  lua:
 #    - type: Inline
 #      inline: |
+#        function envoy_on_request(request_handle)
+#          local app = request_handle:headers():get("x-theme-park-app")
+#          if app then
+#            request_handle:streamInfo():dynamicMetadata():set("envoy.filters.http.lua", "app_name", app)
+#          end
+#        end
+#
 #        function envoy_on_response(response_handle)
-#          -- No parentheses on headers
-#          local h = response_handle:headers()
-#          if h then
-#            h:add("x-lua-debug", "confirmed")
+#          -- 1. Try to get app name from metadata
+#          local meta = response_handle:streamInfo():dynamicMetadata():get("envoy.filters.http.lua")
+#          local app_name = meta and meta["app_name"]
+#
+#          -- 2. Only proceed if we have an app name and it's HTML
+#          if app_name then
+#            local contentType = response_handle:headers():get("content-type") or ""
+#            if string.find(string.lower(contentType), "text/html") then
+#
+#              -- 3. Get the body object
+#              local body = response_handle:body()
+#              if body then
+#                -- Safely get the string and its length using Lua's native length operator
+#                local content = body:getBytes(0, body:length())
+#                if content and #content > 0 then
+#                  local css_url = "https://theme-park.kraven.dev/css/base/" .. app_name .. "/nord.css"
+#                  local inject_str = '<link rel="stylesheet" type="text/css" href="' .. css_url .. '"></head>'
+#
+#                  -- 4. Perform the replacement
+#                  local new_content = string.gsub(content, "</[hH][eE][aA][dD]>", inject_str)
+#
+#                  -- 5. Set the new body and clear content-length
+#                  body:setBytes(new_content)
+#                  response_handle:headers():remove("content-length")
+#                end
+#              end
+#            end
 #          end
 #        end
