@@ -7,18 +7,27 @@ metadata:
 spec:
   targetRefs:
     - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: envoy-external
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: envoy-internal
+      kind: HTTPRoute
+      name: flood
+#    - group: gateway.networking.k8s.io
+#      kind: Gateway
+#      name: envoy-external
+#    - group: gateway.networking.k8s.io
+#      kind: Gateway
+#      name: envoy-internal
   lua:
     - type: Inline
       inline: |
         function envoy_on_response(response_handle)
-          -- No parentheses on headers
-          local h = response_handle:headers()
-          if h then
-            h:add("x-lua-debug", "confirmed")
-          end
+          response_handle:headers():add("x-lua-custom", "FOO")
         end
+#  lua:
+#    - type: Inline
+#      inline: |
+#        function envoy_on_response(response_handle)
+#          -- No parentheses on headers
+#          local h = response_handle:headers()
+#          if h then
+#            h:add("x-lua-debug", "confirmed")
+#          end
+#        end
