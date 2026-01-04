@@ -27,7 +27,7 @@ spec:
         end
         function envoy_on_response(response_handle)
           local contentType = response_handle:headers():get("content-type") or ""
-          request_handle:logInfo("content-type: " .. contentType)
+          response_handle:logInfo("content-type: " .. contentType)
         end
 #    - type: Inline
 #      inline: |
