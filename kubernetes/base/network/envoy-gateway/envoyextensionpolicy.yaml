@@ -7,11 +7,8 @@ metadata:
 spec:
   targetRefs:
     - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: envoy-external
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: envoy-internal
+      kind: HTTPRoute
+      name: flood
   lua:
     - type: Inline
       inline: |
@@ -20,7 +17,7 @@ spec:
           local authority = headers:get(":authority")
           if authority == "flood.kraven.dev" then
             request_handle:headers():remove("accept-encoding")
-            request_handle:logInfo("request header: authority: " .. authority)
+            -- request_handle:logInfo("request header: authority: " .. authority)
           end
         end
         function envoy_on_response(response_handle)
@@ -30,13 +27,6 @@ spec:
             local body_obj = response_handle:body()
             if body_obj then
               response_handle:logInfo("got body")
-              local len = body_obj:length()
-              if len > 0 then
-                  local content = body_obj:getBytes(0, len)
-                  response_handle:logInfo("Flood Response Body: " .. content)
-              else
-                  response_handle:logInfo("Flood Response: Body is empty")
-              end
             end
           end
         end
