@@ -61,16 +61,14 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
-      main:
-        controller: main
+      app:
         ports:
           http:
             port: *port
           metrics:
             port: *metricsPort
     serviceMonitor:
-      main:
-        serviceName: main
+      app:
         endpoints:
           - port: metrics
             scheme: http
