@@ -28,8 +28,9 @@ spec:
           if string.find(string.lower(contentType), "text/html") then
             response_handle:logInfo("content-type: " .. contentType)
             local body = response_handle:body()
-            if body then
-              response_handle:logInfo("got body with length: " .. body:length())
+            local body_length = response_handle:body():length()
+            if body_length > 0 then
+              response_handle:logInfo("got body")
             end
           end
         end
