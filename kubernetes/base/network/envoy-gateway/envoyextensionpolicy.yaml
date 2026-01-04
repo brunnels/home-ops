@@ -25,8 +25,9 @@ spec:
             end
           end
         end
-        function envoy_on_response(request_handle)
-          request_handle:logInfo("Lua script processing response")
+        function envoy_on_response(response_handle)
+          local contentType = response_handle:headers():get("content-type") or ""
+          request_handle:logInfo("content-type: " .. contentType)
         end
 #    - type: Inline
 #      inline: |
