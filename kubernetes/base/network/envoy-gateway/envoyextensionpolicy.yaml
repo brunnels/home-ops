@@ -27,10 +27,16 @@ spec:
           local contentType = response_handle:headers():get("content-type") or ""
           if string.find(string.lower(contentType), "text/html") then
             response_handle:logInfo("content-type: " .. contentType)
-            local body = response_handle:body()
-            local body_length = response_handle:body():length()
-            if body_length > 0 then
+            local body_obj = response_handle:body()
+            if body_obj then
               response_handle:logInfo("got body")
+              local len = body_obj:length()
+              if len > 0 then
+                  local content = body_obj:getBytes(0, len)
+                  response_handle:logInfo("Flood Response Body: " .. content)
+              else
+                  response_handle:logInfo("Flood Response: Body is empty")
+              end
             end
           end
         end
