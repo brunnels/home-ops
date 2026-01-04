@@ -20,16 +20,16 @@ spec:
           local authority = headers:get(":authority")
           if authority == "flood.kraven.dev" then
             request_handle:headers():remove("accept-encoding")
-            for key, value in pairs(headers) do
-              request_handle:logInfo("Request Header: " .. key .. " = " .. value)
-            end
+            request_handle:logInfo("request header: authority: " .. authority)
           end
         end
         function envoy_on_response(response_handle)
           local contentType = response_handle:headers():get("content-type") or ""
           if string.find(string.lower(contentType), "text/html") then
+            response_handle:logInfo("content-type: " .. content-type)
             local body = response_handle:body()
             if body then
+              response_handle:logInfo("got body")
               local content = body:getBytes(0, body:length())
               response_handle:logInfo("got body: " .. (content or "nil"))
             end
