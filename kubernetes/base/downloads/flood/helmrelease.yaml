@@ -162,10 +162,10 @@ spec:
         advancedMounts:
           flood:
             app:
-              - path: incomplete
+              - path: /incomplete
                 subPath: *app
             transmission:
-              - path: incomplete
+              - path: /incomplete
                 subPath: *app
         path: /downloads/${VAULT_PREFIX}/incomplete
         server: ${QNAP_HOSTNAME}

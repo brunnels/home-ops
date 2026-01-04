@@ -116,7 +116,7 @@ spec:
         type: nfs
       incomplete:
         globalMounts:
-          - path: incomplete
+          - path: /incomplete
             subPath: *app
         path: /downloads/${VAULT_PREFIX}/incomplete
         server: ${QNAP_HOSTNAME}
