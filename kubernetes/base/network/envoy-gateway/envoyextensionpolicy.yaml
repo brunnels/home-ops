@@ -16,11 +16,14 @@ spec:
     - type: Inline
       inline: |
         function envoy_on_request(request_handle)
-          request_handle:logInfo("Lua script processing request for path: " .. request_handle:headers():get(":path"))
+          local app = request_handle:headers():get("x-theme-park-app")
+          if app then
+            request_handle:logInfo("Found x-theme-park-app header: " .. app)
+          end
         end
-        function envoy_on_response(request_handle)
-          request_handle:logInfo("Lua script processing response for path: " .. request_handle:headers():get(":path"))
-        end
+#        function envoy_on_response(request_handle)
+#          request_handle:logInfo("Lua script processing response for path: " .. request_handle:headers():get(":path"))
+#        end
 #    - type: Inline
 #      inline: |
 #        function envoy_on_request(request_handle)
