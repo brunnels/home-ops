@@ -14,3 +14,4 @@ resources:
   - ./flood.yaml
   - ./prowlarr.yaml
   - ./sabnzbd.yaml
+  - ./sonarr.yaml

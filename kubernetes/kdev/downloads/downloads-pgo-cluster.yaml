@@ -56,7 +56,8 @@ spec:
       USERS: |
         [
           {"name": "postgres", "databases": ["postgres"], "password": {"type": "AlphaNumeric"}, "options": "SUPERUSER"},
-          {"name": "prowlarr", "databases": ["prowlarr"], "password": {"type": "AlphaNumeric"}}
+          {"name": "prowlarr", "databases": ["prowlarr"], "password": {"type": "AlphaNumeric"}},
+          {"name": "sonarr", "databases": ["sonarr"], "password": {"type": "AlphaNumeric"}}
         ]
   prune: true
   sourceRef:

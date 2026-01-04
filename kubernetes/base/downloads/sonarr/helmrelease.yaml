@@ -1,0 +1,123 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app sonarr
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  interval: 1h
+  values:
+    controllers:
+      sonarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/sonarr
+              tag: 4.0.16.2946@sha256:3597fd572f4599c67abbeb8afd3cb85bce8a9e389f0779b7ea1273781544d15c
+            env:
+              TZ: "${TIMEZONE}"
+              SONARR__APP__INSTANCENAME: *app
+              SONARR__APP__THEME: dark
+              SONARR__AUTH__METHOD: External
+              SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              SONARR__LOG__DBENABLED: "False"
+              SONARR__LOG__LEVEL: info
+              SONARR__POSTGRES__HOST: "{{ .Release.Namespace }}-pgbouncer.{{ .Release.Namespace }}.svc"
+              SONARR__POSTGRES__MAINDB: *app
+              SONARR__POSTGRES__PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
+                    key: password
+              SONARR__POSTGRES__PORT: 5432
+              SONARR__POSTGRES__USER: *app
+              SONARR__SERVER__PORT: &port 80
+              SONARR__UPDATE__BRANCH: develop
+            envFrom:
+              - secretRef:
+                  name: *app
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 3
+                  failureThreshold: 5
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 18m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+    service:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Downloads
+          gethomepage.dev/name: Sonarr
+          gethomepage.dev/icon: sonarr
+          gethomepage.dev/description: TV Downloads
+          gethomepage.dev/widget.type: sonarr
+          gethomepage.dev/widget.url: http://sonarr.downloads
+          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_SONARR_TOKEN}}` }}"
+        hostnames:
+          - "sonarr.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+    persistence:
+      config:
+        existingClaim: *app
+      downloads:
+        advancedMounts:
+          sonarr:
+            app:
+              - path: /downloads/downloaded_tv
+                subPath: sabnzbd/downloaded_tv
+              - path: /downloads/tv-sonarr
+                subPath: flood/tv-sonarr
+        path: /downloads/${VAULT_PREFIX}/complete
+        server: ${QNAP_HOSTNAME}
+        type: nfs
+      tv:
+        globalMounts:
+          - path: /media/tv
+        path: /tv
+        server: ${QNAP_HOSTNAME}
+        type: nfs
+      tmp:
+        type: emptyDir
