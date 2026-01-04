@@ -29,7 +29,8 @@ spec:
             response_handle:logInfo("content-type: " .. contentType)
             local body = response_handle:body()
             if body then
-              response_handle:logInfo("got body")
+              local content = body:getBytes(0, body:length())
+              response_handle:logInfo("got body with length: " .. body:length())
             end
           end
         end
