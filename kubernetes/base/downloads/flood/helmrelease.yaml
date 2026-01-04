@@ -155,7 +155,7 @@ spec:
             transmission:
               - path: /downloads
                 subPath: *app
-        path: /downloads
+        path: /downloads/complete
         server: ${QNAP_HOSTNAME}
         type: nfs
       incomplete:
@@ -167,7 +167,7 @@ spec:
             transmission:
               - path: incomplete
                 subPath: *app
-        path: /downloads
+        path: /downloads/incomplete
         server: ${QNAP_HOSTNAME}
         type: nfs
       tmp:
