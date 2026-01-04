@@ -12,9 +12,15 @@ spec:
   lua:
     - type: Inline
       inline: |
+        function envoy_on_request(request_handle)
+          local accept_header = request_handle:headers():get("accept") or ""
+          if string.find(string.lower(accept_header), "text/html") then
+            request_handle:headers():remove("accept-encoding")
+          end
+        end
         function envoy_on_response(response_handle)
           local contentType = response_handle:headers():get("content-type") or ""
-          if string.find(string.lower(contentType), "text/html") then
+          if string.find(string.lower(contentType), "text/html") and not response_handle:headers():get("content-encoding") then
             local body_obj = response_handle:body()
             if body_obj and body_obj:length() > 0 then
               local css_url = "https://${THEME_PARK_SUBDOMAIN:-theme-park}.${SECRET_DOMAIN}/css/base/${THEME_PARK_APP:-${APP}}/${THEME_PARK_THEME:-nord}.css"
