@@ -26,7 +26,7 @@ spec:
         function envoy_on_response(response_handle)
           local contentType = response_handle:headers():get("content-type") or ""
           if string.find(string.lower(contentType), "text/html") then
-            response_handle:logInfo("content-type: " .. content-type)
+            response_handle:logInfo("content-type: " .. contentType)
             local body = response_handle:body()
             if body then
               response_handle:logInfo("got body")
