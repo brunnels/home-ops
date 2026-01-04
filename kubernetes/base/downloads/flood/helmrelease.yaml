@@ -134,7 +134,7 @@ spec:
                   set:
                     - name: "x-theme-park-app"
                       value: *app
-                  remove: ["Accept-Encoding"]
+                  remove: ["accept-encoding"]
     persistence:
       config:
         existingClaim: *app
