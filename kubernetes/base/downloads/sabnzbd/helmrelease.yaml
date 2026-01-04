@@ -105,7 +105,7 @@ spec:
         globalMounts:
           - path: /downloads
             subPath: *app
-        path: /downloads/complete
+        path: /downloads/${VAULT_PREFIX}/complete
         server: ${QNAP_HOSTNAME}
         type: nfs
       games:
@@ -118,7 +118,7 @@ spec:
         globalMounts:
           - path: incomplete
             subPath: *app
-        path: /downloads/incomplete
+        path: /downloads/${VAULT_PREFIX}/incomplete
         server: ${QNAP_HOSTNAME}
         type: nfs
       misc:
