@@ -79,7 +79,7 @@ spec:
       tmpfs:
         type: emptyDir
         advancedMounts:
-          prowlarr:
+          flaresolverr:
             app:
               - path: /app/.local
                 subPath: app-local
