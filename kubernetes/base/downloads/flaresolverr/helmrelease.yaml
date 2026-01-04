@@ -76,5 +76,12 @@ spec:
             interval: 1m
             scrapeTimeout: 10s
     persistence:
-      tmp:
+      tmpfs:
         type: emptyDir
+        advancedMounts:
+          prowlarr:
+            app:
+              - path: /app/.local
+                subPath: app-local
+              - path: /tmp
+                subPath: tmp
