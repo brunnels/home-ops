@@ -6,9 +6,6 @@ metadata:
   name: inject-nord-theme-global
 spec:
   targetRefs:
-#    - group: gateway.networking.k8s.io
-#      kind: HTTPRoute
-#      name: flood
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: envoy-external
@@ -18,8 +15,13 @@ spec:
   lua:
     - type: Inline
       inline: |
+        -- Called on the request path.
+        function envoy_on_request(request_handle)
+          -- Do something.
+        end
+        -- Called on the response path.
         function envoy_on_response(response_handle)
-          response_handle:headers():add("x-lua-custom", "FOO")
+          -- Do something.
         end
 #  lua:
 #    - type: Inline
