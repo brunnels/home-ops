@@ -37,6 +37,7 @@ spec:
               READARR__AUTH__REQUIRED: DisabledForLocalAddresses
               READARR__LOG__DBENABLED: "False"
               READARR__LOG__LEVEL: info
+              READARR__POSTGRES__CACHEDB: bookshelf-cache
               READARR__POSTGRES__HOST: "{{ .Release.Namespace }}-pgbouncer.{{ .Release.Namespace }}.svc"
               READARR__POSTGRES__MAINDB: *app
               READARR__POSTGRES__PASSWORD:
