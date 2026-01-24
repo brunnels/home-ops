@@ -18,9 +18,9 @@ spec:
       createSecret: false
       username: admin
     image:
-      repository: artifactory.devops.telekom.de/ghcr.io.docker/gkalian/wego-app
+      repository: ghcr.io/gkalian/wego-app
       pullPolicy: IfNotPresent
-      tag: v0.39.0-rc.3
+      tag: v0.39.0-rc.3@sha256:abc892644b38f4b4a49f1f5dcaf8b15a219a3e6104a632bc9824b2f2365659e8
     ingress:
       enabled: false
     metrics:
