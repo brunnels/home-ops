@@ -21,7 +21,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      DB_NAMES: "readarr readarr-cache readarr-logs"
+      DB_NAMES: "readarr readarr-cache readarr-log"
   prune: true
   sourceRef:
     kind: GitRepository
