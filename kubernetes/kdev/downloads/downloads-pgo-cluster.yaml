@@ -56,7 +56,6 @@ spec:
       USERS: |
         [
           {"name": "postgres", "databases": ["postgres"], "password": {"type": "AlphaNumeric"}, "options": "SUPERUSER"},
-          {"name": "bookshelf", "databases": ["bookshelf", "bookshelf-cache", "bookshelf-log"], "password": {"type": "AlphaNumeric"}},
           {"name": "lidarr", "databases": ["prowlarr"], "password": {"type": "AlphaNumeric"}},
           {"name": "prowlarr", "databases": ["lidarr"], "password": {"type": "AlphaNumeric"}},
           {"name": "radarr", "databases": ["radarr"], "password": {"type": "AlphaNumeric"}},
