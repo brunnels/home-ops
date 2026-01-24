@@ -11,7 +11,7 @@ spec:
   interval: 1h
   values:
     fullnameOverride: *app
-    domain: "${SECRET_DOMAIN}"
+    domain: "${SECRET_DOMAIN:-cluster.local}"
     ttl: 1
     service:
       type: LoadBalancer
