@@ -102,6 +102,12 @@ spec:
               - name: *app
                 port: *port
     persistence:
+      books:
+        globalMounts:
+          - path: /media/books
+        path: /books
+        server: ${QNAP_HOSTNAME}
+        type: nfs
       config:
         existingClaim: *app
       downloads:
@@ -115,11 +121,8 @@ spec:
         path: /downloads/${VAULT_PREFIX}/complete
         server: ${QNAP_HOSTNAME}
         type: nfs
-      books:
-        globalMounts:
-          - path: /media/books
-        path: /books
-        server: ${QNAP_HOSTNAME}
-        type: nfs
+      run:
+        type: emptyDir
+        medium: Memory
       tmp:
         type: emptyDir
