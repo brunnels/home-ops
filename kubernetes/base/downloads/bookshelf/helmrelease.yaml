@@ -90,7 +90,7 @@ spec:
           gethomepage.dev/icon: *app
           gethomepage.dev/description: eBook Downloads
           gethomepage.dev/widget.type: *app
-          gethomepage.dev/widget.url: "http://readarr.{{ .Release.Namespace }}"
+          gethomepage.dev/widget.url: "http://bookshelf.{{ .Release.Namespace }}"
           gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_READARR_TOKEN}}` }}"
         hostnames:
           - "bookshelf.${SECRET_DOMAIN}"
