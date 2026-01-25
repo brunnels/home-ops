@@ -17,4 +17,4 @@ resources:
   - ./prowlarr.yaml
 #  - ./radarr.yaml
   - ./sabnzbd.yaml
-#  - ./sonarr.yaml
+  - ./sonarr.yaml
