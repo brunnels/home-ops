@@ -126,7 +126,7 @@ spec:
         advancedMounts:
           readarr:
             app:
-              - path: /downloads/downloaded_books
+              - path: /downloads/complete/downloaded_books
                 subPath: sabnzbd/downloaded_books
               - path: /downloads/books-readarr
                 subPath: flood/books-readarr

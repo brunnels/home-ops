@@ -108,7 +108,7 @@ spec:
         advancedMounts:
           sonarr:
             app:
-              - path: /downloads/downloaded_tv
+              - path: /downloads/complete/downloaded_tv
                 subPath: sabnzbd/downloaded_tv
               - path: /downloads/tv-sonarr
                 subPath: flood/tv-sonarr

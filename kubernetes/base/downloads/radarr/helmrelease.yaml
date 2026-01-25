@@ -108,7 +108,7 @@ spec:
         advancedMounts:
           radarr:
             app:
-              - path: /downloads/downloaded_movies
+              - path: /downloads/complete/downloaded_movies
                 subPath: sabnzbd/downloaded_movies
               - path: /downloads/movies-radarr
                 subPath: flood/movies-radarr
