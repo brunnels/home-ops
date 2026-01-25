@@ -10,3 +10,4 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ../../common/default/theme-park.yaml
+  - ./homepage.yaml
