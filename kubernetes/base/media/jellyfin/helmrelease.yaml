@@ -29,6 +29,7 @@ spec:
               TZ: ${TIMEZONE}
             probes:
               liveness: &probes
+                enabled: true
                 custom: true
                 spec:
                   httpGet:
