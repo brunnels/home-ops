@@ -124,26 +124,26 @@ spec:
               - name: *app
                 port: *port
     persistence:
+      config:
+        existingClaim: *app
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server
+      cache:
+        storageClass: local-path
+        accessMode: ReadWriteOnce
+        size: 75Gi
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server/Cache
+      logs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server/Logs
       backup:
         globalMounts:
           - path: /config/Backups
         path: /backup/plex
         server: ${QNAP_HOSTNAME}
         type: nfs
-      cache:
-        storageClass: local-path
-        accessMode: ReadWriteOnce
-        size: 10Gi
-        globalMounts:
-          - path: /config/Library/Application Support/Plex Media Server/Cache
-      config:
-        existingClaim: *app
-        globalMounts:
-          - path: /config/Library/Application Support/Plex Media Server
-      logs:
-        type: emptyDir
-        globalMounts:
-          - path: /config/Library/Application Support/Plex Media Server/Logs
       movies:
         globalMounts:
           - path: /media/movies
