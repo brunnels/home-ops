@@ -39,6 +39,11 @@ session:
     database_index: 2
     host: "${NAMESPACE}-dragonfly"
 
+server:
+  buffers:
+    read: 8192
+    write: 8192
+
 storage:
   postgres:
     tls:
