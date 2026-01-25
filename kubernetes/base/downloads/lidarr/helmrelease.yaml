@@ -108,7 +108,7 @@ spec:
         advancedMounts:
           lidarr:
             app:
-              - path: /downloads/downloaded_music
+              - path: /downloads/complete/downloaded_music
                 subPath: sabnzbd/downloaded_music
               - path: /downloads/music-lidarr
                 subPath: flood/music-lidarr
