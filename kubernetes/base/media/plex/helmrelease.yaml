@@ -9,6 +9,11 @@ spec:
     kind: OCIRepository
     name: app-template
   interval: 1h
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: storage
+    - name: volsync
+      namespace: storage
   values:
     controllers:
       plex:
@@ -77,7 +82,8 @@ spec:
             group: external
             alerts:
               - type: pushover
-          io.cilium/lb-ipam-ips: ${SVC_PLEX_ADDR}
+          lbipam.cilium.io/ips: ${SVC_PLEX_ADDR}
+        externalTrafficPolicy: Local
         ports:
           http:
             port: *port
@@ -100,11 +106,10 @@ spec:
         parentRefs:
           - name: envoy-external
             namespace: network
-            sectionName: https
         rules:
           - # Ref: https://forums.plex.tv/t/external-srt-subtitles-are-not-working-w-reverse-proxy/886540
             backendRefs:
-              - identifier: app
+              - name: *app
                 port: *port
             filters:
               - type: RequestHeaderModifier
@@ -116,7 +121,7 @@ spec:
                   type: PathPrefix
                   value: /library/streams
           - backendRefs:
-              - identifier: app
+              - name: *app
                 port: *port
     persistence:
       backup:
