@@ -9,12 +9,12 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
-#  - ./readarr.yaml
+  - ./readarr.yaml
   - ./downloads-pgo-cluster.yaml
   - ./flaresolverr.yaml
-#  - ./flood.yaml
+  - ./flood.yaml
 #  - ./lidarr.yaml
-#  - ./prowlarr.yaml
+  - ./prowlarr.yaml
 #  - ./radarr.yaml
-#  - ./sabnzbd.yaml
+  - ./sabnzbd.yaml
 #  - ./sonarr.yaml
