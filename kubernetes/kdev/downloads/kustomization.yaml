@@ -13,7 +13,7 @@ resources:
   - ./downloads-pgo-cluster.yaml
   - ./flaresolverr.yaml
   - ./flood.yaml
-#  - ./lidarr.yaml
+  - ./lidarr.yaml
   - ./prowlarr.yaml
 #  - ./radarr.yaml
   - ./sabnzbd.yaml
