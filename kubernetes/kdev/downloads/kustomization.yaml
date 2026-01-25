@@ -15,6 +15,6 @@ resources:
   - ./flood.yaml
   - ./lidarr.yaml
   - ./prowlarr.yaml
-#  - ./radarr.yaml
+  - ./radarr.yaml
   - ./sabnzbd.yaml
   - ./sonarr.yaml
