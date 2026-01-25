@@ -1,0 +1,186 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app plex
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  interval: 1h
+  values:
+    controllers:
+      plex:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/plex
+              tag: 1.42.2.10156@sha256:9ad8a3506e1d8ebda873a668603c1a2c10e6887969564561be669efd65ae8871
+            env:
+              TZ: "${TIMEZONE}"
+              PLEX_ADVERTISE_URL: "https://plex.${SECRET_DOMAIN}:443,http://${SVC_PLEX_ADDR}:32400,https://plex.{{ .Release.Namespace }}.svc.cluster.local:32400"
+              PLEX_NO_AUTH_NETWORKS: "${LAN_CIDR},${CLUSTER_CIDR},${SERVICE_CIDR}"
+              PLEX_PREFERENCE_DELETION: "AllowMediaDeletion=0"
+              PLEX_PREFERENCE_IPV6: "EnableIPv6=0"
+              PLEX_PREFERENCE_LAN: "LanNetworksBandwidth=${LAN_CIDR}"
+              PLEX_PREFERENCE_MAPPED_PORT: "ManualPortMappingPort=443"
+              PLEX_PREFERENCE_NAME: "FriendlyName=Runnels"
+              PLEX_PREFERENCE_PORT_MAPPING: "ManualPortMappingMode=1"
+            envFrom:
+              - secretRef:
+                  name: *app
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /identity
+                    port: &port 32400
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 200m
+                memory: 128Mi
+              limits:
+                gpu.intel.com/i915: 1
+                memory: 4Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [65536]
+    service:
+      app:
+        type: LoadBalancer
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: external
+            alerts:
+              - type: pushover
+          io.cilium/lb-ipam-ips: ${SVC_PLEX_ADDR}
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 401"]
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Media
+          gethomepage.dev/name: Plex
+          gethomepage.dev/icon: *app
+          gethomepage.dev/description: Media Player
+          gethomepage.dev/widget.type: *app
+          gethomepage.dev/widget.url: "http://plex.{{ .Release.Namespace }}:32400"
+          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_PLEX_TOKEN}}` }}"
+          gethomepage.dev/pod-selector: app.kubernetes.io/name=plex
+        hostnames:
+          - "plex.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+            sectionName: https
+        rules:
+          - # Ref: https://forums.plex.tv/t/external-srt-subtitles-are-not-working-w-reverse-proxy/886540
+            backendRefs:
+              - identifier: app
+                port: *port
+            filters:
+              - type: RequestHeaderModifier
+                requestHeaderModifier:
+                  remove:
+                    - Range
+            matches:
+              - path:
+                  type: PathPrefix
+                  value: /library/streams
+          - backendRefs:
+              - identifier: app
+                port: *port
+    persistence:
+      backup:
+        globalMounts:
+          - path: /config/Backups
+        path: /backup/plex
+        server: ${QNAP_HOSTNAME}
+        type: nfs
+      cache:
+        storageClass: local-path
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server/Cache
+      config:
+        existingClaim: *app
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server
+      logs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server/Logs
+      movies:
+        globalMounts:
+          - path: /media/movies
+        path: /movies
+        server: ${QNAP_HOSTNAME}
+        type: nfs
+      music:
+        globalMounts:
+          - path: /media/music
+        path: /music
+        server: ${QNAP_HOSTNAME}
+        type: nfs
+      pictures:
+        globalMounts:
+          - path: /media/pictures
+        path: /pictures
+        server: ${QNAP_HOSTNAME}
+        type: nfs
+      tv:
+        globalMounts:
+          - path: /media/tv
+        path: /tv
+        server: ${QNAP_HOSTNAME}
+        type: nfs
+      videos:
+        globalMounts:
+          - path: /media/videos
+        path: /videos
+        server: ${QNAP_HOSTNAME}
+        type: nfs
+      tmp:
+        type: emptyDir
+        sizeLimit: 10Gi
+      transcode:
+        type: custom
+        volumeSpec:
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                storageClassName: ceph-block
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 500Gi
