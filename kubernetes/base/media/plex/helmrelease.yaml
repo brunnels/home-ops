@@ -129,7 +129,7 @@ spec:
         globalMounts:
           - path: /config/Library/Application Support/Plex Media Server
       cache:
-        storageClass: local-path
+        storageClass: ceph-block
         accessMode: ReadWriteOnce
         size: 75Gi
         globalMounts:
