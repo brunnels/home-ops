@@ -1,0 +1,41 @@
+title: Dashboard
+favicon: goaccess-light
+theme: dark
+background:
+  image: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
+  blur: sm
+  saturate: 50
+  brightness: 50
+  opacity: 50
+color: slate
+headerStyle: clean
+layout:
+  Home:
+    style: column
+    icon: mdi-home-analytics
+  Git:
+    style: column
+    icon: mdi-desktop-tower
+  Storage:
+    style: row
+    columns: 2
+    icon: mdi-desktop-tower
+  Calendar:
+    style: column
+    icon: mdi-calendar
+  Media:
+    style: column
+    icon: mdi-play-circle
+  Infrastructure:
+    style: column
+    icon: mdi-server
+  DNS:
+    style: column
+    icon: mdi-server
+  Observability:
+    style: column
+    icon: mdi-chart-line
+  Downloads:
+    style: row
+    columns: 3
+    icon: mdi-download-circle
