@@ -92,11 +92,12 @@ spec:
           type: ClusterRoleBinding
           roleRef:
             kind: ClusterRole
-            identifier: *app
+            name: *app
             apiGroup: rbac.authorization.k8s.io
           subjects:
             - kind: ServiceAccount
-              identifier: *app
+              name: *app
+              namespace: default
     route:
       app:
         hostnames:
