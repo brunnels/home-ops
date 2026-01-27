@@ -110,6 +110,10 @@ spec:
               - name: *app
                 port: *port
     persistence:
+      config:
+        type: emptyDir
+        globalMounts:
+          - path: /app/config
       config-settings:
         type: configMap
         name: *app
