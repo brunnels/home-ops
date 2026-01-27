@@ -25,11 +25,17 @@ spec:
               TZ: "${TIMEZONE}"
               HOMEPAGE_ALLOWED_HOSTS: "*"
               NODE_OPTIONS: "--max-http-header-size=65536"
-              PUID: 1000
-              PGID: 1000
             envFrom:
               - secretRef:
                   name: *app
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/healthcheck
+                    port: &port 3000
             resources:
               requests:
                 cpu: 15m
@@ -56,7 +62,7 @@ spec:
               - type: pushover
         ports:
           http:
-            port: &port 3000
+            port: *port
     serviceAccount:
       homepage: {}
     rbac:
