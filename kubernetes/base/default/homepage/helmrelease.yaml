@@ -116,3 +116,8 @@ spec:
             path: /app/config/settings.yaml
           - subPath: widgets.yaml
             path: /app/config/widgets.yaml
+      logs:
+        type: emptyDir
+        sizeLimit: 100Mi
+        globalMounts:
+          - path: /app/config/logs
