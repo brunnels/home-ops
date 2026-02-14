@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app overseerr
+  name: &app seerr
 spec:
   chartRef:
     kind: OCIRepository
@@ -11,18 +11,21 @@ spec:
   interval: 1h
   values:
     controllers:
-      overseerr:
+      seerr:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: ghcr.io/sct/overseerr
-              tag: 1.34.0@sha256:4f38f58d68555004d3f487a4c5cbe2823e6a0942d946a25a2d9391d8492240a4
+              repository: ghcr.io/seerr-team/seerr
+              tag: develop@sha256:aff58070327a0d536bbd1f33c7bd009e753433e68fafee831b8ac3ae64a8f769
             env:
-              TZ: "${TIMEZONE}"
-              LOG_LEVEL: "info"
+              LOG_LEVEL: info
               PORT: &port 80
+              TZ: "${TIMEZONE}"
+            envFrom:
+              - secretRef:
+                  name: *app
             probes:
               liveness: &probes
                 enabled: true
@@ -33,15 +36,15 @@ spec:
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
-                  timeoutSeconds: 1
+                  timeoutSeconds: 5
                   failureThreshold: 3
               readiness: *probes
             resources:
               requests:
-                cpu: 200m
+                cpu: 10m
                 memory: 128Mi
               limits:
-                memory: 4Gi
+                memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -64,12 +67,12 @@ spec:
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Media
-          gethomepage.dev/name: Overseerr
+          gethomepage.dev/name: Seerr
           gethomepage.dev/icon: *app
           gethomepage.dev/description: Media Request Management
           gethomepage.dev/widget.type: *app
-          gethomepage.dev/widget.url: "http://overseerr.{{ .Release.Namespace }}"
-          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_OVERSEERR_TOKEN}}` }}"
+          gethomepage.dev/widget.url: "http://seerr.{{ .Release.Namespace }}"
+          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_SEERR_TOKEN}}` }}"
         hostnames:
           - "requests.${SECRET_DOMAIN}"
         parentRefs:
