@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app tautulli
+  name: &app overseerr
 spec:
   commonMetadata:
     labels:
