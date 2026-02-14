@@ -114,9 +114,9 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /app/config
-            subpath: config
+            subPath: config
           - path: /app/.next/server/pages
-            subpath: pages
+            subPath: pages
       config-settings:
         type: configMap
         name: *app
