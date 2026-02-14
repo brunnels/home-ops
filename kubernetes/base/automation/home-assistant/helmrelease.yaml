@@ -22,9 +22,6 @@ spec:
             env:
               HASS_URL: "https://hass.${SECRET_EXTERNAL_DOMAIN}"
               TZ: "${TIMEZONE}"
-            envFrom:
-              - secretRef:
-                  name: *app
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
