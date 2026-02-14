@@ -112,7 +112,7 @@ spec:
     route:
       app:
         annotations:
-          gethomepage.dev/enabled: "false"
+          gethomepage.dev/enabled: true
           gethomepage.dev/group: Downloads
           gethomepage.dev/name: Flood
           gethomepage.dev/icon: *app
