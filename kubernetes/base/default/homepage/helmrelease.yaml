@@ -18,7 +18,7 @@ spec:
           reloader.stakater.com/auto: "true"
         containers:
           app:
-            image:
+            image: &image
               repository: ghcr.io/gethomepage/homepage
               tag: v1.10.1@sha256:0b596092c0b55fe4c65379a428a3fe90bd192f10d1b07d189a34fe5fabe7eedb
             env:
@@ -36,7 +36,7 @@ spec:
                   httpGet:
                     path: /api/healthcheck
                     port: &port 3000
-            resources:
+            resources: &resources
               requests:
                 cpu: 15m
                 memory: 128Mi
@@ -44,16 +44,9 @@ spec:
                 memory: 768Mi
         initContainers:
           init:
-            image:
-              repository: ghcr.io/gethomepage/homepage
-              tag: v1.10.1@sha256:0b596092c0b55fe4c65379a428a3fe90bd192f10d1b07d189a34fe5fabe7eedb
+            image: *image
             command: ["sh", "-c", "cp -r /app/.next/server/pages/* /pages"]
-            resources:
-              requests:
-                cpu: 15m
-                memory: 128Mi
-              limits:
-                memory: 768Mi
+            resources: *resources
     securityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
