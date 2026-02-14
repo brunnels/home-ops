@@ -9,7 +9,7 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Management
     gethomepage.dev/icon: si-postgresql
-    gethomepage.dev/name: pgAdmin
+    gethomepage.dev/name: ${NAMESPACE} pgAdmin
     gethomepage.dev/pod-selector: postgres-operator.crunchydata.com/pgadmin=${NAMESPACE}-pgadmin
 spec:
   hostnames: ["${NAMESPACE}-pgadmin.${SECRET_DOMAIN}"]
