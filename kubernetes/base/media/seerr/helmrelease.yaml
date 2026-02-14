@@ -68,9 +68,9 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Media
           gethomepage.dev/name: Seerr
-          gethomepage.dev/icon: *app
+          gethomepage.dev/icon: overseerr
           gethomepage.dev/description: Media Request Management
-          gethomepage.dev/widget.type: *app
+          gethomepage.dev/widget.type: overseerr
           gethomepage.dev/widget.url: "http://seerr.{{ .Release.Namespace }}"
           gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_SEERR_TOKEN}}` }}"
         hostnames:
