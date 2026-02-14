@@ -10,3 +10,4 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./esphome.yaml
+  - ./home-assistant.yaml
