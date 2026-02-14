@@ -112,13 +112,13 @@ spec:
     route:
       app:
         annotations:
-          gethomepage.dev/enabled: "true"
+          gethomepage.dev/enabled: "false"
           gethomepage.dev/group: Downloads
           gethomepage.dev/name: Flood
           gethomepage.dev/icon: flood
           gethomepage.dev/description: Bittorrent UI
           gethomepage.dev/widget.type: flood
-          gethomepage.dev/widget.url: http://flood.downloads
+          gethomepage.dev/widget.url: "http://flood.{{ .Release.Namespace }}"
         hostnames:
           - "flood.${SECRET_DOMAIN}"
         parentRefs:
