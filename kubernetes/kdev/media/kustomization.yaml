@@ -10,5 +10,5 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./plex.yaml
-  - ./seer.yaml
+  - ./seerr.yaml
   - ./tautulli.yaml
