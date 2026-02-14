@@ -115,8 +115,8 @@ spec:
         globalMounts:
           - path: /app/config
             subPath: config
-          - path: /app/.next/server/pages
-            subPath: pages
+#          - path: /app/.next/server/pages
+#            subPath: pages
       config-settings:
         type: configMap
         name: *app
