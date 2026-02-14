@@ -57,10 +57,10 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Automation
           gethomepage.dev/name: ESPHome
-          gethomepage.dev/icon: esphome
+          gethomepage.dev/icon: *app
           gethomepage.dev/description: ESP Microcontroller Automation
-          gethomepage.dev/widget.type: esphome
-          gethomepage.dev/widget.url: "http://esphome.automation:6052"
+          gethomepage.dev/widget.type: *app
+          gethomepage.dev/widget.url: "http://esphome.{{ .Release.Namespace }}:6052"
         hostnames:
           - "esphome.${SECRET_DOMAIN}"
         parentRefs:

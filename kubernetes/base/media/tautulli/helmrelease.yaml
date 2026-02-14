@@ -21,7 +21,6 @@ spec:
               tag: 2.16.0@sha256:772e1af814159bd7e774273d4f9170b1a0f7129f2ad39be5619a458b7b0fd4b0
             env:
               TZ: "${TIMEZONE}"
-              TAUTULLI__PORT: &port 80
             probes:
               liveness: &probes
                 enabled: true
@@ -29,7 +28,7 @@ spec:
                 spec:
                   httpGet:
                     path: /status
-                    port: *port
+                    port: &port 8081
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -69,10 +68,10 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Media
           gethomepage.dev/name: Tautulli
-          gethomepage.dev/icon: tautulli
+          gethomepage.dev/icon: *app
           gethomepage.dev/description: Plex Stream Monitoring
-          gethomepage.dev/widget.type: tautulli
-          gethomepage.dev/widget.url: http://tautulli.media
+          gethomepage.dev/widget.type: *app
+          gethomepage.dev/widget.url: "http://tautulli.{{ .Release.Namespace }}:8081"
           gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_TAUTULLI_TOKEN}}` }}"
         hostnames:
           - "tautulli.${SECRET_DOMAIN}"

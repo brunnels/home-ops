@@ -65,10 +65,10 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Media
           gethomepage.dev/name: Overseerr
-          gethomepage.dev/icon: overseerr
+          gethomepage.dev/icon: *app
           gethomepage.dev/description: Media Request Management
-          gethomepage.dev/widget.type: overseerr
-          gethomepage.dev/widget.url: http://overseerr.media
+          gethomepage.dev/widget.type: *app
+          gethomepage.dev/widget.url: "http://overseerr.{{ .Release.Namespace }}"
           gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_OVERSEERR_TOKEN}}` }}"
         hostnames:
           - "requests.${SECRET_DOMAIN}"

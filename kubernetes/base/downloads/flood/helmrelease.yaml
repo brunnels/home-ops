@@ -115,9 +115,9 @@ spec:
           gethomepage.dev/enabled: "false"
           gethomepage.dev/group: Downloads
           gethomepage.dev/name: Flood
-          gethomepage.dev/icon: flood
+          gethomepage.dev/icon: *app
           gethomepage.dev/description: Bittorrent UI
-          gethomepage.dev/widget.type: flood
+          gethomepage.dev/widget.type: *app
           gethomepage.dev/widget.url: "http://flood.{{ .Release.Namespace }}"
         hostnames:
           - "flood.${SECRET_DOMAIN}"
