@@ -125,14 +125,15 @@ spec:
       config:
         type: emptyDir
         advancedMounts:
-          init:
-            - path: /pages
-              subPath: pages
           homepage:
-            - path: /app/config
-              subPath: config
-            - path: /app/.next/server/pages
-              subPath: pages
+            init:
+              - path: /pages
+                subPath: pages
+            app:
+              - path: /app/config
+                subPath: config
+              - path: /app/.next/server/pages
+                subPath: pages
       config-settings:
         type: configMap
         name: *app
