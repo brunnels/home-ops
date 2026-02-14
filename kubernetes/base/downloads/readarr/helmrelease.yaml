@@ -96,7 +96,7 @@ spec:
     route:
       app:
         annotations:
-          gethomepage.dev/enabled: "true"
+          gethomepage.dev/enabled: "false"
           gethomepage.dev/group: Downloads
           gethomepage.dev/name: Readarr
           gethomepage.dev/icon: *app
