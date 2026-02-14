@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/seerr-team/seerr
-              tag: develop@sha256:aff58070327a0d536bbd1f33c7bd009e753433e68fafee831b8ac3ae64a8f769
+              tag: develop@sha256:41e0e746b8e718e3964a1ed2eb0effa60cae1ab3b386280e1aa5a96a72ed1eee
             env:
               LOG_LEVEL: info
               PORT: &port 80
@@ -101,9 +101,12 @@ spec:
                     storage: 15Gi
         globalMounts:
           - path: /app/config/cache
-      logs:
+      tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /app/config/logs
-      tmp:
-        type: emptyDir
+        advancedMounts:
+          seerr:
+            app:
+              - path: /app/config/logs
+                subPath: logs
+              - path: /tmp
+                subPath: tmp
