@@ -87,15 +87,15 @@ spec:
         annotations:
           gatus.home-operations.com/endpoint: |-
             conditions: ["[STATUS] == 401"]
-#          gethomepage.dev/enabled: "true"
-#          gethomepage.dev/group: Media
-#          gethomepage.dev/name: Plex
-#          gethomepage.dev/icon: *app
-#          gethomepage.dev/description: Media Player
-#          gethomepage.dev/widget.type: *app
-#          gethomepage.dev/widget.url: "http://plex.{{ .Release.Namespace }}:32400"
-#          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_PLEX_TOKEN}}` }}"
-#          gethomepage.dev/pod-selector: app.kubernetes.io/name=plex
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Media
+          gethomepage.dev/name: Plex
+          gethomepage.dev/icon: *app
+          gethomepage.dev/description: Media Player
+          gethomepage.dev/widget.type: *app
+          gethomepage.dev/widget.url: "http://plex.{{ .Release.Namespace }}:32400"
+          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_PLEX_TOKEN}}` }}"
+          gethomepage.dev/pod-selector: app.kubernetes.io/name=plex
         hostnames:
           - "plex.${SECRET_DOMAIN}"
         parentRefs:
