@@ -157,5 +157,14 @@ spec:
                     storage: 1Gi
         globalMounts:
           - path: /config/.venv
+      secrets:
+        type: secret
+        name: *app
+        advancedMounts:
+          home-assistant:
+            app:
+              - path: /config/secrets.yaml
+                subPath: secrets.yaml
+                readOnly: true
       tmp:
         type: emptyDir
