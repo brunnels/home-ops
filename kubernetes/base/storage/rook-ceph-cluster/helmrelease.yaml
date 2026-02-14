@@ -24,7 +24,7 @@ spec:
           gethomepage.dev/group: Management
           gethomepage.dev/name: Rook Dashboard
           gethomepage.dev/icon: rook
-          gethomepage.dev/pod-selector: app.kubernetes.io/name=rook-ceph-mgr
+          gethomepage.dev/pod-selector: mgr_role=active
         host:
           name: "rook.${SECRET_DOMAIN}"
           path: /
