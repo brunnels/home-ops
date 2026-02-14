@@ -42,6 +42,18 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 768Mi
+        initContainers:
+          init:
+            image:
+              repository: ghcr.io/gethomepage/homepage
+              tag: v1.10.1@sha256:0b596092c0b55fe4c65379a428a3fe90bd192f10d1b07d189a34fe5fabe7eedb
+            cmd: ["sh", "-c", "cp -r /app/.next/server/pages /pages"]
+            resources:
+              requests:
+                cpu: 15m
+                memory: 128Mi
+              limits:
+                memory: 768Mi
     securityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
@@ -112,11 +124,15 @@ spec:
     persistence:
       config:
         type: emptyDir
-        globalMounts:
-          - path: /app/config
-            subPath: config
-#          - path: /app/.next/server/pages
-#            subPath: pages
+        advancedMounts:
+          init:
+            - path: /pages
+              subPath: pages
+          homepage:
+            - path: /app/config
+              subPath: config
+            - path: /app/.next/server/pages
+              subPath: pages
       config-settings:
         type: configMap
         name: *app
