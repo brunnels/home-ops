@@ -10,3 +10,5 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./plex.yaml
+  - ./overseer.yaml
+  - ./tautulli.yaml
