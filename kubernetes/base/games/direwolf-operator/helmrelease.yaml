@@ -12,7 +12,13 @@ spec:
   upgrade:
     crds: CreateReplace
     force: true
-  values: []
+  values:
+    service:
+      app:
+        controller: moonlight_proxy
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/sharing-key: "{{ .Release.Namespace }}"
 #    controllers:
 #      direwolf_operator:
 #        containers:
