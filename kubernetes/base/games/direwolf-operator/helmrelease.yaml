@@ -12,14 +12,14 @@ spec:
   upgrade:
     crds: CreateReplace
     force: true
-  values: []
-#    service:
-#      app:
-#        controller: moonlight_proxy
-#        type: LoadBalancer
-#        annotations:
-#          io.cilium/lb-ipam-sharing-key: "{{ .Release.Namespace }}"
-#          metallb.universe.tf/allow-shared-ip: "{{ .Release.Namespace }}"
+  values:
+    service:
+      app:
+        controller: moonlight_proxy
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-sharing-key: "{{ .Release.Namespace }}"
+          metallb.universe.tf/allow-shared-ip: "{{ .Release.Namespace }}"
 #    controllers:
 #      direwolf_operator:
 #        containers:
