@@ -11,3 +11,4 @@ replacements:
 resources:
   - ./esphome.yaml
   - ./home-assistant.yaml
+  - ./mosquitto.yaml

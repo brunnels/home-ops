@@ -82,11 +82,11 @@ spec:
       app:
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: ${SVC_HAAS_ADDR}
           gatus.home-operations.com/endpoint: |
             group: internal
             alerts:
               - type: pushover
+          lbipam.cilium.io/ips: ${SVC_HAAS_ADDR}
         externalTrafficPolicy: Local
         ports:
           http:
