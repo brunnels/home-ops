@@ -25,9 +25,10 @@ spec:
               PLATFORMIO_SETTING_ENABLE_TELEMETRY: No
             resources:
               requests:
-                cpu: 100m
+                cpu: 10m
                 memory: 256Mi
               limits:
+                cpu: 200m
                 memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
