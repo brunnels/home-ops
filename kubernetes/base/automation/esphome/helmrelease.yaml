@@ -25,8 +25,8 @@ spec:
               PLATFORMIO_SETTING_ENABLE_TELEMETRY: No
             resources:
               requests:
-                cpu: 10m
-                memory: 128Mi
+                cpu: 100m
+                memory: 256Mi
               limits:
                 memory: 1Gi
             securityContext:
