@@ -81,3 +81,5 @@ spec:
           - path: /config/.esphome
           - path: /cache
             subPath: cache
+          - path: /.cache
+            subPath: .cache
