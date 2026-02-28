@@ -25,10 +25,10 @@ spec:
               PLATFORMIO_SETTING_ENABLE_TELEMETRY: No
             resources:
               requests:
-                cpu: 10m
+                cpu: 100m
                 memory: 256Mi
               limits:
-                cpu: 200m
+                cpu: 1000m
                 memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
@@ -76,13 +76,24 @@ spec:
         existingClaim: *app
         globalMounts:
           - path: /config
+      cache:
+        type: custom
+        volumeSpec:
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                storageClassName: local-path
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 5Gi
       esphome-cache:
         type: emptyDir
         globalMounts:
-          - path: /config/.esphome
-          - path: /cache
-            subPath: cache
           - path: /.cache
             subPath: .cache
           - path: /.pioenvs
             subPath: .pioenvs
+          - path: /tmp
+            subPath: tmp
