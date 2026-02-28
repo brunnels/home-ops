@@ -25,10 +25,10 @@ spec:
               PLATFORMIO_SETTING_ENABLE_TELEMETRY: No
             resources:
               requests:
-                cpu: 5m
-                memory: 32Mi
+                cpu: 10m
+                memory: 128Mi
               limits:
-                memory: 2Gi
+                memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -83,3 +83,5 @@ spec:
             subPath: cache
           - path: /.cache
             subPath: .cache
+          - path: /.pioenvs
+            subPath: .pioenvs
