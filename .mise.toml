@@ -11,7 +11,7 @@ _.python.venv = { path = "{{config_root}}/.venv", create = true }
 "aqua:cilium/cilium-cli" = "0.19.2"
 "aqua:cli/cli" = "2.87.3"
 "aqua:cloudflare/cloudflared" = "2026.2.0"
-"aqua:cue-lang/cue" = "0.15.4"
+"aqua:cue-lang/cue" = "0.16.0"
 "aqua:a8m/envsubst" = "1.4.3"
 "aqua:fluxcd/flux2" = "2.8.1"
 "aqua:getsops/sops" = "3.12.1"
