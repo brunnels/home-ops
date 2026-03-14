@@ -30,7 +30,7 @@ spec:
               DB_PORT: 5432
               DB_USER: *app
 #              DISABLE_DOWNLOAD_ENDPOINT_AUTH: true
-#              DISABLE_USERPASS_LOGIN: true # only set to true after first run and admin has been created
+              DISABLE_USERPASS_LOGIN: true # only set to true after first run and admin has been created
 #              ENABLE_SCHEDULED_RESCAN: true
               HASHEOUS_API_ENABLED: true
               OIDC_ENABLED: true
@@ -72,7 +72,7 @@ spec:
               - type: pushover
         ports:
           http:
-            port: &port 5000
+            port: &port 8080
     route:
       app:
         annotations:
