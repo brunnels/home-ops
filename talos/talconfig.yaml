@@ -50,10 +50,13 @@ nodes:
           - intel_iommu=on
           - iommu=pt
           - mitigations=off
+          - net.ifnames=0
+          - nouveau.modeset=0
+          - nvidia-drm.modeset=1
+          - pci=realloc
           - security=none
           - sysctl.kernel.kexec_load_disabled=1
           - talos.auditd.disabled=1
-          - net.ifnames=0
         systemExtensions:
           officialExtensions:
             - siderolabs/binfmt-misc
@@ -80,10 +83,12 @@ nodes:
           mode: 802.3ad
           lacpRate: fast
           xmitHashPolicy: layer3+4
-          miimon: 1000
-          deviceSelectors:
-            - hardwareAddr: 58:47:ca:*
-              driver: i40e
+          miimon: 100
+          updelay: 200
+          downdelay: 200
+          interfaces:
+            - eth2
+            - eth3
         vlans:
           - vlanId: 150
             dhcp: false

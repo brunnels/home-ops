@@ -26,6 +26,7 @@ includes:
   bootstrap: .taskfiles/bootstrap
   talos: .taskfiles/talos
   fetcher: .taskfiles/fetcher
+  volsync: .taskfiles/volsync
 
 tasks:
 

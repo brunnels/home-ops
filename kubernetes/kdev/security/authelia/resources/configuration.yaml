@@ -132,6 +132,14 @@ identity_providers:
         scopes: ["openid", "profile", "email"]
         response_types: ["code"]
 
+      - client_name: romm
+        client_id: '{{ env "ROMM_OIDC_CLIENT_ID" }}'
+        client_secret: '{{ secret "/app/secrets/ROMM_OIDC_CLIENT_SECRET" }}'
+        pre_configured_consent_duration: 1y
+        redirect_uris: ["https://romm.${SECRET_DOMAIN}/api/oauth/openid"]
+        scopes: ["openid", "profile", "email"]
+        response_types: ["code"]
+
       - client_name: sabnznd
         client_id: '{{ env "SABNZBD_OIDC_CLIENT_ID" }}'
         client_secret: '{{ secret "/app/secrets/SABNZBD_OIDC_CLIENT_SECRET" }}'
