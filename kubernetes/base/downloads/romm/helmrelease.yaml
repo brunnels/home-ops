@@ -51,15 +51,6 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-#            probes:
-#              liveness: &probes
-#                enabled: true
-#              readiness: *probes
-#              startup:
-#                enabled: true
-#                spec:
-#                  failureThreshold: 30
-#                  periodSeconds: 5
             resources:
               requests:
                 cpu: 10m
@@ -74,7 +65,11 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: *app
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
         ports:
           http:
             port: &port 8080
