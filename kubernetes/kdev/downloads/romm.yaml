@@ -17,7 +17,7 @@ spec:
       namespace: external-secrets
     - name: dragonfly-operator
       namespace: database
-    - name: security-pgo-cluster
+    - name: downloads-pgo-cluster
     - name: volsync
       namespace: storage
   healthCheckExprs:
