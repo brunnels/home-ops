@@ -115,6 +115,11 @@ spec:
                 subPath: assets
       tmp:
         type: emptyDir
+        globalMounts:
+          - path: /etc/ngix/conf.d
+            subPath: nginx-conf
+          - path: /tmp
+            subPath: tmp
       games:
         globalMounts:
           - path: /romm/library
