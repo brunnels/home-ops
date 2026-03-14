@@ -32,6 +32,7 @@ spec:
 #              DISABLE_DOWNLOAD_ENDPOINT_AUTH: true
               DISABLE_USERPASS_LOGIN: true # only set to true after first run and admin has been created
 #              ENABLE_SCHEDULED_RESCAN: true
+              FLASHPOINT_API_ENABLED: true
               HASHEOUS_API_ENABLED: true
               HLTB_API_ENABLED: true
               IPV4_ONLY: true
