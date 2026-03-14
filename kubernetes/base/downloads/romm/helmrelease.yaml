@@ -43,7 +43,7 @@ spec:
               REDIS_HOST: "${NAMESPACE}-dragonfly"
               REDIS_PORT: 6379
               ROMM_DB_DRIVER: postgresql
-              ROMM_PORT: &port 80
+              ROMM_PORT: &port 8080
 #              SCHEDULED_RESCAN_CRON: "0 3 * * *"
               TZ: "${TIMEZONE}"
             envFrom:
