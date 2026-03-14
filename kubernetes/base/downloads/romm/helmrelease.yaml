@@ -218,7 +218,7 @@ spec:
                 pc98: "pc-9800-series" # PC-9800 Series
                 pcfx: "pc-fx" # PC-FX
                 pokemini: "pokemon-mini" # Pokémon mini
-                psx: "ps" # PlayStation
+                psx: "psx" # PlayStation
                 ps2: "ps2" # PlayStation 2
                 ps3: "ps3" # PlayStation 3
                 ps4: "ps4--1" # PlayStation 4
