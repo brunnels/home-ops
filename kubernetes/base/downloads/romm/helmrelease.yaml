@@ -33,6 +33,7 @@ spec:
               DISABLE_USERPASS_LOGIN: true # only set to true after first run and admin has been created
 #              ENABLE_SCHEDULED_RESCAN: true
               HASHEOUS_API_ENABLED: true
+              IPV4_ONLY: true
               OIDC_ENABLED: true
               OIDC_PROVIDER: authelia
               OIDC_REDIRECT_URI: https://romm.${SECRET_DOMAIN}/api/oauth/openid
