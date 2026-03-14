@@ -58,6 +58,7 @@ spec:
               limits:
                 memory: 4Gi
     defaultPodOptions:
+      enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
