@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: ghcr.io/rommapp/romm
-              tag: 3.8.1@sha256:9a732c9efb4ea70d6cc5818c7d732a4a990fd06b3e1e90600023459942270463
+              tag: 4.7.0@sha256:652f763dbb1133e4dba37e927353d2790d8afa027521ddeec4b56806d6964d9d
             env:
               DB_HOST: "{{ .Release.Namespace }}-pgbouncer.{{ .Release.Namespace }}.svc"
               DB_NAME: *app
