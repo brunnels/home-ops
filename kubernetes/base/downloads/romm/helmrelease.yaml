@@ -34,7 +34,7 @@ spec:
 #              ENABLE_SCHEDULED_RESCAN: true
               HASHEOUS_API_ENABLED: true
               IPV4_ONLY: true
-              OIDC_ENABLED: true
+              OIDC_ENABLED: false
               OIDC_PROVIDER: authelia
               OIDC_REDIRECT_URI: https://romm.${SECRET_DOMAIN}/api/oauth/openid
               OIDC_SERVER_APPLICATION_URL: https://auth.${SECRET_DOMAIN}
@@ -43,7 +43,6 @@ spec:
               REDIS_HOST: "${NAMESPACE}-dragonfly"
               REDIS_PORT: 6379
               ROMM_DB_DRIVER: postgresql
-              ROMM_PORT: &port 8080
 #              SCHEDULED_RESCAN_CRON: "0 3 * * *"
               TZ: "${TIMEZONE}"
             envFrom:
@@ -74,7 +73,7 @@ spec:
               - type: pushover
         ports:
           http:
-            port: *port
+            port: &port 8080
     route:
       app:
         annotations:
