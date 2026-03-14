@@ -107,6 +107,8 @@ spec:
         advancedMounts:
           romm:
             app:
+              - path: /etc/nginx/conf.d
+                subPath: nginx-conf
               - path: /romm/config
                 subPath: config
               - path: /romm/resources
@@ -115,11 +117,6 @@ spec:
                 subPath: assets
       tmp:
         type: emptyDir
-        globalMounts:
-          - path: /etc/ngix/conf.d
-            subPath: nginx-conf
-          - path: /tmp
-            subPath: tmp
       games:
         globalMounts:
           - path: /romm/library
