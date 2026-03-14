@@ -86,6 +86,8 @@ spec:
           gethomepage.dev/group: Media
           gethomepage.dev/icon: *app
           gethomepage.dev/name: Romm
+          gethomepage.dev/widget.type: *app
+          gethomepage.dev/widget.url: "http://romm.{{ .Release.Namespace }}"
         hostnames:
           - "romm.${SECRET_DOMAIN}"
         parentRefs:
@@ -98,7 +100,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: romm-config
+        name: *app
         globalMounts:
           - path: /romm/config/config.yml
             subPath: config.yml
