@@ -96,22 +96,26 @@ spec:
               - name: *app
                 port: *port
     persistence:
+      config:
+        type: configMap
+        name: romm-config
+        globalMounts:
+          - path: /romm/config/config.yml
+            subPath: config.yml
+            readOnly: true
       data:
         existingClaim: *app
         advancedMounts:
           romm:
             app:
-              - subPath: "resources"
-                path: "/romm/resources"
-              - subPath: "assets"
-                path: "/romm/assets"
+              - path: /romm/config
+                subPath: config
+              - path: /romm/resources
+                subPath: resources
+              - path: /romm/assets
+                subPath: assets
       tmp:
         type: emptyDir
-        globalMounts:
-          - path: /romm/config
-            subPath: config
-          - path: /tmp
-            subPath: tmp
       games:
         globalMounts:
           - path: /romm/library
