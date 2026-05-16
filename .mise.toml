@@ -15,7 +15,7 @@ _.python.venv = { path = "{{config_root}}/.venv", create = true }
 "aqua:a8m/envsubst" = "1.4.3"
 "aqua:fluxcd/flux2" = "2.8.7"
 "aqua:getsops/sops" = "3.13.1"
-"aqua:go-task/task" = "3.50.0"
+"aqua:go-task/task" = "3.51.1"
 "aqua:helm/helm" = "3.21.0"
 "aqua:helmfile/helmfile" = "1.5.1"
 "aqua:jqlang/jq" = "1.7.1"
