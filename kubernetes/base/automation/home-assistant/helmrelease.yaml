@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/home-assistant
-              tag: 2026.3.4@sha256:45d37a8be32fc1b2ebc64acc9ab219ca6226dcf04b4de0046d6c4e650b7a3022
+              tag: 2026.5.4@sha256:42d1bc5e99ed0ae8f49b72b8994e25e1a6b0f1467ba26c1b959f54ca42541ffd
             env:
               HASS_URL: "https://hass.${SECRET_DOMAIN}"
               TZ: "${TIMEZONE}"
