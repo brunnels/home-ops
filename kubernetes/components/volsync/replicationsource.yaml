@@ -28,6 +28,3 @@ spec:
       daily: 10
       weekly: 5
       monthly: 3
-    customCA:
-      configMapName: letsencrypt-ca
-      key: letsencrypt-certs.pem

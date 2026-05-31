@@ -27,6 +27,3 @@ spec:
     enableFileDeletion: true
     cleanupCachePVC: true
     cleanupTempPVC: true
-    customCA:
-      configMapName: letsencrypt-ca
-      key: letsencrypt-certs.pem
