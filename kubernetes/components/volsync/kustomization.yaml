@@ -7,3 +7,9 @@ resources:
   - ./pvc.yaml
   - ./replicationdestination.yaml
   - ./replicationsource.yaml
+configMapGenerator:
+  - name: letsencrypt-ca
+    files:
+      - ../../base/security/authelia/resources/letsencrypt-certs.pem
+generatorOptions:
+  disableNameSuffixHash: true
