@@ -7,9 +7,3 @@ resources:
   - ./pvc.yaml
   - ./replicationdestination.yaml
   - ./replicationsource.yaml
-secretGenerator:
-  - name: letsencrypt-ca
-    files:
-      - ca.crt=../../base/security/authelia/resources/letsencrypt-certs.pem
-generatorOptions:
-  disableNameSuffixHash: true
