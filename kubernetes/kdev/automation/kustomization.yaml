@@ -12,3 +12,9 @@ resources:
   - ./esphome.yaml
   - ./home-assistant.yaml
   - ./mosquitto.yaml
+configMapGenerator:
+  - name: letsencrypt-certs
+    files:
+      - ../../../base/security/authelia/resources/letsencrypt-certs.pem
+generatorOptions:
+  disableNameSuffixHash: true
