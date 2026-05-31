@@ -28,3 +28,6 @@ spec:
       daily: 10
       weekly: 5
       monthly: 3
+    customCA:
+      name: letsencrypt-ca
+      key: ca.crt
