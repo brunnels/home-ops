@@ -43,51 +43,51 @@ spec:
             matchLabels:
               postgres-operator.crunchydata.com/cluster: ${NAMESPACE}
   users: ${USERS}
-#  backups:
-#    pgbackrest:
-#      configuration: &backupConfig
-#        - secret:
-#            name: ${NAMESPACE}-pgo
-#      global: &backupFlag
-#        # Global
-#        compress-type: "bz2"
-#        compress-level: "9"
-#        backup-standby: "y"
-#        # QNAP
-#        repo1-block: "y"
-#        repo1-bundle: "y"
-#        repo1-path: /${NAMESPACE}
-#        repo1-retention-full: "30" # days
-#        repo1-retention-full-type: "time"
-#        repo1-s3-uri-style: path
-#        repo1-storage-verify-tls: "n"
-#      jobs:
-#        ttlSecondsAfterFinished: 60
-#      manual:
-#        repoName: repo1
-#        options:
-#          - --type=full
-#      metadata:
-#        labels:
-#          app.kubernetes.io/name: ${NAMESPACE}-backup
-#      repos:
-#        - name: repo1 # QNAP
-#          s3: &qnap
-#            bucket: "${VAULT_PREFIX}-pgo"
-#            endpoint: "${QNAP_HOSTNAME}:8081"
-#            region: "us-east-1"
-#          schedules:
-#            full: "30 1 * * 0" # Sunday at 01:30
-#            differential: "30 1 * * 1-6" # Mon-Sat at 01:30
-#            incremental: "30 3-23 * * *" # Every hour except 01:30-2:30
-#  dataSource:
-#    pgbackrest:
-#      stanza: db
-#      configuration: *backupConfig
-#      global: *backupFlag
-#      repo:
-#        name: "repo1"
-#        s3: *qnap
+  backups:
+    pgbackrest:
+      configuration: &backupConfig
+        - secret:
+            name: ${NAMESPACE}-pgo
+      global: &backupFlag
+        # Global
+        compress-type: "bz2"
+        compress-level: "9"
+        backup-standby: "y"
+        # QNAP
+        repo1-block: "y"
+        repo1-bundle: "y"
+        repo1-path: /${NAMESPACE}
+        repo1-retention-full: "30" # days
+        repo1-retention-full-type: "time"
+        repo1-s3-uri-style: path
+        repo1-storage-verify-tls: "n"
+      jobs:
+        ttlSecondsAfterFinished: 60
+      manual:
+        repoName: repo1
+        options:
+          - --type=full
+      metadata:
+        labels:
+          app.kubernetes.io/name: ${NAMESPACE}-backup
+      repos:
+        - name: repo1 # QNAP
+          s3: &qnap
+            bucket: "${VAULT_PREFIX}-pgo"
+            endpoint: "${QNAP_HOSTNAME}:8081"
+            region: "us-east-1"
+          schedules:
+            full: "30 1 * * 0" # Sunday at 01:30
+            differential: "30 1 * * 1-6" # Mon-Sat at 01:30
+            incremental: "30 3-23 * * *" # Every hour except 01:30-2:30
+  dataSource:
+    pgbackrest:
+      stanza: db
+      configuration: *backupConfig
+      global: *backupFlag
+      repo:
+        name: "repo1"
+        s3: *qnap
   proxy:
     pgBouncer:
       port: 5432
