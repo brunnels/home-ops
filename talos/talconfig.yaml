@@ -70,7 +70,7 @@ nodes:
             - siderolabs/mdadm
             - siderolabs/mei
             - siderolabs/nonfree-kmod-nvidia-production
-            - siderolabs/nut-client
+#            - siderolabs/nut-client
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nvme-cli
             - siderolabs/thunderbolt
@@ -111,12 +111,12 @@ nodes:
       - interface: eth1
         dhcp: false
     extensionServices: &extensionServices
-      - name: nut-client
-        configFiles:
-          - content: MONITOR ${upsmonHost} 1 monuser secret slave
-            mountPath: /usr/local/etc/nut/upsmon.conf
-          - content: MODE=netclient
-            mountPath: /usr/local/etc/nut/nut.conf
+#      - name: nut-client
+#        configFiles:
+#          - content: MONITOR ${upsmonHost} 1 monuser secret slave
+#            mountPath: /usr/local/etc/nut/upsmon.conf
+#          - content: MODE=netclient
+#            mountPath: /usr/local/etc/nut/nut.conf
       - name: lldpd
         configFiles:
           - mountPath: /usr/local/etc/lldpd/lldpd.conf
