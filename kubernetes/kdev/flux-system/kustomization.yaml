@@ -11,4 +11,3 @@ replacements:
 resources:
   - ../../common/flux-system/flux-instance.yaml
   - ../../common/flux-system/flux-operator.yaml
-  - ../../common/flux-system/weave-gitops.yaml

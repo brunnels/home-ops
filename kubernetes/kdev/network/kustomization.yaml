@@ -14,4 +14,3 @@ resources:
   - ../../common/network/echo.yaml
   - ../../common/network/envoy-gateway.yaml
   - ../../common/network/k8s-gateway.yaml
-  - ./vpn-gateway.yaml
