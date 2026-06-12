@@ -48,8 +48,8 @@ metadata:
   namespace: flux-system
 spec:
   deletionPolicy: WaitForTermination
-#  dependsOn:
-#    - name: cluster-secrets
+  dependsOn:
+    - name: cluster-secrets
   interval: 1h
   patches:
     # Add settings postBuild substitutions to child Kustomizations
