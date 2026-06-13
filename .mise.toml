@@ -28,6 +28,6 @@ _.python.venv = { path = "{{config_root}}/.venv", create = true }
 "pipx:makejinja" = "2.8.2"
 "pipx:pre-commit" = "4.6.0"
 "pipx:flux-local" = "latest"
-"python" = "3.14.5"
+"python" = "3.14.6"
 "github:mitsuhiko/minijinja" = "2.20.0"
 "aqua:shellcheck" = "0.11.0"
