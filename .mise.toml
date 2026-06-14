@@ -33,7 +33,7 @@ yamlfmt = "0.21.0"
 yq = "4.53.3"
 zizmor = "1.25.2"
 envsubst = "1.4.3"
-"aqua:mitsuhiko/minijinja" = "2.2.0"
+"aqua:mitsuhiko/minijinja" = "2.20.0"
 oxfmt = "0.54.0"
 
 [hooks]
