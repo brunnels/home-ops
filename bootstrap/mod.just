@@ -56,7 +56,7 @@ talos-bootstrap cluster='':
     cd "{{ cluster }}"
     until talhelper gencommand bootstrap | bash; do sleep 10; done
 
-#[private]
+# [private]
 [script]
 [working-directory('../talos')]
 talos-kubeconfig cluster='':
@@ -141,7 +141,7 @@ apps-resources cluster='':
     export CERT_NAME="${SECRET_DOMAIN/\./-}"
     export CLUSTER="{{ cluster }}"
 
-    apps_dir="{{ kubernetes_dir }}/{{ cluster}}"
+    apps_dir="{{ kubernetes_dir }}/{{ cluster }}"
     for app in "${apps_dir}"/*/; do
         ns=$(basename "${app}")
         just bootstrap create-namespace "${ns}"
