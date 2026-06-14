@@ -35,40 +35,40 @@ url = "https://github.com/FiloSottile/age/releases/download/v1.3.1/age-v1.3.1-wi
 provenance = "github-attestations"
 
 [[tools."aqua:mitsuhiko/minijinja"]]
-version = "2.2.0"
+version = "2.20.0"
 backend = "aqua:mitsuhiko/minijinja"
 
 [[tools.cloudflared]]
-version = "2026.5.2"
+version = "2026.6.0"
 backend = "aqua:cloudflare/cloudflared"
 
 [tools.cloudflared."platforms.linux-arm64"]
-checksum = "sha256:5a4e8ce2701105271412059f44b6a0bf1ae4542b4d98ff3180c0c019443a5815"
-url = "https://github.com/cloudflare/cloudflared/releases/download/2026.5.2/cloudflared-linux-arm64"
+checksum = "sha256:8482ebf1e74a2a4a1a9f1e090e17e3de08423f94100ece6789287cb26fb9480f"
+url = "https://github.com/cloudflare/cloudflared/releases/download/2026.6.0/cloudflared-linux-arm64"
 
 [tools.cloudflared."platforms.linux-arm64-musl"]
-checksum = "sha256:5a4e8ce2701105271412059f44b6a0bf1ae4542b4d98ff3180c0c019443a5815"
-url = "https://github.com/cloudflare/cloudflared/releases/download/2026.5.2/cloudflared-linux-arm64"
+checksum = "sha256:8482ebf1e74a2a4a1a9f1e090e17e3de08423f94100ece6789287cb26fb9480f"
+url = "https://github.com/cloudflare/cloudflared/releases/download/2026.6.0/cloudflared-linux-arm64"
 
 [tools.cloudflared."platforms.linux-x64"]
-checksum = "sha256:5286698547f03df745adb2355f04c12dde52ef425491e81f433642d695521886"
-url = "https://github.com/cloudflare/cloudflared/releases/download/2026.5.2/cloudflared-linux-amd64"
+checksum = "sha256:08d27c4c5d3ed73ee3e98ef2ddceb4ad09fd4cfc28e243565a189538e8ccd706"
+url = "https://github.com/cloudflare/cloudflared/releases/download/2026.6.0/cloudflared-linux-amd64"
 
 [tools.cloudflared."platforms.linux-x64-musl"]
-checksum = "sha256:5286698547f03df745adb2355f04c12dde52ef425491e81f433642d695521886"
-url = "https://github.com/cloudflare/cloudflared/releases/download/2026.5.2/cloudflared-linux-amd64"
+checksum = "sha256:08d27c4c5d3ed73ee3e98ef2ddceb4ad09fd4cfc28e243565a189538e8ccd706"
+url = "https://github.com/cloudflare/cloudflared/releases/download/2026.6.0/cloudflared-linux-amd64"
 
 [tools.cloudflared."platforms.macos-arm64"]
-checksum = "sha256:ba94054c9fd4297645093d59d51442e5e546d07bb0516120e694a13d5b216d38"
-url = "https://github.com/cloudflare/cloudflared/releases/download/2026.5.2/cloudflared-darwin-arm64.tgz"
+checksum = "sha256:88e17987423d3fd49167305f8bda14d83a80ab9f2097ff9c82b317a39e342119"
+url = "https://github.com/cloudflare/cloudflared/releases/download/2026.6.0/cloudflared-darwin-arm64.tgz"
 
 [tools.cloudflared."platforms.macos-x64"]
-checksum = "sha256:7240f709506bc2c1eb9da4d89cf2555499c60280ecb854b7d80e8f17d4b7903d"
-url = "https://github.com/cloudflare/cloudflared/releases/download/2026.5.2/cloudflared-darwin-amd64.tgz"
+checksum = "sha256:f6eaa91260ee327994331ac5ac2f7cec7925c4b6e15296b63fe0916992a06bdc"
+url = "https://github.com/cloudflare/cloudflared/releases/download/2026.6.0/cloudflared-darwin-amd64.tgz"
 
 [tools.cloudflared."platforms.windows-x64"]
-checksum = "sha256:20b9638f685333d623798e733effbad2487093f15ba592f6c7752360ff3b7ab7"
-url = "https://github.com/cloudflare/cloudflared/releases/download/2026.5.2/cloudflared-windows-amd64.exe"
+checksum = "sha256:03e322598e84d77406fa55b93f59e8e54636c5d8501d9dce36697fcf080ed8cc"
+url = "https://github.com/cloudflare/cloudflared/releases/download/2026.6.0/cloudflared-windows-amd64.exe"
 
 [[tools.cue]]
 version = "0.16.1"
@@ -160,42 +160,42 @@ url = "https://github.com/fluxcd/flux2/releases/download/v2.8.8/flux_2.8.8_windo
 url = "https://github.com/fluxcd/flux2/releases/download/v2.8.8/provenance.intoto.jsonl"
 
 [[tools.gh]]
-version = "2.93.0"
+version = "2.94.0"
 backend = "aqua:cli/cli"
 
 [tools.gh."platforms.linux-arm64"]
-checksum = "sha256:c55feb33684abba57e9909737340d5b39282257c0363e1edde6785ac4a413be7"
-url = "https://github.com/cli/cli/releases/download/v2.93.0/gh_2.93.0_linux_arm64.tar.gz"
+checksum = "sha256:705a23b70b0f1b7ba4c302fdcef392ce3edaacfa7ce8e85e4d93d72ea800a538"
+url = "https://github.com/cli/cli/releases/download/v2.94.0/gh_2.94.0_linux_arm64.tar.gz"
 provenance = "github-attestations"
 
 [tools.gh."platforms.linux-arm64-musl"]
-checksum = "sha256:c55feb33684abba57e9909737340d5b39282257c0363e1edde6785ac4a413be7"
-url = "https://github.com/cli/cli/releases/download/v2.93.0/gh_2.93.0_linux_arm64.tar.gz"
+checksum = "sha256:705a23b70b0f1b7ba4c302fdcef392ce3edaacfa7ce8e85e4d93d72ea800a538"
+url = "https://github.com/cli/cli/releases/download/v2.94.0/gh_2.94.0_linux_arm64.tar.gz"
 provenance = "github-attestations"
 
 [tools.gh."platforms.linux-x64"]
-checksum = "sha256:02d1290eba130e0b896f3709ffff22e1c75a51475ddb70476a85abc6b5807af0"
-url = "https://github.com/cli/cli/releases/download/v2.93.0/gh_2.93.0_linux_amd64.tar.gz"
+checksum = "sha256:a757f1ba6db18f4de8cbadb244843a5f89bc75b5e7c6fc127d2bd77fbd12ed62"
+url = "https://github.com/cli/cli/releases/download/v2.94.0/gh_2.94.0_linux_amd64.tar.gz"
 provenance = "github-attestations"
 
 [tools.gh."platforms.linux-x64-musl"]
-checksum = "sha256:02d1290eba130e0b896f3709ffff22e1c75a51475ddb70476a85abc6b5807af0"
-url = "https://github.com/cli/cli/releases/download/v2.93.0/gh_2.93.0_linux_amd64.tar.gz"
+checksum = "sha256:a757f1ba6db18f4de8cbadb244843a5f89bc75b5e7c6fc127d2bd77fbd12ed62"
+url = "https://github.com/cli/cli/releases/download/v2.94.0/gh_2.94.0_linux_amd64.tar.gz"
 provenance = "github-attestations"
 
 [tools.gh."platforms.macos-arm64"]
-checksum = "sha256:a86be4e0a86c26456cf71177d6572d6f1165cf1679e532b72f7f15918ee51fd2"
-url = "https://github.com/cli/cli/releases/download/v2.93.0/gh_2.93.0_macOS_arm64.zip"
+checksum = "sha256:4f9bc1a5e77500737290a307b40b4c396a4d23729f55340f2a83f414410165a1"
+url = "https://github.com/cli/cli/releases/download/v2.94.0/gh_2.94.0_macOS_arm64.zip"
 provenance = "github-attestations"
 
 [tools.gh."platforms.macos-x64"]
-checksum = "sha256:009425b9d175c482037fe25181817fd6b1ea3ae1f51cfae0e18f29f33d3152ac"
-url = "https://github.com/cli/cli/releases/download/v2.93.0/gh_2.93.0_macOS_amd64.zip"
+checksum = "sha256:733ee8fa49247d27cd94a6c7384455bdecaa82172a3bcfad63ac1ecc2867251d"
+url = "https://github.com/cli/cli/releases/download/v2.94.0/gh_2.94.0_macOS_amd64.zip"
 provenance = "github-attestations"
 
 [tools.gh."platforms.windows-x64"]
-checksum = "sha256:77aa01ed7317295ad550de0ad04f3f276b1ef0e9272e3d002ac28dd99853d211"
-url = "https://github.com/cli/cli/releases/download/v2.93.0/gh_2.93.0_windows_amd64.zip"
+checksum = "sha256:c0766af54195dfa0bcd9a0cb63a45c313fbaffdebb9f736f666e9ba4be8c91e8"
+url = "https://github.com/cli/cli/releases/download/v2.94.0/gh_2.94.0_windows_amd64.zip"
 provenance = "github-attestations"
 
 [[tools.gum]]
@@ -334,36 +334,36 @@ url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-windows-amd64.
 provenance = "github-attestations"
 
 [[tools.just]]
-version = "1.51.0"
+version = "1.52.0"
 backend = "aqua:casey/just"
 
 [tools.just."platforms.linux-arm64"]
-checksum = "sha256:ed7ec466b77709198fd4afed253dba0270203ba5eb1c006bee2b0139090284f5"
-url = "https://github.com/casey/just/releases/download/1.51.0/just-1.51.0-aarch64-unknown-linux-musl.tar.gz"
+checksum = "sha256:41af45372c49c404ca7b9a318ae9de5564636e39c6520cc4d42bf678f3bfb1bc"
+url = "https://github.com/casey/just/releases/download/1.52.0/just-1.52.0-aarch64-unknown-linux-musl.tar.gz"
 
 [tools.just."platforms.linux-arm64-musl"]
-checksum = "sha256:ed7ec466b77709198fd4afed253dba0270203ba5eb1c006bee2b0139090284f5"
-url = "https://github.com/casey/just/releases/download/1.51.0/just-1.51.0-aarch64-unknown-linux-musl.tar.gz"
+checksum = "sha256:41af45372c49c404ca7b9a318ae9de5564636e39c6520cc4d42bf678f3bfb1bc"
+url = "https://github.com/casey/just/releases/download/1.52.0/just-1.52.0-aarch64-unknown-linux-musl.tar.gz"
 
 [tools.just."platforms.linux-x64"]
-checksum = "sha256:c8f085ca3e885723c341d06243fc291b5abfdc8bbe3b2c076b117de490387b59"
-url = "https://github.com/casey/just/releases/download/1.51.0/just-1.51.0-x86_64-unknown-linux-musl.tar.gz"
+checksum = "sha256:e0a712614574d45625332529c864754e26782422b7c7db931466180a618f092d"
+url = "https://github.com/casey/just/releases/download/1.52.0/just-1.52.0-x86_64-unknown-linux-musl.tar.gz"
 
 [tools.just."platforms.linux-x64-musl"]
-checksum = "sha256:c8f085ca3e885723c341d06243fc291b5abfdc8bbe3b2c076b117de490387b59"
-url = "https://github.com/casey/just/releases/download/1.51.0/just-1.51.0-x86_64-unknown-linux-musl.tar.gz"
+checksum = "sha256:e0a712614574d45625332529c864754e26782422b7c7db931466180a618f092d"
+url = "https://github.com/casey/just/releases/download/1.52.0/just-1.52.0-x86_64-unknown-linux-musl.tar.gz"
 
 [tools.just."platforms.macos-arm64"]
-checksum = "sha256:61e3f1b8a545ff064b091eab4b6e14f8cc743ff15549be293b1e92f5b1467002"
-url = "https://github.com/casey/just/releases/download/1.51.0/just-1.51.0-aarch64-apple-darwin.tar.gz"
+checksum = "sha256:1538caf566c9d8dd99286a21c0e1224b89f6676b70c16a4bcbeb52dd21fc78f5"
+url = "https://github.com/casey/just/releases/download/1.52.0/just-1.52.0-aarch64-apple-darwin.tar.gz"
 
 [tools.just."platforms.macos-x64"]
-checksum = "sha256:d583e45f1f9fcdd26069ad2fe3bb9dea414756d8d0752eb9093974cb5c0246f0"
-url = "https://github.com/casey/just/releases/download/1.51.0/just-1.51.0-x86_64-apple-darwin.tar.gz"
+checksum = "sha256:52e4b7dc45d5934e9bc3b8f1ad3fe78bb92d0df1bca477de0c5449c59ac7a562"
+url = "https://github.com/casey/just/releases/download/1.52.0/just-1.52.0-x86_64-apple-darwin.tar.gz"
 
 [tools.just."platforms.windows-x64"]
-checksum = "sha256:09d1138b6845e73f04bff5e26be3f57663bddca25e36fe6241d28a5aa310b64e"
-url = "https://github.com/casey/just/releases/download/1.51.0/just-1.51.0-x86_64-pc-windows-msvc.zip"
+checksum = "sha256:ac53a7da91a33e344042dbec11e4bf1e1ec1d65ca4b695fe71398206d2a1630d"
+url = "https://github.com/casey/just/releases/download/1.52.0/just-1.52.0-x86_64-pc-windows-msvc.zip"
 
 [[tools.kubeconform]]
 version = "0.8.0"
