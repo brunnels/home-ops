@@ -1,0 +1,164 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+
+# Bootstraps core applications that provide a minimal runtime base for the
+# cluster. These releases are installed first so the cluster has the resources
+# Flux needs before its own reconciliation begins.
+#
+# After this bootstrap phase, Flux is ready to take over management of the
+# application stack and continue reconciling downstream state.
+
+helmDefaults:
+  cleanupOnFail: true
+  forceConflicts: true
+  wait: true
+  waitForJobs: true
+
+bases:
+  - default.yaml
+
+releases:
+  - name: cilium
+    namespace: kube-system
+    inherit:
+      - template: default
+    hooks:
+      - # Wait for Cilium CRDs to be available
+        command: kubectl
+        args:
+#          - --context={{ requiredEnv "CLUSTER" }}
+          - wait
+          - --for=create
+          - crd/ciliumbgpadvertisements.cilium.io
+          - crd/ciliumbgpclusterconfigs.cilium.io
+          - crd/ciliumbgppeerconfigs.cilium.io
+          - crd/ciliumloadbalancerippools.cilium.io
+          - --timeout=2m
+        events:
+          - postsync
+        showlogs: true
+      - # Apply Cilium Resources
+        command: bash
+        args:
+          - -c
+          - |
+            cat ../../kubernetes/base/kube-system/cilium/networks.yaml \
+            | envsubst \
+            | kubectl \
+            apply --namespace=kube-system \
+            --server-side \
+            --field-manager=kustomize-controller \
+            --filename -
+        events:
+          - postsync
+        showlogs: true
+
+  - name: coredns
+    namespace: kube-system
+    inherit:
+      - template: default
+    needs: ['kube-system/cilium']
+
+  - name: spegel
+    namespace: kube-system
+    inherit:
+      - template: default
+    needs: ['kube-system/coredns']
+
+  - name: external-secrets
+    namespace: external-secrets
+    chart: oci://ghcr.io/external-secrets/charts/external-secrets
+    version: 2.5.0
+    values:
+      - ./templates/values-collapsed.yaml.gotmpl
+    hooks:
+      - # Wait for ExternalSecrets CRDs to be available
+        command: kubectl
+        args:
+#          - --context={{ requiredEnv "CLUSTER" }}
+          - wait
+          - --for=create
+          - crd/clustersecretstores.external-secrets.io
+          - --timeout=2m
+        events:
+          - postsync
+        showlogs: true
+      - # Apply cluster secret store
+        command: bash
+        args:
+          - -c
+          - |
+            cat ../../kubernetes/base/external-secrets-stores/akeyless/clustersecretstore.yaml \
+            | envsubst \
+            | kubectl \
+            apply --server-side \
+            --field-manager=kustomize-controller \
+            --filename -
+        events:
+          - postsync
+        showlogs: true
+      - # Wait for ClusterSecretStore akeyless-secret-store to be ready
+        command: bash
+        args:
+          - -c
+          - until [ "$(kubectl get clustersecretstores akeyless-secret-store --no-headers | awk '{print $NF}')" == "True" ]; do sleep 5; done
+        events:
+          - postsync
+        showlogs: true
+      - # Create the ExternalSecret for envoy gateway TLS
+        command: bash
+#--context={{ requiredEnv "CLUSTER" }} \
+        args:
+          - -c
+          - |
+            cat ../../kubernetes/base/network/envoy-gateway/externalsecret.yaml \
+            | sed 's|\${SECRET_DOMAIN/\./-}|\${CERT_NAME}|g' \
+            | envsubst \
+            | kubectl \
+            apply --namespace=network \
+            --server-side \
+            --field-manager=kustomize-controller \
+            --filename -
+        events:
+          - postsync
+        showlogs: true
+      - # Wait for Secret for envoy gateway TLS to be created
+        command: bash
+        args:
+          - -c
+          - until kubectl -n network get secrets | grep "production-tls" &>/dev/null; do sleep 5; done
+        events:
+          - postsync
+        showlogs: true
+    needs: ['kube-system/spegel']
+
+  - name: cert-manager
+    namespace: cert-manager
+    chart: oci://quay.io/jetstack/charts/cert-manager
+    version: v1.20.2
+    values:
+      - ./templates/values-collapsed.yaml.gotmpl
+    needs: ['external-secrets/external-secrets']
+
+  - name: flux-operator
+    namespace: flux-system
+    inherit:
+      - template: default
+    needs: ['cert-manager/cert-manager']
+    hooks:
+      - # Apply Resources
+        command: kubectl
+        args:
+          - apply
+          - --server-side
+          - --force-conflicts
+          - --filename=../../kubernetes/base/{{ .Release.Namespace }}/{{ .Release.Name }}/clusterrolebinding.yaml
+        events:
+          - presync
+        showlogs: true
+
+#  - name: flux-instance
+#    namespace: flux-system
+#    inherit:
+#      - template: default
+#    needs: ['flux-system/flux-operator']

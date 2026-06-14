@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: akeyless
+  namespace: external-secrets
+stringData:
+  accessId: "ak://akeyless/ACCESS_ID"
+  accessType: api_key
+  accessTypeParam: "ak://akeyless/ACCESS_TYPE_PARAM"
