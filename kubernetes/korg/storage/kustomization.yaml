@@ -11,7 +11,7 @@ replacements:
 resources:
   - ../../common/storage/csi-driver-nfs.yaml
   - ../../common/storage/local-path-provisioner.yaml
-  - ../../common/storage/rook-ceph-cluster.yaml
+  - ./rook-ceph-cluster.yaml
   - ../../common/storage/rook-ceph-operator.yaml
   - ../../common/storage/snapshot-controller.yaml
   - ../../common/storage/volsync.yaml
