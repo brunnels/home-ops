@@ -17,5 +17,5 @@ resources:
   - ./prowlarr.yaml
   #- ./radarr.yaml
   #- ./romm.yaml
-  #- ./sabnzbd.yaml
+  - ./sabnzbd.yaml
   #- ./sonarr.yaml
