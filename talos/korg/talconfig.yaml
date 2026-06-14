@@ -1,0 +1,195 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
+---
+clusterName: korg
+
+talosVersion: "${talosVersion}"
+kubernetesVersion: "${kubernetesVersion}"
+
+endpoint: https://10.0.150.100:6443
+additionalApiServerCertSans: &sans
+  - "127.0.0.1"
+  - "10.0.150.100"
+  - "korg.lan.kraven.org"
+additionalMachineCertSans: *sans
+
+clusterPodNets: ["10.69.0.0/16"]
+clusterSvcNets: ["10.96.0.0/16"]
+
+# Disable built-in CNI to use Cilium
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: korg-n4
+    ipAddress: 10.0.150.96
+    nameservers:
+      - 10.0.200.1
+    disableSearchDomain: true
+    installDisk: /dev/disk/by-id/ata-SATA_SSD_B7A307871B5300035278
+    controlPlane: false
+    machineSpec:
+      secureboot: true
+    nodeLabels: &nodeLabels
+      intel.feature.node.kubernetes.io/gpu: "true"
+      topology.kubernetes.io/region: main
+    schematic: &schematic
+      customization:
+        extraKernelArgs:
+          - -init_on_alloc # Less security, faster puter
+          - -init_on_free # Less security, faster puter
+          - -selinux # Less security, faster puter
+          - apparmor=0 # Less security, faster puter
+          - init_on_alloc=0 # Less security, faster puter
+          - init_on_free=0 # Less security, faster puter
+          - mitigations=off # Less security, faster puter
+          - security=none # Less security, faster puter
+          - talos.auditd.disabled=1 # Less security, faster puter
+          - i915.modeset=1 # Meteor Lake CPU / iGPU
+          - i915.enable_guc=3 # Meteor Lake CPU / iGPU
+          - sysctl.kernel.kexec_load_disabled=1 # Meteor Lake CPU / iGPU
+          - intel_iommu=on # PCI Passthrough
+          - iommu=pt # PCI Passthrough
+          - pci=realloc # PCI Passthrough
+          - net.ifnames=0 # Normalize interace names
+          - module_blacklist=igc # Disable onboard NIC
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/binfmt-misc
+            - siderolabs/fuse3
+            - siderolabs/i915
+            - siderolabs/intel-ice-firmware
+            - siderolabs/intel-ucode
+            - siderolabs/iscsi-tools
+            - siderolabs/mei
+            - siderolabs/nfs-utils
+            - siderolabs/nfsrahead
+            - siderolabs/nvme-cli
+    #    extensionServices: &extensionServices
+    #      - name: nut-client
+    #        configFiles:
+    #          - content: MONITOR ${upsmonHost} 1 monuser secret slave
+    #            mountPath: /usr/local/etc/nut/upsmon.conf
+    #          - content: MODE=netclient
+    #            mountPath: /usr/local/etc/nut/nut.conf
+    #      - name: lldpd
+    #        configFiles:
+    #          - mountPath: /usr/local/etc/lldpd/lldpd.conf
+    #            content: |
+    #              configure lldpd portidsubtype ifname
+    #              configure system description "Talos Node"
+    networkInterfaces:
+      - interface: eth0
+        mtu: 9000
+        vlans:
+          - vlanId: 150
+            dhcp: false
+            addresses:
+              - 10.0.150.96/24
+            routes:
+              - network: 0.0.0.0/0
+                gateway: 10.0.150.1
+            mtu: 9000
+    patches:
+      - "@./manifests/oomconfig.yaml"
+      - "@./manifests/timesyncconfig.yaml"
+      - "@./manifests/watchdogtimerconfig.yaml"
+  - hostname: korg-n1
+    ipAddress: 10.0.150.99
+    nameservers:
+      - 10.0.200.1
+    disableSearchDomain: true
+    installDisk: /dev/disk/by-id/ata-SATA_SSD_DA09079110EC06342341
+    controlPlane: true
+    machineSpec:
+      secureboot: true
+    nodeLabels: *nodeLabels
+    schematic: *schematic
+    networkInterfaces:
+      - interface: eth0
+        mtu: 9000
+        vlans:
+          - vlanId: 150
+            dhcp: false
+            addresses:
+              - 10.0.150.99/24
+            routes:
+              - network: 0.0.0.0/0
+                gateway: 10.0.150.1
+            mtu: 9000
+    patches:
+      - "@./manifests/oomconfig.yaml"
+      - "@./manifests/timesyncconfig.yaml"
+      - "@./manifests/vipconfig.yaml"
+      - "@./manifests/watchdogtimerconfig.yaml"
+  - hostname: korg-n2
+    ipAddress: 10.0.150.98
+    nameservers:
+      - 10.0.200.1
+    disableSearchDomain: true
+    installDisk: /dev/disk/by-id/ata-SATA_SSD_DC4E079110EC06342361
+    controlPlane: true
+    machineSpec:
+      secureboot: true
+    nodeLabels: *nodeLabels
+    schematic: *schematic
+    #    extensionServices: *extensionServices
+    networkInterfaces:
+      - interface: eth0
+        mtu: 9000
+        vlans:
+          - vlanId: 150
+            dhcp: false
+            addresses:
+              - 10.0.150.98/24
+            routes:
+              - network: 0.0.0.0/0
+                gateway: 10.0.150.1
+            mtu: 9000
+    patches:
+      - "@./manifests/oomconfig.yaml"
+      - "@./manifests/timesyncconfig.yaml"
+      - "@./manifests/vipconfig.yaml"
+      - "@./manifests/watchdogtimerconfig.yaml"
+  - hostname: korg-n3
+    ipAddress: 10.0.150.97
+    nameservers:
+      - 10.0.200.1
+    disableSearchDomain: true
+    installDisk: /dev/disk/by-id/ata-SATA_SSD_DC4E079110EC06341678
+    controlPlane: true
+    machineSpec:
+      secureboot: true
+    nodeLabels: *nodeLabels
+    schematic: *schematic
+    #    extensionServices: *extensionServices
+    networkInterfaces:
+      - interface: eth0
+        mtu: 9000
+        vlans:
+          - vlanId: 150
+            dhcp: false
+            addresses:
+              - 10.0.150.97/24
+            routes:
+              - network: 0.0.0.0/0
+                gateway: 10.0.150.1
+            mtu: 9000
+    patches:
+      - "@./manifests/oomconfig.yaml"
+      - "@./manifests/timesyncconfig.yaml"
+      - "@./manifests/vipconfig.yaml"
+      - "@./manifests/watchdogtimerconfig.yaml"
+
+# Global patches
+patches:
+  - "@./patches/global/machine-files.yaml"
+  - "@./patches/global/machine-kubelet.yaml"
+  - "@./patches/global/machine-modules.yaml"
+  - "@./patches/global/machine-sysctls.yaml"
+  - "@./patches/global/machine-sysfs.yaml"
+  - "@./patches/global/machine-udev.yaml"
+
+# Controller patches
+controlPlane:
+  patches:
+    - "@./patches/controller/cluster.yaml"

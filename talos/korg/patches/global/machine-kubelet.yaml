@@ -1,0 +1,16 @@
+---
+machine:
+  kubelet:
+    extraConfig:
+      serializeImagePulls: false
+    extraMounts:
+      - destination: /var/mnt/lpp-0
+        type: bind
+        source: /var/mnt/lpp-0
+        options:
+          - bind
+          - rshared
+          - rw
+    nodeIP:
+      validSubnets:
+        - 10.0.150.0/24
