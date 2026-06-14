@@ -6,3 +6,8 @@ templates:
     version: '{{ (fromYaml (tpl (readFile "./templates/release.yaml.gotmpl") .)).version }}'
     values:
       - ./templates/values.yaml.gotmpl
+  default-collapsed:
+    chart: '{{ (fromYaml (tpl (readFile "./templates/release-collapsed.yaml.gotmpl") .)).chart }}'
+    version: '{{ (fromYaml (tpl (readFile "./templates/release-collapsed.yaml.gotmpl") .)).version }}'
+    values:
+      - ./templates/values-collapsed.yaml.gotmpl

@@ -1,0 +1,3 @@
+{{- $oci := fromYaml (readFile (printf "../../kubernetes/base/%s/ocirepository.yaml" .Release.Name)) -}}
+chart: {{ $oci.spec.url }}
+version: {{ $oci.spec.ref.tag }}

@@ -17,11 +17,11 @@ helmDefaults:
 bases:
   - default.yaml
 
+defaultInherit: default
+
 releases:
   - name: cilium
     namespace: kube-system
-    inherit:
-      - template: default
     hooks:
       - # Wait for Cilium CRDs to be available
         command: kubectl
@@ -54,22 +54,16 @@ releases:
 
   - name: coredns
     namespace: kube-system
-    inherit:
-      - template: default
     needs: ["kube-system/cilium"]
 
   - name: spegel
     namespace: kube-system
-    inherit:
-      - template: default
     needs: ["kube-system/coredns"]
 
   - name: external-secrets
     namespace: external-secrets
-    chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 2.5.0
-    values:
-      - ./templates/values-collapsed.yaml.gotmpl
+    inherit:
+      - template: default-collapsed
     hooks:
       - # Wait for ExternalSecrets CRDs to be available
         command: kubectl
@@ -131,16 +125,12 @@ releases:
 
   - name: cert-manager
     namespace: cert-manager
-    chart: oci://quay.io/jetstack/charts/cert-manager
-    version: v1.20.2
-    values:
-      - ./templates/values-collapsed.yaml.gotmpl
+    inherit:
+      - template: default-collapsed
     needs: ["external-secrets/external-secrets"]
 
   - name: flux-operator
     namespace: flux-system
-    inherit:
-      - template: default
     needs: ["cert-manager/cert-manager"]
     hooks:
       - # Apply Resources
@@ -156,6 +146,4 @@ releases:
 
   - name: flux-instance
     namespace: flux-system
-    inherit:
-      - template: default
     needs: ["flux-system/flux-operator"]
