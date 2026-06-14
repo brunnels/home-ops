@@ -9,10 +9,10 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
-  - ../../common/storage/ceph-csi-drivers.yaml
+  #  - ../../common/storage/ceph-csi-drivers.yaml
   - ../../common/storage/csi-driver-nfs.yaml
   - ../../common/storage/local-path-provisioner.yaml
-  - ../../common/storage/rook-ceph-cluster.yaml
-  - ../../common/storage/rook-ceph-operator.yaml
+  #  - ../../common/storage/rook-ceph-cluster.yaml
+  #  - ../../common/storage/rook-ceph-operator.yaml
   - ../../common/storage/snapshot-controller.yaml
   - ../../common/storage/volsync.yaml
