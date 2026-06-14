@@ -37,4 +37,4 @@ spec:
           OAUTH2_SERVER_METADATA_URL: https://auth.${SECRET_DOMAIN}/.well-known/openid-configuration
           OAUTH2_SCOPE: openid email profile
           OAUTH2_ICON: fa-openid
-          OAUTH2_BUTTON_COLOR: '#2db1fd'
+          OAUTH2_BUTTON_COLOR: "#2db1fd"

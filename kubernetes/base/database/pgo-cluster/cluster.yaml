@@ -48,8 +48,7 @@ spec:
       configuration: &backupConfig
         - secret:
             name: ${NAMESPACE}-pgo
-      global: &backupFlag
-        # Global
+      global: &backupFlag # Global
         compress-type: "bz2"
         compress-level: "9"
         backup-standby: "y"

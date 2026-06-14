@@ -127,7 +127,6 @@ identity_providers:
         pre_configured_consent_duration: 1y
         redirect_uris:
           - "https://downloads-pgadmin.${SECRET_DOMAIN}/oauth2/authorize"
-          - "https://media-pgadmin.${SECRET_DOMAIN}/oauth2/authorize"
           - "https://security-pgadmin.${SECRET_DOMAIN}/oauth2/authorize"
         scopes: ["openid", "profile", "email"]
         response_types: ["code"]

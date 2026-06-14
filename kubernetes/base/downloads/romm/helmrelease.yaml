@@ -29,9 +29,9 @@ spec:
                     key: password
               DB_PORT: 5432
               DB_USER: *app
-#              DISABLE_DOWNLOAD_ENDPOINT_AUTH: true
+              #              DISABLE_DOWNLOAD_ENDPOINT_AUTH: true
               DISABLE_USERPASS_LOGIN: true # only set to true after first run and admin has been created
-#              ENABLE_SCHEDULED_RESCAN: true
+              #              ENABLE_SCHEDULED_RESCAN: true
               FLASHPOINT_API_ENABLED: true
               HASHEOUS_API_ENABLED: true
               HLTB_API_ENABLED: true
@@ -47,7 +47,7 @@ spec:
               REDIS_HOST: "${NAMESPACE}-dragonfly"
               REDIS_PORT: 6379
               ROMM_DB_DRIVER: postgresql
-#              SCHEDULED_RESCAN_CRON: "0 3 * * *"
+              #              SCHEDULED_RESCAN_CRON: "0 3 * * *"
               TZ: "${TIMEZONE}"
             envFrom:
               - secretRef:

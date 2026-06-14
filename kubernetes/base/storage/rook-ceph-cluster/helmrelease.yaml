@@ -13,7 +13,7 @@ spec:
     # https://artifacthub.io/packages/helm/rook/rook-ceph-cluster?modal=values
     operatorNamespace: storage
     monitoring:
-#      enabled: true
+      #      enabled: true
       createPrometheusRules: true
     toolbox:
       enabled: true

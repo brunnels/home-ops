@@ -26,7 +26,6 @@ releases:
       - # Wait for Cilium CRDs to be available
         command: kubectl
         args:
-#          - --context={{ requiredEnv "CLUSTER" }}
           - wait
           - --for=create
           - crd/ciliumbgpadvertisements.cilium.io
@@ -57,13 +56,13 @@ releases:
     namespace: kube-system
     inherit:
       - template: default
-    needs: ['kube-system/cilium']
+    needs: ["kube-system/cilium"]
 
   - name: spegel
     namespace: kube-system
     inherit:
       - template: default
-    needs: ['kube-system/coredns']
+    needs: ["kube-system/coredns"]
 
   - name: external-secrets
     namespace: external-secrets
@@ -75,7 +74,6 @@ releases:
       - # Wait for ExternalSecrets CRDs to be available
         command: kubectl
         args:
-#          - --context={{ requiredEnv "CLUSTER" }}
           - wait
           - --for=create
           - crd/clustersecretstores.external-secrets.io
@@ -107,7 +105,6 @@ releases:
         showlogs: true
       - # Create the ExternalSecret for envoy gateway TLS
         command: bash
-#--context={{ requiredEnv "CLUSTER" }} \
         args:
           - -c
           - |
@@ -130,7 +127,7 @@ releases:
         events:
           - postsync
         showlogs: true
-    needs: ['kube-system/spegel']
+    needs: ["kube-system/spegel"]
 
   - name: cert-manager
     namespace: cert-manager
@@ -138,13 +135,13 @@ releases:
     version: v1.20.2
     values:
       - ./templates/values-collapsed.yaml.gotmpl
-    needs: ['external-secrets/external-secrets']
+    needs: ["external-secrets/external-secrets"]
 
   - name: flux-operator
     namespace: flux-system
     inherit:
       - template: default
-    needs: ['cert-manager/cert-manager']
+    needs: ["cert-manager/cert-manager"]
     hooks:
       - # Apply Resources
         command: kubectl
@@ -157,8 +154,8 @@ releases:
           - presync
         showlogs: true
 
-#  - name: flux-instance
-#    namespace: flux-system
-#    inherit:
-#      - template: default
-#    needs: ['flux-system/flux-operator']
+  - name: flux-instance
+    namespace: flux-system
+    inherit:
+      - template: default
+    needs: ["flux-system/flux-operator"]
