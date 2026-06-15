@@ -26,7 +26,6 @@ spec:
       idToken: ""
       accessToken: ""
     redirectURL: "https://${APP_SUBDOMAIN:-${APP}}.${SECRET_DOMAIN}/oauth2/callback"
-    logoutPath: "${LOGOUT_PATH:-/logout}"
     scopes: ["openid", "offline_access"]
     forwardAccessToken: false
     passThroughAuthHeader: false
