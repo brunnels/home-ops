@@ -12,12 +12,21 @@ spec:
   oidc:
     provider:
       issuer: "https://auth.${SECRET_DOMAIN}"
+      authorizationEndpoint: "https://auth.${SECRET_DOMAIN}/api/oidc/authorization"
+      tokenEndpoint: "https://auth.${SECRET_DOMAIN}/api/oidc/token"
     clientIDRef:
       name: "${APP}-oidc"
+      key: client-id
     clientSecret:
       name: "${APP}-oidc"
+      key: client-secret
     refreshToken: true
     cookieDomain: "${SECRET_DOMAIN}"
+    cookieNames:
+      idToken: ""
+      accessToken: ""
     redirectURL: "https://${APP_SUBDOMAIN:-${APP}}.${SECRET_DOMAIN}/oauth2/callback"
     logoutPath: "${LOGOUT_PATH:-/logout}"
     scopes: ["openid", "profile", "email"]
+    forwardAccessToken: false
+    passThroughAuthHeader: false
