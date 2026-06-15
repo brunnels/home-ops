@@ -131,13 +131,13 @@ identity_providers:
         scopes: ["openid", "profile", "email"]
         response_types: ["code"]
 
-      - client_name: radarr
-        client_id: '{{ env "RADARR_OIDC_CLIENT_ID" }}'
-        client_secret: '{{ secret "/app/secrets/RADARR_OIDC_CLIENT_SECRET" }}'
-        grant_types: ["authorization_code", "refresh_token"]
-        pre_configured_consent_duration: 1y
-        redirect_uris: ["https://radarr.${SECRET_DOMAIN}/oauth2/callback"]
-        scopes: ["openid", "offline_access"]
+      #- client_name: radarr
+      #  client_id: '{{ env "RADARR_OIDC_CLIENT_ID" }}'
+      #  client_secret: '{{ secret "/app/secrets/RADARR_OIDC_CLIENT_SECRET" }}'
+      #  grant_types: ["authorization_code", "refresh_token"]
+      #  pre_configured_consent_duration: 1y
+      #  redirect_uris: ["https://radarr.${SECRET_DOMAIN}/oauth2/callback"]
+      #  scopes: ["openid", "offline_access"]
 
       - client_name: readarr
         client_id: '{{ env "READARR_OIDC_CLIENT_ID" }}'
