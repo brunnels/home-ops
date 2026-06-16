@@ -28,6 +28,13 @@ spec:
     - type: type.googleapis.com/envoy.config.listener.v3.Listener
       name: network/envoy-external/https-quic
       operation: *operation
+    - type: type.googleapis.com/envoy.config.listener.v3.Listener
+      name: default/eg/https
+      operation:
+        op: add
+        jsonPath: ..filter_chains[?@.filters[0].name == 'envoy.filters.network.http_connection_manager'].filters[0].typed_config
+        path: max_request_headers_kb
+        value: 128
 ---
 # yaml-language-server: $schema=https://k8s-schemas.pages.dev/gateway.envoyproxy.io/envoypatchpolicy_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
@@ -62,6 +69,6 @@ spec:
       name: default/eg/https
       operation:
         op: add
-        jsonPath: "..filter_chains[?@.filters[0].name == 'envoy.filters.network.http_connection_manager'].filters[0].typed_config"
+        jsonPath: ..filter_chains[?@.filters[0].name == 'envoy.filters.network.http_connection_manager'].filters[0].typed_config
         path: max_request_headers_kb
         value: 128
