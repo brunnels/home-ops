@@ -11,7 +11,7 @@ spec:
   components:
     #- ../../../components/envoy-gateway-oidc
     - ../../../components/pgo-db-init
-    #- ../../../components/theme-park
+    - ../../../components/theme-park
     - ../../../components/volsync
   dependsOn:
     - name: downloads-pgo-cluster
