@@ -10,7 +10,7 @@ spec:
       app.kubernetes.io/name: *app
   components:
     - ../../../components/pgo-db-init
-    - ../../../components/theme-park
+    #- ../../../components/theme-park
   dependsOn:
     - name: downloads-pgo-cluster
   interval: 1h
