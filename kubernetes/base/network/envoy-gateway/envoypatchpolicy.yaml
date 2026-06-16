@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kube-schemas.pages.dev/gateway.envoyproxy.io/envoypatchpolicy_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-schemas.pages.dev/gateway.envoyproxy.io/envoypatchpolicy_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyPatchPolicy
 metadata:
@@ -29,7 +29,7 @@ spec:
       name: network/envoy-external/https-quic
       operation: *operation
 ---
-# yaml-language-server: $schema=https://kube-schemas.pages.dev/gateway.envoyproxy.io/envoypatchpolicy_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-schemas.pages.dev/gateway.envoyproxy.io/envoypatchpolicy_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyPatchPolicy
 metadata:
