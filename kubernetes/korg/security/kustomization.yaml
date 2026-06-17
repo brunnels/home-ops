@@ -10,4 +10,4 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./security-pgo-cluster.yaml
-  #- ./authelia.yaml
+  - ./authelia.yaml
