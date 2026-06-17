@@ -19,7 +19,7 @@ spec:
     clientSecret:
       name: "${APP}-oidc"
     redirectURL: "https://${APP_SUBDOMAIN:-${APP}}.${SECRET_DOMAIN}/oauth2/callback"
-    logoutPath: "/logout"
+    #logoutPath: "/logout"
     #refreshToken: true
     #cookieDomain: "${SECRET_DOMAIN}"
     #cookieNames:
