@@ -176,6 +176,15 @@ identity_providers:
         response_types: ["code"]
         scopes: ["openid", "offline_access"]
 
+      - client_name: sonarr
+        client_id: '{{ env "SONARR_OIDC_CLIENT_ID" }}'
+        client_secret: '{{ secret "/app/secrets/SONARR_OIDC_CLIENT_SECRET" }}'
+        grant_types: ["authorization_code", "refresh_token"]
+        pre_configured_consent_duration: 1y
+        redirect_uris: ["https://sonarr.${SECRET_DOMAIN}/oauth2/callback"]
+        response_types: ["code"]
+        scopes: ["openid", "offline_access"]
+
       - client_name: tautulli
         client_id: '{{ env "TAUTULLI_OIDC_CLIENT_ID" }}'
         client_secret: '{{ secret "/app/secrets/TAUTULLI_OIDC_CLIENT_SECRET" }}'
