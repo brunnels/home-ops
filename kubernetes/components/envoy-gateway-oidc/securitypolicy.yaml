@@ -18,12 +18,13 @@ spec:
       name: "${APP}-oidc"
     clientSecret:
       name: "${APP}-oidc"
-    refreshToken: true
-    cookieDomain: "${SECRET_DOMAIN}"
-    cookieNames:
-      idToken: ""
-      accessToken: ""
     redirectURL: "https://${APP_SUBDOMAIN:-${APP}}.${SECRET_DOMAIN}/oauth2/callback"
-    scopes: ["openid", "offline_access"]
-    forwardAccessToken: false
-    passThroughAuthHeader: false
+    logoutPath: "/logout"
+    #refreshToken: true
+    #cookieDomain: "${SECRET_DOMAIN}"
+    #cookieNames:
+    #  idToken: ""
+    #  accessToken: ""
+    #scopes: ["openid", "offline_access"]
+    #forwardAccessToken: false
+    #passThroughAuthHeader: false
