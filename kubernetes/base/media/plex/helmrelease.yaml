@@ -72,7 +72,7 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [65536]
+        #supplementalGroups: [65536]
     service:
       app:
         type: LoadBalancer
