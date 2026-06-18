@@ -100,9 +100,13 @@ spec:
           limits:
             memory: 256Mi
       storage:
-        useAllNodes: true
+        useAllNodes: false
         useAllDevices: false
         devicePathFilter: ${CEPH_DEVICE_PATH_FILTER}
+        nodes:
+          - name: korg-n1
+          - name: korg-n2
+          - name: korg-n4
     cephBlockPools:
       - name: ceph-blockpool
         spec:
