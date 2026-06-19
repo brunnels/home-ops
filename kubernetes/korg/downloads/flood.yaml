@@ -12,7 +12,6 @@ spec:
     - ../../../components/envoy-gateway-oidc
     - ../../../components/theme-park
     - ../../../components/kopiur
-    - ../../../components/volsync
   dependsOn:
     - name: kopiur-repository
       namespace: storage
