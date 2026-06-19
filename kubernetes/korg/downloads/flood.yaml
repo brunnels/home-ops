@@ -12,8 +12,11 @@ spec:
     - ../../../components/envoy-gateway-oidc
     - ../../../components/kopiur
     - ../../../components/theme-park
+    - ../../../components/volsync
   dependsOn:
     - name: kopiur-repository
+      namespace: storage
+    - name: volsync
       namespace: storage
   interval: 1h
   path: ./kubernetes/base/downloads/flood

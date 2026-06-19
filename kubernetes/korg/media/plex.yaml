@@ -14,8 +14,6 @@ spec:
   dependsOn:
     - name: kopiur-repository
       namespace: storage
-    - name: rook-ceph-cluster
-      namespace: storage
     - name: volsync
       namespace: storage
   interval: 1h
