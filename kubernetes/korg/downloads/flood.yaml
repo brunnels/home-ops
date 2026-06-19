@@ -20,7 +20,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      KOPIUR_CLAIM: flood-kopiur
   prune: true
   sourceRef:
     kind: GitRepository
