@@ -83,7 +83,7 @@ spec:
           - path: /config/repository.config
             subPath: repository.config
       repository:
-        path: "/backup/${VAULT_PREFIX}/kopiur"
+        path: "/appdata/${VAULT_PREFIX}-kopia"
         server: ${QNAP_HOSTNAME}
         type: nfs
       tmpfs:

@@ -13,7 +13,7 @@ spec:
       volume:
         nfs:
           server: ${QNAP_HOSTNAME}
-          path: "/backup/${VAULT_PREFIX}/kopiur"
+          path: "/appdata/${VAULT_PREFIX}-kopia"
   create:
     enabled: true
   credentialProjection:

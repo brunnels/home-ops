@@ -15,7 +15,7 @@ spec:
         - name: repo
           nfs:
             server: ${QNAP_HOSTNAME}
-            path: "/backup/${VAULT_PREFIX}/kopiur"
+            path: "/appdata/${VAULT_PREFIX}-kopia"
       extraVolumeMounts:
         - name: repo
           mountPath: /repo
