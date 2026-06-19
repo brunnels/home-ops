@@ -10,7 +10,7 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   #- ../../common/storage/ceph-csi-drivers.yaml
-  - ../../common/storage/csi-driver-nfs.yaml
+  #- ../../common/storage/csi-driver-nfs.yaml
   - ../../common/storage/kopia.yaml
   - ../../common/storage/kopiur.yaml
   - ../../common/storage/kopiur-repository.yaml
