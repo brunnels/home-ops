@@ -40,6 +40,9 @@ data:
   VOLSYNC_CACHE_SNAPSHOTCLASS: "ceph-block"
   VOLSYNC_STORAGECLASS: "ceph-block"
 
+  KOPIUR_SNAPSHOTCLASS: "csi-ceph-blockpool"
+  KOPIUR_STORAGECLASS: "ceph-block"
+
   SVC_VPN_ADDR: "10.0.150.13"
   SVC_MQTT_ADDR: "10.0.150.14"
   SVC_PLEX_ADDR: "10.0.150.20"
