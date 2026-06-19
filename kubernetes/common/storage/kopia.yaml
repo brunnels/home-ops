@@ -11,6 +11,7 @@ spec:
   #components:
   #  - ../../../components/zeroscaler
   dependsOn:
+    - name: kopiur-repository
     - name: external-secrets-stores
       namespace: external-secrets
   interval: 1h

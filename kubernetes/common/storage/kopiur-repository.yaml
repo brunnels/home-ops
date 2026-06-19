@@ -10,7 +10,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: kopiur
-    - name: kopia
   interval: 1h
   path: ./kubernetes/base/storage/kopiur-repository
   prune: true
