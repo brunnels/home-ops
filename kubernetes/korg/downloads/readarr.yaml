@@ -25,6 +25,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      KOPIUR_CAPACITY: 8Gi
       DB_NAMES: "readarr readarr-cache readarr-log"
   prune: true
   sourceRef:
