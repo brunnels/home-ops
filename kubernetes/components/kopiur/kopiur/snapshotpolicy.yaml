@@ -14,7 +14,7 @@ spec:
     - pvc:
         name: ${APP}
   copyMethod: Snapshot
-  volumeSnapshotClassName: ${KOPIUR_SNAPSHOTCLASS:=csi-ceph-block}
+  volumeSnapshotClassName: ${KOPIUR_SNAPSHOTCLASS:=csi-ceph-blockpool}
   retention:
     keepDaily: 7
     keepWeekly: 4
