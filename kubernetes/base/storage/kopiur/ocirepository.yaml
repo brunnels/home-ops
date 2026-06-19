@@ -3,12 +3,12 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: local-path-provisioner
+  name: kopiur
 spec:
   interval: 15m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.0.36
-  url: oci://ghcr.io/rancher/local-path-provisioner/charts/local-path-provisioner
+    tag: 0.4.9
+  url: oci://ghcr.io/home-operations/charts/kopiur
