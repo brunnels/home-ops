@@ -10,16 +10,17 @@ spec:
       app.kubernetes.io/name: *app
   components:
     - ../../../components/envoy-gateway-oidc
+    - ../../../components/kopiur
     - ../../../components/theme-park
-    - ../../../components/volsync
   dependsOn:
-    - name: volsync
+    - name: kopiur-repository
       namespace: storage
   interval: 1h
   path: ./kubernetes/base/downloads/flood
   postBuild:
     substitute:
       APP: *app
+      KOPIUR_CLAIM: flood-kopiur
   prune: true
   sourceRef:
     kind: GitRepository
