@@ -3,10 +3,10 @@
 apiVersion: kopiur.home-operations.com/v1alpha1
 kind: SnapshotSchedule
 metadata:
-  name: ${APP}-backup
+  name: ${APP}
 spec:
   policyRef:
-    name: ${APP}
+    name: ${APP}-backup
   schedule:
     cron: H * * * *
     jitter: 2m
