@@ -3,11 +3,11 @@
 apiVersion: kopiur.home-operations.com/v1alpha1
 kind: Restore
 metadata:
-  name: ${APP}
+  name: ${APP}-restore
 spec:
   source:
     fromPolicy:
-      name: ${APP}
+      name: ${APP}-backup
       offset: 0 # 0 = latest snapshot
   target:
     populator: {}
