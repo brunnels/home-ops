@@ -13,7 +13,7 @@ spec:
     - ../../../components/theme-park
     - ../../../components/volsync
   dependsOn:
-    - name: kopiur-repository
+    - name: volsync
       namespace: storage
   interval: 1h
   path: ./kubernetes/base/downloads/flood
