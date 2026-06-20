@@ -11,8 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: vpn-gateway
-      namespace: network
+    #- name: vpn-gateway
+    #  namespace: network
     - name: external-secrets-stores
       namespace: external-secrets
     - name: crunchy-postgres-operator

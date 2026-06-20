@@ -17,7 +17,7 @@ spec:
     substitute:
       INBOUND_PORTS: "60112"
       # ROUTED_NAMESPACES should be a valid JSON array of strings representing the namespaces that will have vpn access
-      ROUTED_NAMESPACES: '["automation"]'
+      ROUTED_NAMESPACES: '["downloads"]'
       # PUBLIC_PORTS should be a valid JSON array of objects representing the nat inbound port config for each service
       PUBLIC_PORTS: |
         [
