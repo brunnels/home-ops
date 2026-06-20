@@ -96,7 +96,7 @@ spec:
           ephemeral:
             volumeClaimTemplate:
               spec:
-                storageClassName: local-path
+                storageClassName: openebs-hostpath
                 accessModes:
                   - ReadWriteOnce
                 resources:
