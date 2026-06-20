@@ -34,6 +34,38 @@ checksum = "sha256:c56e8ce22f7e80cb85ad946cc82d198767b056366201d3e1a2b93d865be38
 url = "https://github.com/FiloSottile/age/releases/download/v1.3.1/age-v1.3.1-windows-amd64.zip"
 provenance = "github-attestations"
 
+[[tools."aqua:go-task/task"]]
+version = "3.51.1"
+backend = "aqua:go-task/task"
+
+[tools."aqua:go-task/task"."platforms.linux-arm64"]
+checksum = "sha256:49c58bb00eff2449a5553f3b3e694fc424e0dc04d5c669d8831126daee1000f8"
+url = "https://github.com/go-task/task/releases/download/v3.51.1/task_linux_arm64.tar.gz"
+
+[tools."aqua:go-task/task"."platforms.linux-arm64-musl"]
+checksum = "sha256:49c58bb00eff2449a5553f3b3e694fc424e0dc04d5c669d8831126daee1000f8"
+url = "https://github.com/go-task/task/releases/download/v3.51.1/task_linux_arm64.tar.gz"
+
+[tools."aqua:go-task/task"."platforms.linux-x64"]
+checksum = "sha256:da7e92f0ff961ef2aae7cfecbad8d1fd2a08d7b09ba968673adf7ff389b243b5"
+url = "https://github.com/go-task/task/releases/download/v3.51.1/task_linux_amd64.tar.gz"
+
+[tools."aqua:go-task/task"."platforms.linux-x64-musl"]
+checksum = "sha256:da7e92f0ff961ef2aae7cfecbad8d1fd2a08d7b09ba968673adf7ff389b243b5"
+url = "https://github.com/go-task/task/releases/download/v3.51.1/task_linux_amd64.tar.gz"
+
+[tools."aqua:go-task/task"."platforms.macos-arm64"]
+checksum = "sha256:a0330f0df20dd1187e323f284a7f365c0ea1f2f271c1e154811e9fc4724bed13"
+url = "https://github.com/go-task/task/releases/download/v3.51.1/task_darwin_arm64.tar.gz"
+
+[tools."aqua:go-task/task"."platforms.macos-x64"]
+checksum = "sha256:08b0a2107c56940e1fc7be15ebd5999f28a867925cfcd619393f8075fef67409"
+url = "https://github.com/go-task/task/releases/download/v3.51.1/task_darwin_amd64.tar.gz"
+
+[tools."aqua:go-task/task"."platforms.windows-x64"]
+checksum = "sha256:422d79dff5afd5a55fb46ae1cfacc7350ec96d4ef27a63a3ec77a5c30a7b0f03"
+url = "https://github.com/go-task/task/releases/download/v3.51.1/task_windows_amd64.zip"
+
 [[tools."aqua:mitsuhiko/minijinja"]]
 version = "2.21.0"
 backend = "aqua:mitsuhiko/minijinja"
@@ -529,7 +561,7 @@ url = "https://github.com/evilmartians/lefthook/releases/download/v2.1.9/lefthoo
 provenance = "github-attestations"
 
 [[tools.oxfmt]]
-version = "0.54.0"
+version = "0.55.0"
 backend = "npm:oxfmt"
 
 [[tools.pipx]]
@@ -579,7 +611,7 @@ url = "https://github.com/astral-sh/python-build-standalone/releases/download/20
 provenance = "github-attestations"
 
 [tools.python."platforms.linux-x64"]
-checksum = "blake3:062a2f658589745d49882f69343051e6f20af9ef32aaea0ee1838a490b7fa82f"
+checksum = "sha256:6da8db06e0efe4ec321e9a931b3e3c1851a87f0ee6c8e6eed2e80aeac635ca5d"
 url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260610/cpython-3.14.6+20260610-x86_64_v4-unknown-linux-gnu-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
