@@ -10,9 +10,12 @@ spec:
       app.kubernetes.io/name: *app
   components:
     #- ../../../components/envoy-gateway-oidc
-    - ../../../components/kopiur
+    #- ../../../components/kopiur
+    - ../../../components/volsync
   dependsOn:
     - name: kopiur-repository
+      namespace: storage
+    - name: volsync
       namespace: storage
   interval: 1h
   path: ./kubernetes/base/automation/esphome
