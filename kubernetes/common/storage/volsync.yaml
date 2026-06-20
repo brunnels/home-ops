@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: local-path-provisioner
+    - name: openebs-hostpath
     - name: snapshot-controller
     - name: rook-ceph-cluster
   interval: 1h

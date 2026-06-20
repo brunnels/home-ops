@@ -37,7 +37,7 @@ data:
 
   VOLSYNC_PVC_STORAGECLASS: "ceph-block"
   VOLSYNC_SNAPSHOTCLASS: "csi-ceph-blockpool"
-  VOLSYNC_CACHE_SNAPSHOTCLASS: "ceph-block"
+  VOLSYNC_CACHE_SNAPSHOTCLASS: "openebs-hostpath"
   VOLSYNC_STORAGECLASS: "ceph-block"
 
   KOPIUR_SNAPSHOTCLASS: "csi-ceph-blockpool"
