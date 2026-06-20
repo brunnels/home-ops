@@ -11,4 +11,4 @@ replacements:
 resources:
   #- ./plex.yaml
   #- ./seerr.yaml
-  #- ./tautulli.yaml
+  - ./tautulli.yaml
