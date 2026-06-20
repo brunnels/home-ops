@@ -52,7 +52,6 @@ spec:
         kind: PostgresCluster
   postBuild:
     substitute:
-      PGO_REPLICAS: "4"
       # USERS should be a valid JSON array representing PostgresCluster spec.users
       USERS: |
         [
