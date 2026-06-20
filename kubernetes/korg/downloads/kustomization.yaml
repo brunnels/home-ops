@@ -9,7 +9,7 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
-  - ./downloads-pgo-cluster.yaml
+  #- ./downloads-pgo-cluster.yaml
   #- ./flaresolverr.yaml
   #- ./flood.yaml
   #- ./lidarr.yaml
