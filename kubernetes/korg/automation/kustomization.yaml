@@ -9,6 +9,6 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
-  #- ./esphome.yaml
+  - ./esphome.yaml
   #- ./home-assistant.yaml
   - ./mosquitto.yaml
