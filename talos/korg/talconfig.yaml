@@ -20,15 +20,13 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: korg-n4
-    ipAddress: 10.0.150.96
+  - hostname: korg-n1
+    ipAddress: 10.0.150.99
     nameservers:
       - 10.0.200.1
     disableSearchDomain: true
-    installDisk: /dev/disk/by-id/ata-SATA_SSD_B7A307871B5300035278
-    controlPlane: false
-    machineSpec:
-      secureboot: true
+    installDisk: /dev/disk/by-id/ata-SATA_SSD_DA09079110EC06342341
+    controlPlane: true
     nodeLabels: &nodeLabels
       intel.feature.node.kubernetes.io/gpu: "true"
       topology.kubernetes.io/region: main
@@ -38,9 +36,11 @@ nodes:
           - -init_on_alloc # Less security, faster puter
           - -init_on_free # Less security, faster puter
           - -selinux # Less security, faster puter
+          - -lockdown # Cilium BPF
           - apparmor=0 # Less security, faster puter
           - init_on_alloc=0 # Less security, faster puter
           - init_on_free=0 # Less security, faster puter
+          - lockdown=integrity # Cilium BPF
           - mitigations=off # Less security, faster puter
           - security=none # Less security, faster puter
           - talos.auditd.disabled=1 # Less security, faster puter
@@ -50,7 +50,7 @@ nodes:
           - intel_iommu=on # PCI Passthrough
           - iommu=pt # PCI Passthrough
           - pci=realloc # PCI Passthrough
-          - net.ifnames=0 # Normalize interace names
+          - net.ifnames=0 # Normalize interface names
           - module_blacklist=igc # Disable onboard NIC
         systemExtensions:
           officialExtensions:
@@ -84,43 +84,18 @@ nodes:
           - vlanId: 150
             dhcp: false
             addresses:
-              - 10.0.150.96/24
-            routes:
-              - network: 0.0.0.0/0
-                gateway: 10.0.150.1
-            mtu: 9000
-    patches:
-      - "@./manifests/oomconfig.yaml"
-      - "@./manifests/timesyncconfig.yaml"
-      - "@./manifests/watchdogtimerconfig.yaml"
-  - hostname: korg-n1
-    ipAddress: 10.0.150.99
-    nameservers:
-      - 10.0.200.1
-    disableSearchDomain: true
-    installDisk: /dev/disk/by-id/ata-SATA_SSD_DA09079110EC06342341
-    controlPlane: true
-    machineSpec:
-      secureboot: true
-    nodeLabels: *nodeLabels
-    schematic: *schematic
-    networkInterfaces:
-      - interface: eth0
-        mtu: 9000
-        vlans:
-          - vlanId: 150
-            dhcp: false
-            addresses:
               - 10.0.150.99/24
             routes:
               - network: 0.0.0.0/0
                 gateway: 10.0.150.1
             mtu: 9000
-    patches:
+            vip:
+              ip: 10.0.150.100
+    patches: &patches
       - "@./manifests/oomconfig.yaml"
       - "@./manifests/timesyncconfig.yaml"
-      - "@./manifests/vipconfig.yaml"
       - "@./manifests/watchdogtimerconfig.yaml"
+
   - hostname: korg-n2
     ipAddress: 10.0.150.98
     nameservers:
@@ -132,7 +107,7 @@ nodes:
       secureboot: true
     nodeLabels: *nodeLabels
     schematic: *schematic
-    #    extensionServices: *extensionServices
+    #extensionServices: *extensionServices
     networkInterfaces:
       - interface: eth0
         mtu: 9000
@@ -145,11 +120,10 @@ nodes:
               - network: 0.0.0.0/0
                 gateway: 10.0.150.1
             mtu: 9000
-    patches:
-      - "@./manifests/oomconfig.yaml"
-      - "@./manifests/timesyncconfig.yaml"
-      - "@./manifests/vipconfig.yaml"
-      - "@./manifests/watchdogtimerconfig.yaml"
+            vip:
+              ip: 10.0.150.100
+    patches: *patches
+
   - hostname: korg-n3
     ipAddress: 10.0.150.97
     nameservers:
@@ -157,11 +131,9 @@ nodes:
     disableSearchDomain: true
     installDisk: /dev/disk/by-id/ata-SATA_SSD_DC4E079110EC06341678
     controlPlane: true
-    machineSpec:
-      secureboot: true
     nodeLabels: *nodeLabels
     schematic: *schematic
-    #    extensionServices: *extensionServices
+    #extensionServices: *extensionServices
     networkInterfaces:
       - interface: eth0
         mtu: 9000
@@ -174,11 +146,33 @@ nodes:
               - network: 0.0.0.0/0
                 gateway: 10.0.150.1
             mtu: 9000
-    patches:
-      - "@./manifests/oomconfig.yaml"
-      - "@./manifests/timesyncconfig.yaml"
-      - "@./manifests/vipconfig.yaml"
-      - "@./manifests/watchdogtimerconfig.yaml"
+            vip:
+              ip: 10.0.150.100
+    patches: *patches
+
+  - hostname: korg-n4
+    ipAddress: 10.0.150.96
+    nameservers:
+      - 10.0.200.1
+    disableSearchDomain: true
+    installDisk: /dev/disk/by-id/ata-SATA_SSD_B7A307871B5300035278
+    controlPlane: false
+    nodeLabels: *nodeLabels
+    schematic: *schematic
+    #extensionServices: *extensionServices
+    networkInterfaces:
+      - interface: eth0
+        mtu: 9000
+        vlans:
+          - vlanId: 150
+            dhcp: false
+            addresses:
+              - 10.0.150.96/24
+            routes:
+              - network: 0.0.0.0/0
+                gateway: 10.0.150.1
+            mtu: 9000
+    patches: *patches
 
 # Global patches
 patches:

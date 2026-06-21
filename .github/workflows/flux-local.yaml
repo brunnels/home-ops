@@ -3,21 +3,28 @@ name: "Flux Local"
 
 on:
   pull_request:
-    branches: ["main"]
+    branches:
+      - "main"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   pre-job:
     name: Flux Local Pre-Job
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       any_changed: ${{ steps.changed-files.outputs.any_changed }}
     steps:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
 
       - name: Get Changed Files
         id: changed-files
@@ -25,19 +32,23 @@ jobs:
         with:
           files: kubernetes/**
 
-#  test:
-#    name: Flux Local Test
-#    needs: pre-job
-#    runs-on: ubuntu-latest
-#    if: ${{ needs.pre-job.outputs.any_changed == 'true' }}
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-#
-#      - name: Run flux-local test
-#        uses: docker://ghcr.io/allenporter/flux-local:v8.1.0
-#        with:
-#          args: test --enable-helm --all-namespaces --path /github/workspace/kubernetes/clusters/kdev -v
+  test:
+    name: Flux Local Test
+    needs: pre-job
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    if: ${{ needs.pre-job.outputs.any_changed == 'true' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+
+      - name: Run flux-local test
+        uses: docker://ghcr.io/allenporter/flux-local:v8.2.0
+        with:
+          args: test --enable-helm --all-namespaces --path /github/workspace/kubernetes/clusters/kdev -v
 
   diff:
     name: Flux Local Diff
@@ -48,7 +59,9 @@ jobs:
       pull-requests: write
     strategy:
       matrix:
-        resources: ["helmrelease", "kustomization"]
+        resources:
+          - "helmrelease"
+          - "kustomization"
       max-parallel: 4
       fail-fast: false
     if: ${{ needs.pre-job.outputs.any_changed == 'true' }}
@@ -57,15 +70,17 @@ jobs:
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           path: pull
+          persist-credentials: false
 
       - name: Checkout Default Branch
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           ref: "${{ github.event.repository.default_branch }}"
           path: default
+          persist-credentials: false
 
       - name: Run flux-local diff
-        uses: docker://ghcr.io/allenporter/flux-local:v8.1.0
+        uses: docker://ghcr.io/allenporter/flux-local:v8.2.0
         with:
           args: >-
             diff ${{ matrix.resources }}
@@ -108,9 +123,11 @@ jobs:
 
   flux-local-status:
     name: Flux Local Success
-#    needs: ["test", "diff"]
-    needs: ["diff"]
+    needs:
+      - "test"
+      - "diff"
     runs-on: ubuntu-latest
+    permissions: {}
     if: ${{ always() }}
     steps:
       - name: Any jobs failed?

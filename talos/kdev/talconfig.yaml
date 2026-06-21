@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 ---
-clusterName: kubernetes
+clusterName: kdev
 
 talosVersion: "${talosVersion}"
 kubernetesVersion: "${kubernetesVersion}"
@@ -9,11 +9,9 @@ endpoint: https://10.0.150.200:6443
 additionalApiServerCertSans: &sans
   - "127.0.0.1"
   - "10.0.150.200"
-  - "k8s.kraven.dev"
-  - "kdev-n1.lan.kraven.org"
-  - "kdev-n2.lan.kraven.org"
-  - "kdev-n3.lan.kraven.org"
+  - "kdev.lan.kraven.org"
 additionalMachineCertSans: *sans
+
 clusterPodNets: ["10.42.0.0/16"]
 clusterSvcNets: ["10.43.0.0/16"]
 
@@ -24,14 +22,17 @@ cniConfig:
 nodes:
   - hostname: kdev-n1
     ipAddress: 10.0.150.254
+    nameservers:
+      - 10.0.200.1
+    disableSearchDomain: true
     installDisk: /dev/disk/by-id/nvme-SK_hynix_BC511_HFM256GDJTNI-82A0A_NJ02N76261100320B
     controlPlane: true
     nodeLabels: &nodeLabels
       intel.feature.node.kubernetes.io/gpu: "true"
+      topology.kubernetes.io/region: main
       nvidia.com/gpu.present: "true"
       node.kubernetes.io/gpu: "true"
-    userVolumes: &userVolumes
-      # non-ceph
+    userVolumes: &userVolumes # non-ceph
       - name: lpp-0
         provisioning:
           diskSelector:
@@ -40,42 +41,41 @@ nodes:
     schematic: &schematic
       customization:
         extraKernelArgs:
-          - -init_on_alloc
-          - -init_on_free
-          - -selinux
-          - apparmor=0
-          - i915.enable_guc=3
-          - init_on_alloc=0
-          - init_on_free=0
-          - intel_iommu=on
-          - iommu=pt
-          - mitigations=off
-          - net.ifnames=0
+          - -init_on_alloc # Less security, faster puter
+          - -init_on_free # Less security, faster puter
+          - -selinux # Less security, faster puter
+          - -lockdown # Cilium BPF
+          - apparmor=0 # Less security, faster puter
+          - init_on_alloc=0 # Less security, faster puter
+          - init_on_free=0 # Less security, faster puter
+          - lockdown=integrity # Cilium BPF
+          - mitigations=off # Less security, faster puter
+          - security=none # Less security, faster puter
+          - talos.auditd.disabled=1 # Less security, faster puter
+          - i915.modeset=1 # Meteor Lake CPU / iGPU
+          - i915.enable_guc=3 # Meteor Lake CPU / iGPU
+          - sysctl.kernel.kexec_load_disabled=1 # Meteor Lake CPU / iGPU
+          - intel_iommu=on # PCI Passthrough
+          - iommu=pt # PCI Passthrough
+          - pci=realloc # PCI Passthrough
+          - net.ifnames=0 # Normalize interface names
           - nouveau.modeset=0
           - nvidia-drm.modeset=1
-          - pci=realloc
-          - security=none
-          - sysctl.kernel.kexec_load_disabled=1
-          - talos.auditd.disabled=1
         systemExtensions:
           officialExtensions:
             - siderolabs/binfmt-misc
-            - siderolabs/crun
-            - siderolabs/ctr
             - siderolabs/fuse3
             - siderolabs/i915
+            - siderolabs/intel-ice-firmware
             - siderolabs/intel-ucode
             - siderolabs/iscsi-tools
-            - siderolabs/lldpd
-            - siderolabs/mdadm
             - siderolabs/mei
+            - siderolabs/nfs-utils
+            - siderolabs/nfsrahead
             - siderolabs/nonfree-kmod-nvidia-production
-#            - siderolabs/nut-client
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nvme-cli
             - siderolabs/thunderbolt
-            - siderolabs/uinput
-            - siderolabs/util-linux-tools
     networkInterfaces: &networkInterfaces
       - interface: bond0
         mtu: 9000
@@ -110,21 +110,23 @@ nodes:
         dhcp: false
       - interface: eth1
         dhcp: false
-    extensionServices: &extensionServices
-#      - name: nut-client
-#        configFiles:
-#          - content: MONITOR ${upsmonHost} 1 monuser secret slave
-#            mountPath: /usr/local/etc/nut/upsmon.conf
-#          - content: MODE=netclient
-#            mountPath: /usr/local/etc/nut/nut.conf
-      - name: lldpd
-        configFiles:
-          - mountPath: /usr/local/etc/lldpd/lldpd.conf
-            content: |
-              configure lldpd portidsubtype ifname
-              configure system description "Talos Node"
+    #    extensionServices: &extensionServices
+    #      - name: nut-client
+    #        configFiles:
+    #          - content: MONITOR ${upsmonHost} 1 monuser secret slave
+    #            mountPath: /usr/local/etc/nut/upsmon.conf
+    #          - content: MODE=netclient
+    #            mountPath: /usr/local/etc/nut/nut.conf
+    #      - name: lldpd
+    #        configFiles:
+    #          - mountPath: /usr/local/etc/lldpd/lldpd.conf
+    #            content: |
+    #              configure lldpd portidsubtype ifname
+    #              configure system description "Talos Node"
     patches:
       - "@./manifests/ethernetconfig.yaml"
+      - "@./manifests/oomconfig.yaml"
+      - "@./manifests/timesyncconfig.yaml"
       - "@./manifests/watchdogtimerconfig.yaml"
       - |
         machine:
@@ -146,17 +148,23 @@ nodes:
                 routes:
                   - network: 169.254.255.102/32
                     metric: 2048
+
   - hostname: kdev-n2
     ipAddress: 10.0.150.253
+    nameservers:
+      - 10.0.200.1
+    disableSearchDomain: true
     installDisk: /dev/disk/by-id/nvme-BPX_8B71077C060891075911
     controlPlane: true
     nodeLabels: *nodeLabels
-    userVolumes: *userVolumes
     schematic: *schematic
+    #extensionServices: *extensionServices
     networkInterfaces: *networkInterfaces
-    extensionServices: *extensionServices
+    userVolumes: *userVolumes
     patches:
       - "@./manifests/ethernetconfig.yaml"
+      - "@./manifests/oomconfig.yaml"
+      - "@./manifests/timesyncconfig.yaml"
       - "@./manifests/watchdogtimerconfig.yaml"
       - |
         machine:
@@ -181,15 +189,20 @@ nodes:
 
   - hostname: kdev-n3
     ipAddress: 10.0.150.252
+    nameservers:
+      - 10.0.200.1
+    disableSearchDomain: true
     installDisk: /dev/disk/by-id/nvme-Samsung_SSD_950_PRO_256GB_S2GLNCAGB26901M
     controlPlane: true
     nodeLabels: *nodeLabels
-    userVolumes: *userVolumes
     schematic: *schematic
+    #extensionServices: *extensionServices
     networkInterfaces: *networkInterfaces
-    extensionServices: *extensionServices
+    userVolumes: *userVolumes
     patches:
       - "@./manifests/ethernetconfig.yaml"
+      - "@./manifests/oomconfig.yaml"
+      - "@./manifests/timesyncconfig.yaml"
       - "@./manifests/watchdogtimerconfig.yaml"
       - |
         machine:
@@ -216,14 +229,11 @@ patches:
   - "@./patches/global/machine-files.yaml"
   - "@./patches/global/machine-kubelet.yaml"
   - "@./patches/global/machine-modules.yaml"
-  - "@./patches/global/machine-network.yaml"
   - "@./patches/global/machine-sysctls.yaml"
   - "@./patches/global/machine-sysfs.yaml"
-  - "@./patches/global/machine-time.yaml"
   - "@./patches/global/machine-udev.yaml"
 
 # Controller patches
 controlPlane:
   patches:
     - "@./patches/controller/cluster.yaml"
-    - "@./patches/controller/machine.yaml"

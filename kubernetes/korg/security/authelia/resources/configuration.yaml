@@ -41,8 +41,8 @@ session:
 
 server:
   buffers:
-    read: 16384
-    write: 16384
+    read: 8192
+    write: 8192
 
 storage:
   postgres:

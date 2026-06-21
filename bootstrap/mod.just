@@ -13,7 +13,7 @@ default:
 
 [doc('Bootstrap the Talos cluster')]
 [group('bootstrap')]
-talos cluster='':
+talos cluster:
     just bootstrap talos-secret "{{ cluster }}"
     just talos generate-config "{{ cluster }}"
     just bootstrap talos-apply "{{ cluster }}"
@@ -23,7 +23,7 @@ talos cluster='':
 [doc('Bootstrap apps into the Talos cluster')]
 [group('bootstrap')]
 [script]
-apps cluster='':
+apps cluster:
     just log info "$(just set-cluster "{{ cluster }}")"
     just bootstrap apps-ready "{{ cluster }}"
     just bootstrap apps-crds
@@ -33,7 +33,7 @@ apps cluster='':
 [private]
 [script]
 [working-directory('../talos')]
-talos-secret cluster='':
+talos-secret cluster:
     just log info "Generating talsecret" cluster "{{ cluster }}"
     cd "{{ cluster }}"
     if [ ! -f talsecret.sops.yaml ]; then
@@ -43,7 +43,7 @@ talos-secret cluster='':
 [private]
 [script]
 [working-directory('../talos')]
-talos-apply cluster='':
+talos-apply cluster:
     just log info "Applying talos config" cluster "{{ cluster }}"
     cd "{{ cluster }}"
     talhelper gencommand apply --extra-flags="--insecure" | bash
@@ -51,7 +51,7 @@ talos-apply cluster='':
 [private]
 [script]
 [working-directory('../talos')]
-talos-bootstrap cluster='':
+talos-bootstrap cluster:
     just log info "Bootstrapping talos" cluster "{{ cluster }}"
     cd "{{ cluster }}"
     until talhelper gencommand bootstrap | bash; do sleep 10; done
@@ -59,7 +59,7 @@ talos-bootstrap cluster='':
 # [private]
 [script]
 [working-directory('../talos')]
-talos-kubeconfig cluster='':
+talos-kubeconfig cluster:
     just log info "Fetching kubeconfig" cluster "{{ cluster }}"
     cd "{{ cluster }}"
     until talhelper gencommand kubeconfig --extra-flags="{{ justfile_dir() }} --force --force-context-name {{ cluster }}" | bash; do sleep 10; done
@@ -119,7 +119,7 @@ create-resource type name ns:
 
 [private]
 [script]
-apps-resources cluster='':
+apps-resources cluster:
     just log info "Applying resources" cluster "{{ cluster }}"
 
     # load cluster settings into environment variables
@@ -155,7 +155,7 @@ apps-resources cluster='':
 # Wait until nodes register as Ready=False. They only become Ready=True once the CNI is healthy.
 [private]
 [script]
-apps-ready cluster='':
+apps-ready cluster:
     just log info "Waiting for nodes to register as Ready=False" cluster "{{ cluster }}"
     if ! kubectl wait nodes --for=condition=Ready=True --all --timeout=10s &>/dev/null; then
         until kubectl wait nodes --for=condition=Ready=False --all --timeout=10s &>/dev/null; do

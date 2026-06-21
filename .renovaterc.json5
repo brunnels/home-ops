@@ -146,11 +146,7 @@
     {
       description: "Process annotated dependencies",
       customType: "regex",
-      managerFilePatterns: [
-        "/(^|/).+\\.env(?:\\.j2)?$/",
-        "/(^|/).+\\.sh(?:\\.j2)?$/",
-        "/(^|/).+\\.ya?ml(?:\\.j2)?$/",
-      ],
+      managerFilePatterns: ["/(^|/).+\\.env(?:\\.j2)?$/", "/(^|/).+\\.sh(?:\\.j2)?$/", "/(^|/).+\\.ya?ml(?:\\.j2)?$/"],
       matchStrings: [
         // # renovate: datasource=github-releases depName=k3s-io/k3s
         // k3s_release_version: &version v1.29.0+k3s1
@@ -168,12 +164,8 @@
     {
       customType: "regex",
       description: "Process OCI dependencies",
-      managerFilePatterns: [
-        "/\\.yaml(?:\\.j2)?$/",
-      ],
-      matchStrings: [
-        "oci://(?<depName>[^:]+):(?<currentValue>\\S+)",
-      ],
+      managerFilePatterns: ["/\\.yaml(?:\\.j2)?$/"],
+      matchStrings: ["oci://(?<depName>[^:]+):(?<currentValue>\\S+)"],
       datasourceTemplate: "docker",
     },
   ],
