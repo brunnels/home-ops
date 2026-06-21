@@ -32,9 +32,4 @@ data:
   GIT_REPO: "github.com/brunnels/home-ops"
   GIT_REPO_REF: "refs/heads/main"
 
-  VOLSYNC_PVC_STORAGECLASS: "ceph-block"
-  VOLSYNC_SNAPSHOTCLASS: "csi-ceph-blockpool"
-  VOLSYNC_CACHE_SNAPSHOTCLASS: "ceph-block"
-  VOLSYNC_STORAGECLASS: "ceph-block"
-
   SVC_VPN_ADDR: "10.0.150.133"

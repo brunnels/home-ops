@@ -28,17 +28,10 @@ data:
   CEPH_CLUSTER_CIDR: "10.0.150.0/24"
 
   THEME_PARK_THEME: "space-gray"
-  # should be a valid JSON array representing spec.nodePathMap[0].paths
-  LOCAL_PATH_PROVISIONER_NODE_PATHS: '["/var/mnt/lpp-0"]'
   OPENEBS_HOSTPATH: "/var/mnt/lpp-0"
 
   GIT_REPO: "github.com/brunnels/home-ops"
   GIT_REPO_REF: "refs/heads/main"
-
-  VOLSYNC_PVC_STORAGECLASS: "ceph-block"
-  VOLSYNC_SNAPSHOTCLASS: "csi-ceph-blockpool"
-  VOLSYNC_CACHE_SNAPSHOTCLASS: "openebs-hostpath"
-  VOLSYNC_STORAGECLASS: "ceph-block"
 
   KOPIUR_SNAPSHOTCLASS: "csi-ceph-blockpool"
   KOPIUR_STORAGECLASS: "ceph-block"
