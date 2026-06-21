@@ -18,7 +18,7 @@ spec:
         - 0.0.0.0/0
       toPorts:
         - ports:
-            - port: "1637"
+            - port: "51820"
               protocol: UDP
     - toEntities:
         - cluster
@@ -39,12 +39,12 @@ spec:
   egress:
     - toPorts:
         - ports:
-            - port: "8472"
+            - port: "4789"
               protocol: UDP
   ingress:
     - toPorts:
         - ports:
-            - port: "8472"
+            - port: "4789"
               protocol: UDP
     - icmps:
         - fields:
