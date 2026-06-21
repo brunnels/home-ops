@@ -106,14 +106,14 @@ spec:
       #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
       gatewayLabelValue: ""
       gatewayAnnotationValue:
-    persistence:
-      dnsmasq-leases:
-        enabled: true
-        type: persistentVolumeClaim
-        storageClass: ceph-block
-        accessMode: ReadWriteOnce
-        size: 32Mi
-        advancedMounts:
-          main:
-            main:
-              - path: /var/lib/misc
+    #persistence:
+    #  dnsmasq-leases:
+    #    enabled: true
+    #    type: persistentVolumeClaim
+    #    storageClass: ceph-block
+    #    accessMode: ReadWriteOnce
+    #    size: 32Mi
+    #    advancedMounts:
+    #      main:
+    #        main:
+    #          - path: /var/lib/misc
