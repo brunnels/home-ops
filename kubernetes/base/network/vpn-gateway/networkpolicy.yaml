@@ -39,12 +39,12 @@ spec:
   egress:
     - toPorts:
         - ports:
-            - port: "4789"
+            - port: "8472"
               protocol: UDP
   ingress:
     - toPorts:
         - ports:
-            - port: "4789"
+            - port: "8472"
               protocol: UDP
     - icmps:
         - fields:
