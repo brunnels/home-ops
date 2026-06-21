@@ -14,6 +14,10 @@ spec:
     - pvc:
         name: ${APP}
   copyMethod: Snapshot
+  files:
+    ignoreRules:
+      - "lost+found"
+      - "*/lost+found"
   volumeSnapshotClassName: ${KOPIUR_SNAPSHOTCLASS:=csi-ceph-blockpool}
   retention:
     keepDaily: 7
