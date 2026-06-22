@@ -10,7 +10,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: intel-device-plugin-operator
-      namespace: &namespace kube-system
   healthCheckExprs:
     - apiVersion: deviceplugin.intel.com/v1
       kind: GpuDevicePlugin
