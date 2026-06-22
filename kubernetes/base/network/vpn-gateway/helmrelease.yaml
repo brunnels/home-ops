@@ -19,9 +19,9 @@ spec:
         containers:
           gluetun:
             enabled: true
+            type: gluetun
             env:
               TZ: "${TIMEZONE}"
-              FIREWALL: off
               FIREWALL_ENABLED_DISABLING_IT_SHOOTS_YOU_IN_YOUR_FOOT: off
               DOT: off
               DOT_IPV6: off
@@ -33,10 +33,10 @@ spec:
             envFrom:
               - secretRef:
                   name: *app
-            ports:
-              - containerPort: 80
-                name: gluetun
-                protocol: TCP
+            #ports:
+            #  - containerPort: 80
+            #    name: gluetun
+            #    protocol: TCP
             resources:
               requests:
                 cpu: 100m
@@ -44,21 +44,21 @@ spec:
               limits:
                 cpu: 175m
                 memory: 192Mi
-            securityContext:
-              capabilities:
-                add:
-                  - NET_ADMIN
-        pod:
-          annotations:
-            configmap.reloader.stakater.com/reload: vpn-gateway-pod-gateway
-            secret.reloader.stakater.com/reload: vpn-gateway-pod-gateway
-      webhook:
-        pod:
-          # The sidecar containers inserted by the webhook will use this DNS config
-          dnsConfig:
-            options:
-              - name: ndots
-                value: "1"
+            #securityContext:
+            #  capabilities:
+            #    add:
+            #      - NET_ADMIN
+        #pod:
+        #  annotations:
+        #    configmap.reloader.stakater.com/reload: vpn-gateway-pod-gateway
+        #    secret.reloader.stakater.com/reload: vpn-gateway-pod-gateway
+      #webhook:
+      #  pod:
+      #    # The sidecar containers inserted by the webhook will use this DNS config
+      #    dnsConfig:
+      #      options:
+      #        - name: ndots
+      #          value: "1"
     global:
       fullnameOverride: *app
     networkpolicies:
@@ -66,23 +66,23 @@ spec:
         enabled: false
     publicPorts: ${PUBLIC_PORTS}
     routed_namespaces: ${ROUTED_NAMESPACES}
-    service:
-      main:
-        controller: main
-        type: ClusterIP
-        clusterIP: None
-        ports:
-          http:
-            port: 4789
-            protocol: UDP
-          gluetun:
-            port: 80
-            protocol: TCP
+    #service:
+    #  main:
+    #    controller: main
+    #    type: ClusterIP
+    #    clusterIP: None
+    #    ports:
+    #      http:
+    #        port: 4789
+    #        protocol: UDP
+    #      gluetun:
+    #        port: 80
+    #        protocol: TCP
     settings:
       NOT_ROUTED_TO_GATEWAY_CIDRS: "${CLUSTER_CIDR} ${SERVICE_CIDR}"
       VPN_BLOCK_OTHER_TRAFFIC: true
       VPN_LOCAL_CIDRS: "172.16.0.0/24 ${CLUSTER_CIDR} ${SERVICE_CIDR}"
-      #GATEWAY_ENABLE_DNSSEC: false
+      GATEWAY_ENABLE_DNSSEC: false
       VPN_INTERFACE: wg0
       VPN_TRAFFIC_PORT: 1637
     webhook:
@@ -106,14 +106,3 @@ spec:
       #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
       gatewayLabelValue: ""
       gatewayAnnotationValue:
-    #persistence:
-    #  dnsmasq-leases:
-    #    enabled: true
-    #    type: persistentVolumeClaim
-    #    storageClass: ceph-block
-    #    accessMode: ReadWriteOnce
-    #    size: 32Mi
-    #    advancedMounts:
-    #      main:
-    #        main:
-    #          - path: /var/lib/misc
