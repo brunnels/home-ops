@@ -56,13 +56,15 @@ talos-bootstrap cluster:
     cd "{{ cluster }}"
     until talhelper gencommand bootstrap | bash; do sleep 10; done
 
-# [private]
+[private]
 [script]
 [working-directory('../talos')]
 talos-kubeconfig cluster:
     just log info "Fetching kubeconfig" cluster "{{ cluster }}"
     cd "{{ cluster }}"
     until talhelper gencommand kubeconfig --extra-flags="{{ justfile_dir() }} --force --force-context-name {{ cluster }}" | bash; do sleep 10; done
+    controller=$(yq .endpoint < {{ justfile_dir() }}/talos/{{ cluster }}/talconfig.yaml)
+    kubectl config set-cluster {{ cluster }} --server ${controller}
 
 [private]
 [script]

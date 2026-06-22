@@ -19,8 +19,6 @@ default:
 log lvl msg *args:
     gum log -t rfc3339 -s -l "{{ lvl }}" "{{ msg }}" {{ args }}
 
-[private]
 [script]
 set-cluster cluster:
-    controller=$(yq .endpoint < {{ justfile_dir() }}/talos/{{ cluster }}/talconfig.yaml)
-    kubectl config set-cluster {{ cluster }} --server ${controller}
+    kubectl config use-context {{ cluster }}
