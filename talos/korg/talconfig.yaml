@@ -187,3 +187,4 @@ patches:
 controlPlane:
   patches:
     - "@./patches/controller/cluster.yaml"
+    - "@./patches/controller/machine-features.yaml"
