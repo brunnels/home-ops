@@ -11,3 +11,4 @@ replacements:
 resources:
   - ./security-pgo-cluster.yaml
   - ./authelia.yaml
+  - ../../common/security/authelia-oidc-operator.yaml
