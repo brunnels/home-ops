@@ -23,3 +23,5 @@ spec:
   scopes:
     - openid
     - offline_access
+  token_endpoint:
+    auth_method: client_secret_basic
