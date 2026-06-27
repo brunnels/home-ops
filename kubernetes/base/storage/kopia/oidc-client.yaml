@@ -25,3 +25,10 @@ spec:
     - offline_access
   token_endpoint:
     auth_method: client_secret_basic
+
+  public: false
+  authorization_policy: two_factor
+  consent_mode: auto
+  claims:
+    policy:
+      id_token: ["groups", "email", "email_verified", "alt_emails", "preferred_username", "name"]
