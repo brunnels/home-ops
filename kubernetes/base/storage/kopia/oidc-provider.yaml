@@ -7,4 +7,4 @@ spec:
   cors:
     allowed_origins:
       - https://${APP}.${SECRET_DOMAIN}
-    refresh_token_lifespan: 30d
+  refresh_token_lifespan: 30d
