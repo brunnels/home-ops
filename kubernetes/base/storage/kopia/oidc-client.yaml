@@ -4,7 +4,7 @@ kind: OIDCClient
 metadata:
   name: ${APP}
   annotations:
-    authelia.milas.dev/oidc-provider: ${APP}/${NAMESPACE}
+    authelia.milas.dev/oidc-provider: ${NAMESPACE}/${APP}
 spec:
   description: ${APP}
   grant_types:
