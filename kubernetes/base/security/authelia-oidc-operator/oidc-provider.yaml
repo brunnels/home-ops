@@ -2,9 +2,8 @@
 apiVersion: authelia.milas.dev/v1alpha1
 kind: OIDCProvider
 metadata:
-  name: ${APP}
+  name: default
 spec:
   cors:
-    allowed_origins:
-      - https://${APP}.${SECRET_DOMAIN}
+    allowed_origins_from_client_redirect_uris: true
   refresh_token_lifespan: "30m"

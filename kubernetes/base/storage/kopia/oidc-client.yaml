@@ -4,7 +4,7 @@ kind: OIDCClient
 metadata:
   name: ${APP}
   annotations:
-    authelia.milas.dev/oidc-provider: ${NAMESPACE}/${APP}
+    authelia.milas.dev/oidc-provider: security/default
 spec:
   description: ${APP}
   grant_types:
@@ -16,7 +16,7 @@ spec:
   response_types:
     - code
   secret_ref:
-    name: ${APP}
+    name: ${APP}-oidc-credentials
     fields:
       client_id: OIDC_CLIENT_ID
       client_secret: OIDC_CLIENT_SECRET

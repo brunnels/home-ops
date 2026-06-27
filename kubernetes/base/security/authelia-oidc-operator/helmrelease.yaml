@@ -22,4 +22,4 @@ spec:
           manager:
             image:
               repository: ghcr.io/brunnels/authelia-oidc-operator
-              tag: pr-1@sha256:1ba694127c438c9a9df0f400d2a89e14891781dbb17441830fb1c5b2044c7143
+              tag: pr-1
