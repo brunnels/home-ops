@@ -10,7 +10,7 @@ spec:
   grant_types:
     - authorization_code
     - refresh_token
-  preconfigured_consent_duration: "1y"
+  preconfigured_consent_duration: "30m"
   redirect_uris:
     - https://${APP}.${SECRET_DOMAIN}/oauth2/callback
   response_types:
