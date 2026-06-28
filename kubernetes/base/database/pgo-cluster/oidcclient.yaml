@@ -1,0 +1,26 @@
+---
+apiVersion: authelia.milas.dev/v1alpha2
+kind: OIDCClient
+metadata:
+  name: ${NAMESPACE}-pgadmin
+  annotations:
+    authelia.milas.dev/oidc-provider: security/default
+spec:
+  description: ${NAMESPACE} pgAdmin
+  preconfigured_consent_duration: 1y
+  redirect_uris:
+    - https://${NAMESPACE}-pgadmin.${SECRET_DOMAIN}/oauth2/callback
+  response_types:
+    - code
+  secret_ref:
+    name: pgadmin-oauth2
+    fields:
+      client_id: client-id
+      client_secret: client-secret
+  #scopes:
+  #  - email
+  #  - openid
+  #  - profile
+  # default should not be needed, but it is required for the operator to work issue: #6
+  token_endpoint:
+    auth_method: client_secret_basic

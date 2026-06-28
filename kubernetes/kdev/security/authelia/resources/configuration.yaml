@@ -114,14 +114,14 @@ identity_providers:
       #  response_types: ["code"]
       #  scopes: ["openid", "offline_access"]
 
-      - client_name: pgAdmin
-        client_id: '{{ env "PGADMIN_OIDC_CLIENT_ID" }}'
-        client_secret: '{{ secret "/app/secrets/PGADMIN_OIDC_CLIENT_SECRET" }}'
-        pre_configured_consent_duration: 1y
-        redirect_uris:
-          - "https://security-pgadmin.${SECRET_DOMAIN}/oauth2/authorize"
-        scopes: ["openid", "profile", "email"]
-        response_types: ["code"]
+      #- client_name: pgAdmin
+      #  client_id: '{{ env "PGADMIN_OIDC_CLIENT_ID" }}'
+      #  client_secret: '{{ secret "/app/secrets/PGADMIN_OIDC_CLIENT_SECRET" }}'
+      #  pre_configured_consent_duration: 1y
+      #  redirect_uris:
+      #    - "https://security-pgadmin.${SECRET_DOMAIN}/oauth2/authorize"
+      #  #scopes: ["openid", "profile", "email"]
+      #  response_types: ["code"]
 
       #- client_name: Weave GitOps
       #  client_id: '{{ env "WEAVE_OIDC_CLIENT_ID" }}'
