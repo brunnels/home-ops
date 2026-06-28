@@ -11,10 +11,12 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets-stores
-      namespace: external-secrets
+    - name: authelia-oidc-operator
+      namespace: security
     - name: crunchy-postgres-operator
       namespace: database
+    - name: external-secrets-stores
+      namespace: external-secrets
     - name: openebs-hostpath
       namespace: storage
   healthCheckExprs:

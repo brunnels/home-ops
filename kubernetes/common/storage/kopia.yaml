@@ -12,9 +12,9 @@ spec:
     - ../../../components/envoy-gateway-oidc
   #  - ../../../components/zeroscaler
   dependsOn:
+    - name: authelia
+      namespace: security
     - name: kopiur-repository
-    - name: external-secrets-stores
-      namespace: external-secrets
   interval: 1h
   path: ./kubernetes/base/storage/kopia
   postBuild:
