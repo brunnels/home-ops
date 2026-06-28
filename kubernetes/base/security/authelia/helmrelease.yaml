@@ -30,7 +30,7 @@ spec:
               AUTHELIA_TELEMETRY_METRICS_ENABLED: "true"
               AUTHELIA_THEME: dark
               AUTHELIA_CERTIFICATES_DIRECTORY: /trusted_certs
-              X_AUTHELIA_CONFIG: /config
+              X_AUTHELIA_CONFIG: /config/configuration.yaml,/config/authelia.oidc.yaml
               X_AUTHELIA_CONFIG_FILTERS: template
 
               AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE: /app/secrets/AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD
