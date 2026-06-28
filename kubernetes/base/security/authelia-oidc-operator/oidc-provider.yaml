@@ -3,7 +3,7 @@ apiVersion: authelia.milas.dev/v1alpha1
 kind: OIDCProvider
 metadata:
   name: default
-spec:
+spec: []
   #claims_policies:
   #  default:
   #    id_token:
@@ -13,15 +13,15 @@ spec:
   #      - alt_emails
   #      - preferred_username
   #      - name
-  cors:
-    allowed_origins_from_client_redirect_uris: true
-    #endpoints:
-    #  - authorization
-    #  - introspection
-    #  - pushed-authorization-request
-    #  - revocation
-    #  - token
-    #  - userinfo
+  #cors:
+  #  allowed_origins_from_client_redirect_uris: true
+  #endpoints:
+  #  - authorization
+  #  - introspection
+  #  - pushed-authorization-request
+  #  - revocation
+  #  - token
+  #  - userinfo
   #hmac_secret_ref:
   #  name: authelia-files
   #  key: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET
