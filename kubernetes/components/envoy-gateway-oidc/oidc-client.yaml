@@ -10,25 +10,18 @@ spec:
   grant_types:
     - authorization_code
     - refresh_token
-  preconfigured_consent_duration: "30m"
+  preconfigured_consent_duration: 1y
   redirect_uris:
-    - https://${APP}.${SECRET_DOMAIN}/oauth2/callback
+    - https://${APP_SUBDOMAIN:-${APP}}.${SECRET_DOMAIN}/oauth2/callback
   response_types:
     - code
   secret_ref:
     name: ${APP}-oidc-credentials
     fields:
-      client_id: OIDC_CLIENT_ID
-      client_secret: OIDC_CLIENT_SECRET
+      client_id: client-id
+      client_secret: client-secret
   scopes:
     - openid
     - offline_access
   token_endpoint:
     auth_method: client_secret_basic
-
-  public: false
-  authorization_policy: two_factor
-  consent_mode: auto
-  claims:
-    policy:
-      id_token: ["groups", "email", "email_verified", "alt_emails", "preferred_username", "name"]

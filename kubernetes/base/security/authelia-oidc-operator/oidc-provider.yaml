@@ -4,6 +4,25 @@ kind: OIDCProvider
 metadata:
   name: default
 spec:
+  claims_policies:
+    default:
+      id_token:
+        - groups
+        - email
+        - email_verified
+        - alt_emails
+        - preferred_username
+        - name
   cors:
     allowed_origins_from_client_redirect_uris: true
-  refresh_token_lifespan: "30m"
+    endpoints:
+      - authorization
+      - pushed-authorization-request
+      - token
+      - revocation
+      - introspection
+      - userinfo
+  hmac_secret_ref:
+    name: authelia-files
+    key: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET
+  refresh_token_lifespan: 30d
