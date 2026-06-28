@@ -10,3 +10,6 @@ spec:
   preconfigured_consent_duration: 1y
   redirect_uris:
     - https://${APP_SUBDOMAIN:-${APP}}.${SECRET_DOMAIN}/oauth2/callback
+  # default should not be needed, but it is required for the operator to work issue: #6
+  token_endpoint:
+    auth_method: client_secret_basic

@@ -23,5 +23,6 @@ spec:
   scopes:
     - openid
     - offline_access
+  # default should not be needed, but it is required for the operator to work issue: #6
   token_endpoint:
     auth_method: client_secret_basic
