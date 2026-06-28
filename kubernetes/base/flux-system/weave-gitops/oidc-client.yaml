@@ -8,4 +8,3 @@ spec:
   preconfigured_consent_duration: 1y
   redirect_uris:
     - https://${APP_SUBDOMAIN:-${APP}}.${SECRET_DOMAIN}/oauth2/callback
-  claims_policy: default
