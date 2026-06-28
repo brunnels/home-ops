@@ -3,10 +3,10 @@ apiVersion: authelia.milas.dev/v1alpha2
 kind: OIDCClient
 metadata:
   name: ${APP}
-  #annotations:
-  #  authelia.milas.dev/oidc-provider: security/default
+  annotations:
+    authelia.milas.dev/oidc-provider: security/default
 spec:
-  description: ${APP}
+  description: ${OIDC_DESCRIPTION:-${APP}}
   grant_types:
     - authorization_code
     - refresh_token
