@@ -16,7 +16,7 @@ spec:
   response_types:
     - code
   secret_ref:
-    name: ${APP}-oidc-credentials
+    name: ${APP}-oidc
     fields:
       client_id: client-id
       client_secret: client-secret
