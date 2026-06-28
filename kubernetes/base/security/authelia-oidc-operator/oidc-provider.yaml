@@ -22,7 +22,7 @@ spec:
     #  - revocation
     #  - token
     #  - userinfo
-  hmac_secret_ref:
-    name: authelia-files
-    key: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET
-  refresh_token_lifespan: 720h
+  #hmac_secret_ref:
+  #  name: authelia-files
+  #  key: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET
+  #refresh_token_lifespan: 720h
