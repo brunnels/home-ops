@@ -1,0 +1,11 @@
+---
+apiVersion: authelia.milas.dev/v1alpha2
+kind: OIDCClient
+metadata:
+  name: weave-gitops
+spec:
+  description: Weave GitOps
+  preconfigured_consent_duration: 1y
+  redirect_uris:
+    - https://${APP_SUBDOMAIN:-${APP}}.${SECRET_DOMAIN}/oauth2/callback
+  claims_policy: default
