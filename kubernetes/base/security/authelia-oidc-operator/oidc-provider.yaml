@@ -25,4 +25,4 @@ spec:
   hmac_secret_ref:
     name: authelia-files
     key: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET
-  refresh_token_lifespan: 30d
+  refresh_token_lifespan: 720h
