@@ -9,13 +9,11 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
-  #- ../../common/storage/ceph-csi-drivers.yaml
+  - ../../common/storage/ceph-csi-drivers.yaml
   - ../../common/storage/kopia.yaml
   - ../../common/storage/kopiur.yaml
   - ../../common/storage/kopiur-repository.yaml
   - ../../common/storage/openebs-hostpath.yaml
-  #- ../../common/storage/rook-ceph-cluster.yaml
-  - ./rook-ceph-cluster.yaml
-  #- ../../common/storage/rook-ceph-operator.yaml
-  - ./rook-ceph-operator.yaml
+  - ../../common/storage/rook-ceph-cluster.yaml
+  - ../../common/storage/rook-ceph-operator.yaml
   - ../../common/storage/snapshot-controller.yaml
