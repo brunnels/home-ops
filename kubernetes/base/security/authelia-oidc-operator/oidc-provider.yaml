@@ -4,15 +4,15 @@ kind: OIDCProvider
 metadata:
   name: default
 spec:
-  claims_policies:
-    default:
-      id_token:
-        - groups
-        - email
-        - email_verified
-        - alt_emails
-        - preferred_username
-        - name
+  #claims_policies:
+  #  default:
+  #    id_token:
+  #      - groups
+  #      - email
+  #      - email_verified
+  #      - alt_emails
+  #      - preferred_username
+  #      - name
   cors:
     allowed_origins_from_client_redirect_uris: true
     endpoints:
