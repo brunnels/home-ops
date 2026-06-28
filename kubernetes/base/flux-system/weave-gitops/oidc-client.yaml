@@ -9,7 +9,12 @@ spec:
   description: Weave GitOps
   preconfigured_consent_duration: 1y
   redirect_uris:
-    - https://${APP_SUBDOMAIN:-${APP}}.${SECRET_DOMAIN}/oauth2/callback
+    - https://gitops.${SECRET_DOMAIN}/oauth2/callback
+  secret_ref:
+    name: weave-gitops-oidc-auth
+    fields:
+      client_id: clientID
+      client_secret: clientSecret
   # default should not be needed, but it is required for the operator to work issue: #6
   token_endpoint:
     auth_method: client_secret_basic
