@@ -105,14 +105,14 @@ identity_providers:
         pre_configured_consent_duration: 1y
         redirect_uris: ["https://grafana.${SECRET_DOMAIN}/login/generic_oauth"]
 
-      - client_name: kopia
-        client_id: '{{ env "KOPIA_OIDC_CLIENT_ID" }}'
-        client_secret: '{{ secret "/app/secrets/KOPIA_OIDC_CLIENT_SECRET" }}'
-        grant_types: ["authorization_code", "refresh_token"]
-        pre_configured_consent_duration: 1y
-        redirect_uris: ["https://kopia.${SECRET_DOMAIN}/oauth2/callback"]
-        response_types: ["code"]
-        scopes: ["openid", "offline_access"]
+      #- client_name: kopia
+      #  client_id: '{{ env "KOPIA_OIDC_CLIENT_ID" }}'
+      #  client_secret: '{{ secret "/app/secrets/KOPIA_OIDC_CLIENT_SECRET" }}'
+      #  grant_types: ["authorization_code", "refresh_token"]
+      #  pre_configured_consent_duration: 1y
+      #  redirect_uris: ["https://kopia.${SECRET_DOMAIN}/oauth2/callback"]
+      #  response_types: ["code"]
+      #  scopes: ["openid", "offline_access"]
 
       - client_name: pgAdmin
         client_id: '{{ env "PGADMIN_OIDC_CLIENT_ID" }}'
