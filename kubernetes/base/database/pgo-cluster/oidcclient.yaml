@@ -9,7 +9,7 @@ spec:
   description: ${NAMESPACE} pgAdmin
   preconfigured_consent_duration: 1y
   redirect_uris:
-    - https://${NAMESPACE}-pgadmin.${SECRET_DOMAIN}/oauth2/callback
+    - https://${NAMESPACE}-pgadmin.${SECRET_DOMAIN}/oauth2/authorize
   response_types:
     - code
   secret_ref:
