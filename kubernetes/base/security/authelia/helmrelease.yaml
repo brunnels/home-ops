@@ -119,14 +119,25 @@ spec:
               - path: /config/configuration.yaml
                 subPath: configuration.yaml
                 readOnly: true
+
+      oidc-config:
+        type: secret
+        name: default-oidc
+        advancedMounts:
+          authelia:
+            app:
+              - path: /config/authelia.oidc.yaml
+                subPath: authelia.oidc.yaml
+                readOnly: true
+
       secret-files:
-        enabled: true
         type: secret
         name: authelia-files
         advancedMounts:
           authelia:
             app:
               - path: /app/secrets
+
       trusted-certs:
         type: configMap
         name: letsencrypt-certs
