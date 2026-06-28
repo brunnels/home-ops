@@ -116,7 +116,7 @@ spec:
         advancedMounts:
           authelia:
             app:
-              - path: /config/00-configuration.yaml
+              - path: /config/configuration.yaml
                 subPath: configuration.yaml
                 readOnly: true
 
