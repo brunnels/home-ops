@@ -34,7 +34,7 @@ yq = "4.53.3"
 zizmor = "1.26.1"
 envsubst = "1.4.3"
 "aqua:mitsuhiko/minijinja" = "2.21.0"
-oxfmt = "0.55.0"
+oxfmt = "0.56.0"
 "aqua:go-task/task" = "latest"
 
 [hooks]
