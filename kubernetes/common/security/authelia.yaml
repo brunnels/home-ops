@@ -20,6 +20,10 @@ spec:
       kind: Dragonfly
       inProgress: status.phase != "Ready"
       current: status.phase == "Ready"
+    - apiVersion: batch/v1
+      kind: Job
+      inProgress: status.succeeded == 0
+      current: status.succeeded != 0
   interval: 1h
   path: ./kubernetes/base/security/authelia
   postBuild:
