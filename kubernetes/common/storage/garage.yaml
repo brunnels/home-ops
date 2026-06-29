@@ -15,6 +15,9 @@ spec:
       namespace: security
   interval: 1h
   path: ./kubernetes/base/storage/garage
+  postBuild:
+    substitute:
+      APP: *app
   prune: true
   sourceRef:
     kind: GitRepository

@@ -18,7 +18,7 @@ spec:
   path: ./kubernetes/base/storage/kopia
   postBuild:
     substitute:
-      APP: kopia
+      APP: *app
   prune: true
   sourceRef:
     kind: GitRepository
