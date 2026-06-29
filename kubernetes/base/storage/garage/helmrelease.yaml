@@ -1,0 +1,139 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: garage
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  interval: 1h
+  values:
+    controllers:
+      garage:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: dxflrs/garage
+              tag: v2.3.0@sha256:866bd13ed2038ba7e7190e840482bc27234c4afaf77be8cfa439ae088c1e4690
+            env:
+              TZ: ${TIMEZONE}
+            probes: &probes
+              liveness: &probe
+                enabled: true
+              readiness: *probe
+            resources:
+              requests:
+                cpu: 5m
+                memory: 100Mi
+              limits:
+                memory: 512Mi
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+          web-ui:
+            image:
+              repository: khairul169/garage-webui
+              tag: 1.1.0@sha256:17c793551873155065bf9a022dabcde874de808a1f26e648d4b82e168806439c
+            env:
+              TZ: ${TIMEZONE}
+              API_BASE_URL: http://garage.{{ .Release.Namespace }}.svc.cluster.local:3903
+              S3_ENDPOINT_URL: http://garage.{{ .Release.Namespace }}.svc.cluster.local:3900
+            resources:
+              requests:
+                cpu: 5m
+                memory: 16Mi
+              limits:
+                memory: 64Mi
+            probes: *probes
+            securityContext: *securityContext
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    persistence:
+      config:
+        globalMounts:
+          - path: /etc/garage.toml
+            subPath: garage.toml
+        name: garage
+        type: secret
+      data:
+        advancedMounts:
+          garage:
+            app:
+              - path: /data
+                subPath: data
+              - path: /meta
+                subPath: meta
+        path: /appdata/${VAULT_PREFIX}-garage
+        server: ${QNAP_HOSTNAME}
+        type: nfs
+    service:
+      app:
+        annotations: &annotations
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        ports:
+          s3:
+            port: 3900
+            protocol: HTTP
+            primary: true
+          api:
+            port: 3903
+            protocol: HTTP
+      web-ui:
+        annotations: *annotations
+        ports:
+          http:
+            port: 3909
+            protocol: HTTP
+    serviceMonitor:
+      server:
+        service:
+          identifier: garage
+        endpoints:
+          - port: api
+            path: /metrics
+            authorization:
+              type: Bearer
+              credentials:
+                name: garage-metrics
+                key: token
+    route:
+      app:
+        hostnames:
+          - "s3.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: s3
+      web-ui:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Garage
+          gethomepage.dev/icon: garage
+          gethomepage.dev/description: S3-compatible object store for small self-hosted deployments
+          gethomepage.dev/group: Storage
+          gethomepage.dev/pod-selector: app.kubernetes.io/name = garage
+        hostnames:
+          - "garage.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: web-ui
+                port: http
