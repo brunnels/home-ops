@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/common-5.0.1/charts/library/common/values.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -24,8 +24,8 @@ spec:
               repository: ghcr.io/brunnels/authelia-oidc-operator
               tag: pr-1
     rawResources:
-      default-provider:
-        fullnameOverride: default
+      provider:
+        forceRename: default
         manifest:
           apiVersion: authelia.milas.dev/v1alpha1
           kind: OIDCProvider
