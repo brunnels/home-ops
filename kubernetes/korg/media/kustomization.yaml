@@ -9,6 +9,6 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
-  #- ./plex.yaml
+  - ./plex.yaml
   - ./seerr.yaml
   - ./tautulli.yaml
