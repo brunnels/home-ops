@@ -10,6 +10,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../components/kopiur
   dependsOn:
     - name: authelia-oidc-operator
       namespace: security
@@ -49,6 +51,7 @@ spec:
   #      kind: PostgresCluster
   postBuild:
     substitute:
+      APP: *app
       # USERS should be a valid JSON array representing PostgresCluster spec.users
       USERS: |
         [
