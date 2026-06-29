@@ -4,25 +4,4 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: csi-driver-nfs
-spec:
-  chartRef:
-    kind: OCIRepository
-    name: csi-driver-nfs
-  interval: 1h
-  values:
-    storageClass:
-      allowVolumeExpansion: true
-      create: true
-      mountOptions:
-        - hard
-        - nconnect=16
-        - nfsvers=4.1
-        - noatime
-        - retrans=5
-        - timeo=600
-      name: nfs-appdata
-      parameters:
-        server: ${QNAP_HOSTNAME}
-        share: /appdata
-      reclaimPolicy: Delete
-      volumeBindingMode: Immediate
+spec: {}

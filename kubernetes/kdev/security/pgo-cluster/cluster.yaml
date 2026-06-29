@@ -51,9 +51,7 @@ spec:
       global:
         compress-type: "bz2"
         compress-level: "9"
-        backup-standby: "n"
-        repo1-block: "y"
-        repo1-bundle: "y"
+        # PVC
         repo1-retention-full: "30" # days
         repo1-retention-full-type: "time"
       jobs:
@@ -69,33 +67,17 @@ spec:
         - name: repo1
           volume:
             volumeClaimSpec:
-              dataSource:
+              dataSourceRef:
                 kind: PersistentVolumeClaim
-                name: ${APP}
+                name: ${NAMESPACE}-pgbackrest
           schedules:
             full: "30 1 * * 0" # Sunday at 01:30
             differential: "30 1 * * 1-6" # Mon-Sat at 01:30
             incremental: "30 3-23 * * *" # Every hour except 01:30-2:30
-        #- name: repo1 # QNAP
-        #  s3: &qnap
-        #    bucket: "${VAULT_PREFIX}-pgo"
-        #    endpoint: "https://${QNAP_HOSTNAME}:8010"
-        #    region: "us-east-1"
-        #  schedules:
-        #    full: "30 1 * * 0" # Sunday at 01:30
-        #    differential: "30 1 * * 1-6" # Mon-Sat at 01:30
-        #    incremental: "30 3-23 * * *" # Every hour except 01:30-2:30
   dataSource:
     volumes:
       pgBackRestVolume:
-        pvcName: ${APP}
-      #pgbackrest:
-      #stanza: db
-      #configuration: *backupConfig
-      #global: *backupFlag
-      #repo:
-      #  name: repo1
-      #  #s3: *qnap
+        pvcName: ${NAMESPACE}-pgbackrest
   proxy:
     pgBouncer:
       port: 5432
