@@ -10,7 +10,6 @@ spec:
       app.kubernetes.io/name: *app
   components:
     - ../../../components/envoy-gateway-oidc
-  #  - ../../../components/zeroscaler
   dependsOn:
     - name: authelia
       namespace: security
