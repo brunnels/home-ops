@@ -8,7 +8,7 @@ components:
   - ../../components/common
 replacements:
   - path: ../../components/replacements/ks.yaml
-resources: []
+resources:
   #- ./plex.yaml
-  #- ./seerr.yaml
-  #- ./tautulli.yaml
+  - ./seerr.yaml
+  - ./tautulli.yaml
