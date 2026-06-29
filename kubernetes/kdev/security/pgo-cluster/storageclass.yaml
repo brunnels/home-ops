@@ -11,12 +11,12 @@ parameters:
   subDir: /${VAULT_PREFIX}/${NAMESPACE}-pgbackrest
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
-mountOptions:
-  - nfsvers=4.1
-  - hard
-  - noatime
-  - nodiratime
-  - rsize=131072
-  - wsize=131072
-  - nconnect=8
+#mountOptions:
+#  - nfsvers=4.1
+#  - hard
+#  - noatime
+#  - nodiratime
+#  - rsize=131072
+#  - wsize=131072
+#  - nconnect=8
 allowVolumeExpansion: true
