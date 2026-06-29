@@ -9,4 +9,20 @@ spec:
     kind: OCIRepository
     name: csi-driver-nfs
   interval: 1h
-  values: {}
+  values:
+    storageClass:
+      allowVolumeExpansion: true
+      create: true
+      mountOptions:
+        - hard
+        - nconnect=16
+        - nfsvers=4.1
+        - noatime
+        - retrans=5
+        - timeo=600
+      name: nfs-appdata
+      parameters:
+        server: ${QNAP_HOSTNAME}
+        share: /appdata
+      reclaimPolicy: Delete
+      volumeBindingMode: Immediate
