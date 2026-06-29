@@ -10,8 +10,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  components:
-    - ../../../components/kopiur
   dependsOn:
     - name: authelia-oidc-operator
       namespace: security
