@@ -12,17 +12,10 @@ spec:
     - name: cert-manager
       namespace: cert-manager
   interval: 1h
-  #upgrade:
-  #  crds: CreateReplace
-  #  force: true
+  upgrade:
+    crds: CreateReplace
+    force: true
   values:
-    controllers:
-      controller_manager:
-        containers:
-          manager:
-            image:
-              repository: ghcr.io/brunnels/authelia-oidc-operator
-              tag: pr-1
     rawResources:
       provider:
         forceRename: default
