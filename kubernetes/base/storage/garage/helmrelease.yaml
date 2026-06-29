@@ -97,18 +97,6 @@ spec:
           http:
             port: 3909
             protocol: HTTP
-    serviceMonitor:
-      server:
-        service:
-          identifier: garage
-        endpoints:
-          - port: api
-            path: /metrics
-            authorization:
-              type: Bearer
-              credentials:
-                name: garage-metrics
-                key: token
     route:
       app:
         hostnames:
