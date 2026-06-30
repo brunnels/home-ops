@@ -112,7 +112,8 @@ spec:
             interval: 1m
             scrapeTimeout: 10s
     route:
-      app:
+      flood:
+        forceRename: flood
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Downloads
@@ -128,8 +129,26 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - name: *app
+              - identifier: app
                 port: *port
+      flood-public:
+        hostnames:
+          - "flood.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - matches:
+              - path:
+                  type: Exact
+                  value: /site.webmanifest
+              - path:
+                  type: Exact
+                  value: /favicon.ico
+          - backendRefs:
+              - identifier: app
+                port: *port
+
     persistence:
       config:
         existingClaim: *app
