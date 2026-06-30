@@ -13,6 +13,10 @@ spec:
     - ../../../components/kopiur
     - ../../../components/theme-park
   dependsOn:
+    - name: authelia-oidc-operator
+      namespace: security
+    - name: external-secrets-stores
+      namespace: external-secrets
     - name: kopiur-repository
       namespace: storage
   interval: 1h
