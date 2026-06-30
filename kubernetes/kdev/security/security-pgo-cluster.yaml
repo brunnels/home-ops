@@ -40,13 +40,13 @@ spec:
   # The replica statefulset and pvc will be recreated automatically
   #
   # Remove this patch after the cluster has been created successfully.
-  #patches:
-  #  - patch: |-
-  #      - op: remove
-  #        path: /spec/dataSource
-  #    target:
-  #      group: postgres-operator.crunchydata.com
-  #      kind: PostgresCluster
+  patches:
+    - patch: |-
+        - op: remove
+          path: /spec/dataSource
+      target:
+        group: postgres-operator.crunchydata.com
+        kind: PostgresCluster
   postBuild:
     substitute:
       APP: *app
