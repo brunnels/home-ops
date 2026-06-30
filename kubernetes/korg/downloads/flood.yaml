@@ -19,6 +19,8 @@ spec:
       namespace: external-secrets
     - name: kopiur-repository
       namespace: storage
+    - name: vpn-gateway
+      namespace: network
   interval: 1h
   path: ./kubernetes/base/downloads/flood
   postBuild:
