@@ -12,6 +12,10 @@ spec:
     - ../../../components/envoy-gateway-oidc
     - ../../../components/kopiur
   dependsOn:
+    - name: authelia-oidc-operator
+      namespace: security
+    - name: external-secrets-stores
+      namespace: external-secrets
     - name: kopiur-repository
       namespace: storage
   interval: 1h
