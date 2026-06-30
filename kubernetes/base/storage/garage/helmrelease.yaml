@@ -125,3 +125,20 @@ spec:
           - backendRefs:
               - identifier: web-ui
                 port: http
+      web-ui-public:
+        hostnames:
+          - "garage.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - matches:
+              - path:
+                  type: Exact
+                  value: /site.webmanifest
+              - path:
+                  type: Exact
+                  value: /favicon.ico
+          - backendRefs:
+              - identifier: web-ui
+                port: http
