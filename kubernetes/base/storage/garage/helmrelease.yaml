@@ -78,6 +78,7 @@ spec:
         type: nfs
     service:
       app:
+        forceRename: garage
         annotations: &annotations
           gatus.home-operations.com/endpoint: |
             group: internal
