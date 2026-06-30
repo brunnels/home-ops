@@ -5,7 +5,7 @@ kind: ConfigMap
 metadata:
   name: cluster-settings
 data:
-  NODE_COUNT: "4"
+  NODE_COUNT: 4
   KS_RETRY_INTERVAL: "2m"
   KS_TIMEOUT: "5m"
 
