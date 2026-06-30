@@ -9,5 +9,6 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
+  - ./namespace.yaml
   - ../../common/default/theme-park.yaml
 #  - ./homepage.yaml

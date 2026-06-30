@@ -9,6 +9,7 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
+  - ./namespace.yaml
   - ../../common/security/authelia.yaml
   - ../../common/security/authelia-oidc-operator.yaml
   - ../../common/security/security-pgo-cluster.yaml

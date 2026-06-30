@@ -9,5 +9,6 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
+  - ./namespace.yaml
   - ../../common/external-secrets/external-secrets.yaml
   - ../../common/external-secrets/external-secrets-stores.yaml

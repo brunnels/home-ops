@@ -9,5 +9,6 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
+  - ./namespace.yaml
   - ../../common/database/dragonfly-operator.yaml
   - ../../common/database/crunchy-postgres-operator.yaml

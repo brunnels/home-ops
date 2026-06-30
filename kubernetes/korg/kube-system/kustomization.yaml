@@ -9,6 +9,7 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
+  - ./namespace.yaml
   - ../../common/kube-system/cilium.yaml
   - ../../common/kube-system/coredns.yaml
   - ../../common/kube-system/descheduler.yaml

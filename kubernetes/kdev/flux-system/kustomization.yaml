@@ -9,6 +9,7 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
+  - ./namespace.yaml
   - ../../common/flux-system/flux-instance.yaml
   - ../../common/flux-system/flux-operator.yaml
   - ../../common/flux-system/weave-gitops.yaml

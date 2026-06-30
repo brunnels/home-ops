@@ -9,6 +9,7 @@ components:
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
+  - ./namespace.yaml
   - ../../common/storage/ceph-csi-drivers.yaml
   - ../../common/storage/garage.yaml
   - ../../common/storage/kopia.yaml
