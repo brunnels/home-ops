@@ -28,7 +28,7 @@ spec:
       metadata:
         labels:
           app.kubernetes.io/name: ${NAMESPACE}-pgo
-      replicas: "${PGO_REPLICAS:-3}"
+      replicas: ${NODE_COUNT:-${PGO_REPLICAS:-3}"}
       dataVolumeClaimSpec:
         storageClassName: openebs-hostpath
         accessModes: ["ReadWriteOnce"]
