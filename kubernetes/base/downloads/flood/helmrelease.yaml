@@ -131,7 +131,7 @@ spec:
           - backendRefs:
               - identifier: app
                 port: *port
-      flood-public:
+      public:
         hostnames:
           - "flood.${SECRET_DOMAIN}"
         parentRefs:
