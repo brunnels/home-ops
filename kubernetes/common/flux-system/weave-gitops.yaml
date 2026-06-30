@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: authelia
+    - name: authelia-oidc-operator
       namespace: security
     - name: external-secrets-stores
       namespace: external-secrets

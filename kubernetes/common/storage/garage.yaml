@@ -11,8 +11,10 @@ spec:
   components:
     - ../../../components/envoy-gateway-oidc
   dependsOn:
-    - name: authelia
+    - name: authelia-oidc-operator
       namespace: security
+    - name: external-secrets-stores
+      namespace: external-secrets
   interval: 1h
   path: ./kubernetes/base/storage/garage
   postBuild:
