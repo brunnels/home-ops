@@ -26,8 +26,8 @@ spec:
       current: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'True')
     - apiVersion: postgres-operator.crunchydata.com/v1
       kind: PostgresCluster
-      progressing: status.conditions.filter(e, e.type == "MinimumReplicasAvailable").all(e, e.status != "True")
-      current: status.conditions.filter(e, e.type == "MinimumReplicasAvailable").all(e, e.status == "True")
+      progressing: status.conditions.filter(e, e.type == "ProxyAvailable").all(e, e.status != "True")
+      current: status.conditions.filter(e, e.type == "ProxyAvailable").all(e, e.status == "True")
   interval: 1h
   path: ./kubernetes/kdev/security/pgo-cluster
   #
