@@ -8,7 +8,7 @@ components:
   - ../../components/common
 replacements:
   - path: ../../components/replacements/ks.yaml
-resources:
-  - ./security-pgo-cluster.yaml
-  - ../../common/security/authelia.yaml
-  - ../../common/security/authelia-oidc-operator.yaml
+resources: []
+#  - ./security-pgo-cluster.yaml
+#  - ../../common/security/authelia.yaml
+#  - ../../common/security/authelia-oidc-operator.yaml
