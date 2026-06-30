@@ -11,12 +11,10 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: authelia-oidc-operator
-      namespace: security
+    - name: garage
+      namespace: storage
     - name: crunchy-postgres-operator
       namespace: database
-    - name: external-secrets-stores
-      namespace: external-secrets
     - name: openebs-hostpath
       namespace: storage
   healthCheckExprs:
@@ -40,16 +38,17 @@ spec:
   # The replica statefulset and pvc will be recreated automatically
   #
   # Remove this patch after the cluster has been created successfully.
-  patches:
-    - patch: |-
-        - op: remove
-          path: /spec/dataSource
-      target:
-        group: postgres-operator.crunchydata.com
-        kind: PostgresCluster
+  #patches:
+  #  - patch: |-
+  #      - op: remove
+  #        path: /spec/dataSource
+  #    target:
+  #      group: postgres-operator.crunchydata.com
+  #      kind: PostgresCluster
   postBuild:
     substitute:
       APP: *app
+      PGO_REPLICAS: ${NODE_COUNT}
       # USERS should be a valid JSON array representing PostgresCluster spec.users
       USERS: |
         [
