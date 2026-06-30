@@ -141,7 +141,7 @@ spec:
           - matches:
               - path:
                   type: Exact
-                  value: /site.webmanifest
+                  value: /manifest.json
               - path:
                   type: Exact
                   value: /favicon.ico
