@@ -48,7 +48,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      PGO_REPLICAS: "${NODE_COUNT}"
+      #PGO_REPLICAS: "${NODE_COUNT}"
       # USERS should be a valid JSON array representing PostgresCluster spec.users
       USERS: |
         [
