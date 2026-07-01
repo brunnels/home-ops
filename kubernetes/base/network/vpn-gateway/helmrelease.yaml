@@ -52,13 +52,13 @@ spec:
               capabilities:
                 add:
                   - NET_ADMIN
-      webhook:
-        pod:
-          # The sidecar containers inserted by the webhook will use this DNS config
-          dnsConfig:
-            options:
-              - name: ndots
-                value: "1"
+      #webhook:
+      #  pod:
+      #    # The sidecar containers inserted by the webhook will use this DNS config
+      #    dnsConfig:
+      #      options:
+      #        - name: ndots
+      #          value: "1"
     global:
       fullnameOverride: *app
     networkpolicies:
