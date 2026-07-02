@@ -33,7 +33,7 @@ spec:
               HTTP_CONTROL_SERVER_LOG: off
               VPN_ENDPOINT_IP_VERSION: v4
               WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 15s
-              FIREWALL_VPN_INPUT_PORTS: "${INBOUND_PORTS}"
+              FIREWALL_VPN_INPUT_PORTS: "1637,${INBOUND_PORTS}"
             envFrom:
               - secretRef:
                   name: *app
@@ -52,13 +52,6 @@ spec:
               capabilities:
                 add:
                   - NET_ADMIN
-      #webhook:
-      #  pod:
-      #    # The sidecar containers inserted by the webhook will use this DNS config
-      #    dnsConfig:
-      #      options:
-      #        - name: ndots
-      #          value: "1"
     global:
       fullnameOverride: *app
     networkpolicies:
@@ -93,7 +86,7 @@ spec:
             - key: kubernetes.io/metadata.name
               operator: "In"
               values: ${ROUTED_NAMESPACES}
-      # -- boolean: Default behaviour for new PODs in the evaluated namespace
+      # -- boolean: Default behavior for new PODs in the evaluated namespace
       # if true then the gatewayLabel and gatewayAnnotation below will not be utilized and the
       # gateway will be injected into every pod in the routed_namespaces
       gatewayDefault: false

@@ -20,6 +20,8 @@ spec:
         - ports:
             - port: "1637"
               protocol: UDP
+            - port: "${INBOUND_PORTS}"
+              protocol: UDP
     - toEntities:
         - cluster
 ---

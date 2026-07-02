@@ -36,12 +36,7 @@ spec:
     envoy:
       enabled: false
     hubble:
-      enabled: true
-      relay:
-        enabled: true
-      ui:
-        standalone:
-          enabled: true
+      enabled: false
     ipam:
       mode: kubernetes
     ipv4NativeRoutingCIDR: "${CLUSTER_CIDR}"
