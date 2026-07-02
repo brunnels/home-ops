@@ -25,6 +25,7 @@ spec:
   path: ./kubernetes/base/downloads/flood
   postBuild:
     substitute:
+      PEER_PORT: "60112"
       APP: *app
   prune: true
   sourceRef:
