@@ -33,7 +33,7 @@ spec:
               HTTP_CONTROL_SERVER_LOG: off
               VPN_ENDPOINT_IP_VERSION: v4
               WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 15s
-              FIREWALL_VPN_INPUT_PORTS: "1637,${INBOUND_PORTS}"
+              FIREWALL_VPN_INPUT_PORTS: "${INBOUND_PORTS}"
             envFrom:
               - secretRef:
                   name: *app
