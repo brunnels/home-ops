@@ -48,10 +48,10 @@ spec:
               limits:
                 cpu: 175m
                 memory: 192Mi
-            securityContext:
-              capabilities:
-                add:
-                  - NET_ADMIN
+            #securityContext:
+            #  capabilities:
+            #    add:
+            #      - NET_ADMIN
     global:
       fullnameOverride: *app
     networkpolicies:
