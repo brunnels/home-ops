@@ -6,6 +6,7 @@ namespace: media
 components:
   - ../../clusters/korg
   - ../../components/common
+  - ../../components/kopiur/secret
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:

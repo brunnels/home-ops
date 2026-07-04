@@ -9,8 +9,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    #    - ../../../components/envoy-gateway-oidc
-    - ../../../components/kopiur
+    - ../../../components/envoy-gateway-oidc
+    - ../../../components/kopiur/backup
   dependsOn:
     - name: kopiur-repository
       namespace: storage

@@ -10,7 +10,7 @@ spec:
       app.kubernetes.io/name: *app
   components:
     - ../../../components/envoy-gateway-oidc
-    - ../../../components/kopiur
+    - ../../../components/kopiur/backup
     - ../../../components/theme-park
   dependsOn:
     - name: authelia-oidc-operator

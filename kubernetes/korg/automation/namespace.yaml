@@ -6,4 +6,3 @@ metadata:
   name: automation
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
-    kopiur.home-operations.com/privileged-movers: "true"
