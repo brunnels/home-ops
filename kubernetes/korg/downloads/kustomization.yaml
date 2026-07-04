@@ -14,6 +14,7 @@ resources:
   - ./downloads-pgo-cluster.yaml
   - ./flaresolverr.yaml
   - ./flood.yaml
+  - ./flood/snapshotpolicy.yaml
   - ./lidarr.yaml
   - ./prowlarr.yaml
   - ./radarr.yaml
