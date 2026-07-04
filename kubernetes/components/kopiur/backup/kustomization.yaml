@@ -7,3 +7,8 @@ resources:
   - ./restore.yaml
   - ./snapshotpolicy.yaml
   - ./snapshotschedule.yaml
+vars:
+  - name: IGNORE_RULES
+    value: |-
+      - "lost+found"
+      - "*/lost+found"

@@ -27,7 +27,9 @@ spec:
     substitute:
       PEER_PORT: ""
       APP: *app
-      IGNORE_RULES_YAML: |-
+      IGNORE_RULES: |-
+        - "lost+found"
+        - "*/lost+found"
         - "*/flood.secret"
   prune: true
   sourceRef:
