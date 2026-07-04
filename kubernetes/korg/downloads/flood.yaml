@@ -31,6 +31,7 @@ spec:
       target:
         group: kopiur.home-operations.com
         kind: SnapshotPolicy
+        name: flood-backup
   path: ./kubernetes/base/downloads/flood
   postBuild:
     substitute:
