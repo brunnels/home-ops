@@ -12,7 +12,7 @@ spec:
     - name: downloads-pgo-cluster
       namespace: downloads
   interval: 1h
-  path: ./kubernetes/korg/network/vpn-gateway
+  path: ./kubernetes/base/network/vpn-gateway
   postBuild:
     substitute:
       INBOUND_PORTS: "60112"

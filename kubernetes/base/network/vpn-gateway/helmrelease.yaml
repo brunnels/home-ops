@@ -100,8 +100,9 @@ spec:
       #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
       gatewayLabelValue: "true"
       gatewayAnnotationValue:
-    secrets:
+    configMaps:
       gluetun-config:
+        forceRename: gluetun-config
         data:
           config.toml: |
             [[roles]]
@@ -110,7 +111,7 @@ spec:
             auth = "none"
     persistence:
       gluetun-config:
-        type: secret
+        type: configMap
         identifier: gluetun-config
         advancedMounts:
           main:
