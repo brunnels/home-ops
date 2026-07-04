@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: automation
 components:
   - ../../clusters/korg
-  - ../../components/
+  - ../../components/common
   - ../../components/kopiur/secret
 replacements:
   - path: ../../components/replacements/ks.yaml
