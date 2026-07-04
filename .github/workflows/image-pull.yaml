@@ -6,6 +6,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -28,7 +31,7 @@ jobs:
           patterns: kubernetes/**/*
 
   extract:
-    if: ${{ needs.filter.outputs.changed-files != '[]' }}
+    if: ${{ needs.filter.outputs.changed-files != '[]' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
     needs: filter
     name: Image Pull - Extract Images
     runs-on: ubuntu-latest
