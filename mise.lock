@@ -29,6 +29,11 @@ checksum = "sha256:01120ea2cbf0463d4c6bd767f99f3271bbed1cdc8a9aa718a76ba1fe4f019
 url = "https://github.com/FiloSottile/age/releases/download/v1.3.1/age-v1.3.1-darwin-arm64.tar.gz"
 provenance = "github-attestations"
 
+[tools.age."platforms.macos-x64"]
+checksum = "sha256:2b233301ad21ab7b1eabd9ae1198a164005fa4928fcdd745d47c39f8593209d7"
+url = "https://github.com/FiloSottile/age/releases/download/v1.3.1/age-v1.3.1-darwin-amd64.tar.gz"
+provenance = "github-attestations"
+
 [tools.age."platforms.windows-x64"]
 checksum = "sha256:c56e8ce22f7e80cb85ad946cc82d198767b056366201d3e1a2b93d865be38154"
 url = "https://github.com/FiloSottile/age/releases/download/v1.3.1/age-v1.3.1-windows-amd64.zip"
@@ -173,6 +178,34 @@ url_api = "https://api.github.com/repos/cue-lang/cue/releases/assets/461081557"
 version = "1.4.3"
 backend = "aqua:a8m/envsubst"
 
+[tools.envsubst."platforms.linux-arm64"]
+checksum = "md5:6d4a9e5ea75525bff5cfc44c65030c95"
+url = "https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-arm64"
+
+[tools.envsubst."platforms.linux-arm64-musl"]
+checksum = "md5:6d4a9e5ea75525bff5cfc44c65030c95"
+url = "https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-arm64"
+
+[tools.envsubst."platforms.linux-x64"]
+checksum = "md5:f16bdc6948726c00d3d96908221464e1"
+url = "https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-x86_64"
+
+[tools.envsubst."platforms.linux-x64-musl"]
+checksum = "md5:f16bdc6948726c00d3d96908221464e1"
+url = "https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-x86_64"
+
+[tools.envsubst."platforms.macos-arm64"]
+checksum = "md5:d0060b1585156176354f96cd570a4cc1"
+url = "https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Darwin-arm64"
+
+[tools.envsubst."platforms.macos-x64"]
+checksum = "md5:f0c1f592bff9f2842b4bcf4d6e7aac10"
+url = "https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Darwin-x86_64"
+
+[tools.envsubst."platforms.windows-x64"]
+checksum = "md5:e35ad08861db03c07b19ba782bb0d53e"
+url = "https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst.exe"
+
 [[tools.flux2]]
 version = "2.9.0"
 backend = "aqua:fluxcd/flux2"
@@ -278,6 +311,45 @@ checksum = "sha256:c2d6acc935cd2f00e2144d7e036d5cd82e6b6bd5594e8c75aa75ef2a4ed6a
 url = "https://github.com/cli/cli/releases/download/v2.96.0/gh_2.96.0_windows_amd64.zip"
 url_api = "https://api.github.com/repos/cli/cli/releases/assets/464728577"
 provenance = "github-attestations"
+
+[[tools."github:home-operations/flate"]]
+version = "0.4.10"
+backend = "github:home-operations/flate"
+
+[tools."github:home-operations/flate"."platforms.linux-arm64"]
+checksum = "sha256:c2b1e8587b9a7fef53e3b16879e3b860f87797b5623916bfbf196c6aca79cae2"
+url = "https://github.com/home-operations/flate/releases/download/v0.4.10/flate_0.4.10_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/459865882"
+
+[tools."github:home-operations/flate"."platforms.linux-arm64-musl"]
+checksum = "sha256:c2b1e8587b9a7fef53e3b16879e3b860f87797b5623916bfbf196c6aca79cae2"
+url = "https://github.com/home-operations/flate/releases/download/v0.4.10/flate_0.4.10_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/459865882"
+
+[tools."github:home-operations/flate"."platforms.linux-x64"]
+checksum = "sha256:f76f67949ed55637658faf54c17dd04babefb3cc2e7cad1ddd6c4d2c58fa107b"
+url = "https://github.com/home-operations/flate/releases/download/v0.4.10/flate_0.4.10_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/459865881"
+
+[tools."github:home-operations/flate"."platforms.linux-x64-musl"]
+checksum = "sha256:f76f67949ed55637658faf54c17dd04babefb3cc2e7cad1ddd6c4d2c58fa107b"
+url = "https://github.com/home-operations/flate/releases/download/v0.4.10/flate_0.4.10_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/459865881"
+
+[tools."github:home-operations/flate"."platforms.macos-arm64"]
+checksum = "sha256:4e08cdf96c0812fba1eba50bc6357f1905b9d6eed2268a0ae0e168d206e741ba"
+url = "https://github.com/home-operations/flate/releases/download/v0.4.10/flate_0.4.10_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/459865879"
+
+[tools."github:home-operations/flate"."platforms.macos-x64"]
+checksum = "sha256:839e242638e1685a67f255e6539a9b997320205d653b63efe8c77c50087cc709"
+url = "https://github.com/home-operations/flate/releases/download/v0.4.10/flate_0.4.10_darwin_amd64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/459865910"
+
+[tools."github:home-operations/flate"."platforms.windows-x64"]
+checksum = "sha256:983cc05c2a79910f14eadf851dc6a13d80518e6d6ee52e110c40a044b76c1e8f"
+url = "https://github.com/home-operations/flate/releases/download/v0.4.10/flate_0.4.10_windows_amd64.zip"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/459865880"
 
 [[tools.gum]]
 version = "0.17.0"
@@ -629,38 +701,38 @@ version = "3.14.6"
 backend = "core:python"
 
 [tools.python."platforms.linux-arm64"]
-checksum = "sha256:9124d5c41739d78a446f1f29c1953bf41071abcbf18e6daec201a27608648195"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260610/cpython-3.14.6+20260610-aarch64-unknown-linux-gnu-install_only_stripped.tar.gz"
+checksum = "sha256:f177d40ca931df03f660fc006f86ad8cd2ac6e7d6b5d54edbc625103464fc4aa"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.14.6+20260623-aarch64-unknown-linux-gnu-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.linux-arm64-musl"]
-checksum = "sha256:5c75bea22f425ebc94912c618518a5aa4753eedeea6b5da5939f027d3a9c0fec"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260610/cpython-3.14.6+20260610-aarch64-unknown-linux-musl-install_only_stripped.tar.gz"
+checksum = "sha256:11d463be3e2d34ea67722acfd8f3f2d6d6e5b6b4d4ab27240f220628134a0141"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.14.6+20260623-aarch64-unknown-linux-musl-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.linux-x64"]
-checksum = "sha256:6da8db06e0efe4ec321e9a931b3e3c1851a87f0ee6c8e6eed2e80aeac635ca5d"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260610/cpython-3.14.6+20260610-x86_64_v4-unknown-linux-gnu-install_only_stripped.tar.gz"
+checksum = "sha256:2f36ce9b866a1420f761fb8f8315f21a89cd770f18b5c191aea5fcf39910b170"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.14.6+20260623-x86_64_v4-unknown-linux-gnu-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.linux-x64-musl"]
-checksum = "sha256:54eca143d09ed3c596ecad5e3bfcb7724387818f8f984f44f3d8c0e9f36681d3"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260610/cpython-3.14.6+20260610-x86_64-unknown-linux-musl-install_only_stripped.tar.gz"
+checksum = "sha256:f25064ecb3b07cfe2440b178e72001cf1e0d69a5e53625ca3a32b7ae4e2fdcc6"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.14.6+20260623-x86_64-unknown-linux-musl-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.macos-arm64"]
-checksum = "sha256:875516e13be36296f8f7dd0972b22ba3bed069ed08d27d5f0069caf227522921"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260610/cpython-3.14.6+20260610-aarch64-apple-darwin-install_only_stripped.tar.gz"
+checksum = "sha256:35d774f61d63c1fd4f1bc9495a7ada92e500dc4382a0df8a9910eb87ea48e8cf"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.14.6+20260623-aarch64-apple-darwin-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.macos-x64"]
-checksum = "sha256:6f85cbb2a0fef4b90fc63aadcfe383c22db5eb7933066ca6ea384828a6b3f2d2"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260610/cpython-3.14.6+20260610-x86_64-apple-darwin-install_only_stripped.tar.gz"
+checksum = "sha256:12fb3ea3d6a855fe6ca1c2241702b06cb7e5939fbef09a5f54bf326e480f66af"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.14.6+20260623-x86_64-apple-darwin-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.windows-x64"]
-checksum = "sha256:49f0c7e8d1c2eaba70c5516ca6c01b6b766f6ff473f1209a76fd01783e7c75ae"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260610/cpython-3.14.6+20260610-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"
+checksum = "sha256:ec05b628ad749682d06d225780fbc02e7bbb5ce2146c9bd8e74a3659b14b693a"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.14.6+20260623-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [[tools.sd]]
