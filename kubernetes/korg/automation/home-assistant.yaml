@@ -19,6 +19,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      OIDC_ROUTE_NAME: home-assistant-code-server
   prune: true
   sourceRef:
     kind: GitRepository

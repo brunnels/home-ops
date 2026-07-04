@@ -20,7 +20,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      ROUTE_NAME: garage-web-ui
+      OIDC_ROUTE_NAME: garage-web-ui
   prune: true
   sourceRef:
     kind: GitRepository
