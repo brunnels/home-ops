@@ -6,7 +6,7 @@ metadata:
   name: ${APP}-backup
 spec:
   files:
-    ignoreRules: ${IGNORE_RULES}
+    ignoreRules: ${IGNORE_RULES:-["lost+found", "*/lost+found"]}
   repository:
     kind: ClusterRepository
     name: nas
