@@ -9,9 +9,9 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../components/envoy-gateway-oidc
+    #- ../../../components/envoy-gateway-oidc
     - ../../../components/kopiur
-    - ../../../components/theme-park
+    #- ../../../components/theme-park
   dependsOn:
     - name: authelia-oidc-operator
       namespace: security
