@@ -9,6 +9,8 @@ resources:
   - ./snapshotschedule.yaml
 vars:
   - name: IGNORE_RULES
-    value: |-
-      - "lost+found"
-      - "*/lost+found"
+    value: |
+      [
+        "lost+found",
+        "*/lost+found"
+      ]

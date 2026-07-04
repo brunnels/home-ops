@@ -27,10 +27,13 @@ spec:
     substitute:
       PEER_PORT: ""
       APP: *app
-      IGNORE_RULES: |-
-        - "lost+found"
-        - "*/lost+found"
-        - "*/flood.secret"
+      IGNORE_RULES: |
+        [
+          "lost+found",
+          "*/lost+found",
+          "*/flood.secret"
+        ]
+
   prune: true
   sourceRef:
     kind: GitRepository
