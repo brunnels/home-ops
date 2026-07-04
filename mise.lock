@@ -419,6 +419,34 @@ url = "https://get.helm.sh/helm-v4.2.2-windows-amd64.tar.gz"
 version = "1.7.0"
 backend = "aqua:helmfile/helmfile"
 
+[tools.helmfile."platforms.linux-arm64"]
+checksum = "sha256:2b674b68ed5a6ff628c4800cd369051176bf98dffe596d6db426422916d4195d"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.7.0/helmfile_1.7.0_linux_arm64.tar.gz"
+
+[tools.helmfile."platforms.linux-arm64-musl"]
+checksum = "sha256:2b674b68ed5a6ff628c4800cd369051176bf98dffe596d6db426422916d4195d"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.7.0/helmfile_1.7.0_linux_arm64.tar.gz"
+
+[tools.helmfile."platforms.linux-x64"]
+checksum = "sha256:cac1f5f851ba5d3aa4ad06373752a69132c0ad70171bc45275ec4c014877c8a3"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.7.0/helmfile_1.7.0_linux_amd64.tar.gz"
+
+[tools.helmfile."platforms.linux-x64-musl"]
+checksum = "sha256:cac1f5f851ba5d3aa4ad06373752a69132c0ad70171bc45275ec4c014877c8a3"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.7.0/helmfile_1.7.0_linux_amd64.tar.gz"
+
+[tools.helmfile."platforms.macos-arm64"]
+checksum = "sha256:cadabe6b7df68366ac43edc17145d9bd55d0934428d064b8bb671d845f0df715"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.7.0/helmfile_1.7.0_darwin_arm64.tar.gz"
+
+[tools.helmfile."platforms.macos-x64"]
+checksum = "sha256:cdf782db13a0dcd5c17973796e03d0d2068433b09d78511fb79976b238718f77"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.7.0/helmfile_1.7.0_darwin_amd64.tar.gz"
+
+[tools.helmfile."platforms.windows-x64"]
+checksum = "sha256:9ccda9d8049a2e2a1a912b001a705cfe293e859679f024bc5457f5e3041b2566"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.7.0/helmfile_1.7.0_windows_amd64.tar.gz"
+
 [[tools.jq]]
 version = "1.8.2"
 backend = "aqua:jqlang/jq"
@@ -633,7 +661,7 @@ url = "https://github.com/evilmartians/lefthook/releases/download/v2.1.9/lefthoo
 provenance = "github-attestations"
 
 [[tools.oxfmt]]
-version = "0.56.0"
+version = "0.57.0"
 backend = "npm:oxfmt"
 
 [[tools.pipx]]

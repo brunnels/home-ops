@@ -6,9 +6,6 @@ on:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -31,7 +28,7 @@ jobs:
           patterns: kubernetes/**/*
 
   flate:
-    if: ${{ needs.filter.outputs.changed-files != '[]' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
+    if: ${{ needs.filter.outputs.changed-files != '[]' }}
     needs: filter
     name: Flate
     runs-on: ubuntu-latest
