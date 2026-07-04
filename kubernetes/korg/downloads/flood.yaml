@@ -22,21 +22,13 @@ spec:
     - name: vpn-gateway
       namespace: network
   interval: 1h
-  patches:
-    - patch: |-
-        - op: add
-          path: /spec/files/ignoreRules
-          value:
-            - "*/flood.secret"
-      target:
-        group: kopiur.home-operations.com
-        kind: SnapshotPolicy
-        name: flood-backup
   path: ./kubernetes/base/downloads/flood
   postBuild:
     substitute:
       PEER_PORT: ""
       APP: *app
+      IGNORE_RULES_YAML: |-
+        - "*/flood.secret"
   prune: true
   sourceRef:
     kind: GitRepository

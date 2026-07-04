@@ -9,6 +9,7 @@ spec:
     ignoreRules:
       - "lost+found"
       - "*/lost+found"
+${IGNORE_RULES_YAML}
   repository:
     kind: ClusterRepository
     name: nas
