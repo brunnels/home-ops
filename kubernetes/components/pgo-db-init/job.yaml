@@ -5,10 +5,7 @@ kind: Job
 metadata:
   name: &name "${APP}-db-init"
   annotations:
-    helm.sh/hook: post-install
-    helm.sh/hook-delete-policy: hook-succeeded
-    meta.helm.sh/release-name: "${APP}"
-    meta.helm.sh/release-namespace: "${NAMESPACE}"
+    kustomize.toolkit.fluxcd.io/reconcile: disabled
   labels:
     app.kubernetes.io/instance: *name
     app.kubernetes.io/name: *name
