@@ -14,10 +14,6 @@ spec:
         nfs:
           server: ${QNAP_HOSTNAME}
           path: "/appdata/${VAULT_PREFIX}-kopia"
-  create:
-    enabled: true
-  credentialProjection:
-    allowed: true
   encryption:
     passwordSecretRef:
       name: kopia
@@ -26,17 +22,20 @@ spec:
   identityDefaults:
     hostnameExpr: namespace
     usernameExpr: namespace + '-' + policyName
-  maintenance:
-    enabled: true
   moverDefaults:
     cache:
-      capacity: 1Mi # Ignored
+      capacity: 1Mi
       mode: Ephemeral
       storageClassName: openebs-hostpath
     podSecurityContext:
       fsGroup: 1000
       fsGroupChangePolicy: OnRootMismatch
+    scratch:
+      capacity: 1Mi
+      storageClassName: openebs-hostpath
     securityContext:
       runAsUser: 1000
       runAsGroup: 1000
     ttlSecondsAfterFinished: 300
+  scheduleDefaults:
+    timezone: ${TIMEZONE}
