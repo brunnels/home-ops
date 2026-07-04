@@ -132,23 +132,23 @@ spec:
           - backendRefs:
               - identifier: app
                 port: *port
-      #public:
-      #  hostnames:
-      #    - "flood.${SECRET_DOMAIN}"
-      #  parentRefs:
-      #    - name: envoy-internal
-      #      namespace: network
-      #  rules:
-      #    - matches:
-      #        - path:
-      #            type: Exact
-      #            value: /manifest.json
-      #        - path:
-      #            type: Exact
-      #            value: /favicon.ico
-      #    - backendRefs:
-      #        - identifier: app
-      #          port: *port
+      public:
+        hostnames:
+          - "flood.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - matches:
+              - path:
+                  type: Exact
+                  value: /manifest.json
+              - path:
+                  type: Exact
+                  value: /favicon.ico
+            backendRefs:
+              - identifier: app
+                port: *port
 
     persistence:
       config:
