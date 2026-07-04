@@ -21,10 +21,6 @@ spec:
       namespace: storage
     - name: vpn-gateway
       namespace: network
-  healthChecks:
-    - kind: HelmRelease
-      name: vpn-gateway
-      namespace: network
   interval: 1h
   patches:
     - patch: |-
