@@ -31,7 +31,6 @@ spec:
               DOT_IPV6: off
               HTTP_CONTROL_SERVER_ADDRESS: ":80"
               HTTP_CONTROL_SERVER_LOG: off
-              HTTP_CONTROL_SERVER_AUTH_CONFIG_FILEPATH: /gluetun/auth/config.toml
               VPN_ENDPOINT_IP_VERSION: v4
               WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 15s
               FIREWALL_VPN_INPUT_PORTS: "${INBOUND_PORTS}"
