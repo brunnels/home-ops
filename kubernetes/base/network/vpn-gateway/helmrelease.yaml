@@ -106,7 +106,7 @@ spec:
           config.toml: |
             [[roles]]
             name = "homepage"
-            routes = ["GET /v1/publicip/ip", "PUT /v1/vpn/status", "GET /v1/portforward"]
+            routes = ["GET /v1/publicip/ip", "GET /v1/vpn/status"]
             auth = "none"
     persistence:
       gluetun-config:
