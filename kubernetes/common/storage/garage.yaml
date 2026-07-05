@@ -8,11 +8,11 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  components:
-    - ../../../components/envoy-gateway-oidc
+  #components:
+  #  - ../../../components/envoy-gateway-oidc
   dependsOn:
-    - name: authelia-oidc-operator
-      namespace: security
+    #- name: authelia-oidc-operator
+    #  namespace: security
     - name: external-secrets-stores
       namespace: external-secrets
   interval: 1h
