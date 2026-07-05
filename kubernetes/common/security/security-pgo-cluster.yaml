@@ -11,8 +11,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: garage
-      namespace: storage
     - name: crunchy-postgres-operator
       namespace: database
     - name: openebs-hostpath

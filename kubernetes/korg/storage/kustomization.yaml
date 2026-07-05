@@ -11,7 +11,6 @@ replacements:
 resources:
   - ./namespace.yaml
   - ../../common/storage/ceph-csi-drivers.yaml
-  - ../../common/storage/garage.yaml
   - ../../common/storage/kopia.yaml
   - ../../common/storage/kopiur.yaml
   - ../../common/storage/kopiur-repository.yaml
