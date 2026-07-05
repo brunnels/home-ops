@@ -27,7 +27,7 @@ spec:
       inProgress: status.conditions.filter(e, e.type == "ProxyAvailable").all(e, e.status != "True")
       current: status.conditions.filter(e, e.type == "ProxyAvailable").all(e, e.status == "True")
   interval: 1h
-  path: ./kubernetes/base/database/pgo-cluster
+  path: ./kubernetes/korg/database/pgo-cluster
   #
   # If you are adding a new cluster to a namespace make sure to update authelia configuration
   # identity_providers.oidc.clients pgAdmin client redirect_uris to include the new authorize endpoint
