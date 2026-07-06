@@ -6,3 +6,5 @@ metadata:
   name: downloads
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
+  #label:
+  #routed-gateway: "true"
