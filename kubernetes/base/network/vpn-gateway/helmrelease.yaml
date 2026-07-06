@@ -32,13 +32,7 @@ spec:
               limits:
                 cpu: 175m
                 memory: 192Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                add:
-                  - NET_RAW
-                  - NET_ADMIN
+
           gluetun:
             enabled: true
             type: gluetun
@@ -60,23 +54,11 @@ spec:
                 name: gluetun
                 protocol: TCP
             resources: *resources
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                add:
-                  - NET_RAW
 
       webhook:
         containers:
           main:
-            resources:
-              requests:
-                cpu: 100m
-                memory: 64Mi
-              limits:
-                cpu: 175m
-                memory: 192Mi
+            resources: *resources
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
