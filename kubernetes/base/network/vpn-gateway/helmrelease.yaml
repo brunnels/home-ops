@@ -59,10 +59,6 @@ spec:
         containers:
           main:
             resources: *resources
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
 
     networkpolicies:
       main:
