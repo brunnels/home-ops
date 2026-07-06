@@ -14,6 +14,9 @@ spec:
         name: angelnu-charts
   interval: 1h
   values:
+    global:
+      fullnameOverride: *app
+
     controllers:
       main:
         pod:
@@ -21,6 +24,21 @@ spec:
             configmap.reloader.stakater.com/reload: vpn-gateway
             secret.reloader.stakater.com/reload: vpn-gateway
         containers:
+          main:
+            resources: &resources
+              requests:
+                cpu: 100m
+                memory: 64Mi
+              limits:
+                cpu: 175m
+                memory: 192Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                add:
+                  - NET_RAW
+                  - NET_ADMIN
           gluetun:
             enabled: true
             type: gluetun
@@ -33,7 +51,7 @@ spec:
               HTTP_CONTROL_SERVER_LOG: off
               VPN_ENDPOINT_IP_VERSION: v4
               WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 15s
-              FIREWALL_VPN_INPUT_PORTS: "${INBOUND_PORTS}"
+              FIREWALL_VPN_INPUT_PORTS: ${INBOUND_PORT}
             envFrom:
               - secretRef:
                   name: *app
@@ -41,6 +59,17 @@ spec:
               - containerPort: 80
                 name: gluetun
                 protocol: TCP
+            resources: *resources
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                add:
+                  - NET_RAW
+
+      webhook:
+        containers:
+          main:
             resources:
               requests:
                 cpu: 100m
@@ -49,16 +78,18 @@ spec:
                 cpu: 175m
                 memory: 192Mi
             securityContext:
-              capabilities:
-                add:
-                  - NET_ADMIN
-    global:
-      fullnameOverride: *app
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+
     networkpolicies:
       main:
         enabled: false
+
     publicPorts: ${PUBLIC_PORTS}
+
     routed_namespaces: ${ROUTED_NAMESPACES}
+
     service:
       main:
         controller: main
@@ -71,6 +102,7 @@ spec:
           gluetun:
             port: 80
             protocol: TCP
+
     settings:
       NOT_ROUTED_TO_GATEWAY_CIDRS: "${CLUSTER_CIDR} ${SERVICE_CIDR}"
       VPN_BLOCK_OTHER_TRAFFIC: true
@@ -92,13 +124,14 @@ spec:
       gatewayDefault: false
       # -- boolean: gatewayLabel and gatewayAnnotation controls the label/annotation key of which the value,
       #   by default, must be 'true' on the pod in order for the gateway sidecar to be injected.
-      gatewayLabel: use-vpn-gateway
-      gatewayAnnotation: ""
+      gatewayLabel: vpn-gateway
+      gatewayAnnotation: vpn-gateway
       # -- string: When a value is configured for the gatewayLabelValue or setGatewayAnnotationValue,
       #   the value of the label and/or annotation set on the gatewayLabel or gatewayAnnotation
-      #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
-      gatewayLabelValue: "true"
-      gatewayAnnotationValue:
+      #   must match the gatewayLabelValue or setGatewayAnnotationValue.
+      gatewayLabelValue: "enabled"
+      gatewayAnnotationValue: "enabled"
+
     configMaps:
       gluetun-config:
         forceRename: gluetun-config
@@ -108,6 +141,7 @@ spec:
             name = "homepage"
             routes = ["GET /v1/publicip/ip", "GET /v1/vpn/status"]
             auth = "none"
+
     persistence:
       gluetun-config:
         type: configMap
