@@ -79,7 +79,7 @@ spec:
     defaultPodOptions:
       hostname: *app
       labels:
-        setGateway: "true"
+        vpn-gateway: "enabled"
       securityContext:
         runAsNonRoot: true
         runAsUser: 568
