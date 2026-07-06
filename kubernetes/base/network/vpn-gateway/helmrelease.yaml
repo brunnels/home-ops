@@ -94,7 +94,7 @@ spec:
         custom:
           matchExpressions:
             - key: kubernetes.io/metadata.name
-              operator: "In"
+              operator: In
               values: ${ROUTED_NAMESPACES}
       # -- boolean: Default behavior for new PODs in the evaluated namespace
       # if true then the gatewayLabel and gatewayAnnotation below will not be utilized and the
@@ -102,13 +102,13 @@ spec:
       gatewayDefault: false
       # -- boolean: gatewayLabel and gatewayAnnotation controls the label/annotation key of which the value,
       #   by default, must be 'true' on the pod in order for the gateway sidecar to be injected.
-      #gatewayLabel: use-vpn-gateway
-      #gatewayAnnotation: use-vpn-gateway
+      gatewayLabel: vpn-gateway
+      gatewayAnnotation: vpn-gateway
       # -- string: When a value is configured for the gatewayLabelValue or setGatewayAnnotationValue,
       #   the value of the label and/or annotation set on the gatewayLabel or gatewayAnnotation
       #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
-      #gatewayLabelValue: "true"
-      #gatewayAnnotationValue: "true"
+      gatewayLabelValue: "enabled"
+      gatewayAnnotationValue: "enabled"
 
     configMaps:
       gluetun-config:
