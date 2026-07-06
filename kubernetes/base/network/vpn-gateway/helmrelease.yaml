@@ -89,13 +89,13 @@ spec:
       VPN_INTERFACE: wg0
       VPN_TRAFFIC_PORT: 1637
     webhook:
-      #namespaceSelector:
-      #  type: custom
-      #  custom:
-      #    matchExpressions:
-      #      - key: kubernetes.io/metadata.name
-      #        operator: "In"
-      #        values: ${ROUTED_NAMESPACES}
+      namespaceSelector:
+        type: custom
+        custom:
+          matchExpressions:
+            - key: kubernetes.io/metadata.name
+              operator: "In"
+              values: ${ROUTED_NAMESPACES}
       # -- boolean: Default behavior for new PODs in the evaluated namespace
       # if true then the gatewayLabel and gatewayAnnotation below will not be utilized and the
       # gateway will be injected into every pod in the routed_namespaces
