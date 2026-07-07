@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: pod-gateway
-      version: 7.1.1
+      version: 7.1.0
       sourceRef:
         kind: HelmRepository
         name: angelnu-charts
@@ -40,12 +40,12 @@ spec:
               TZ: "${TIMEZONE}"
               FIREWALL_ENABLED_DISABLING_IT_SHOOTS_YOU_IN_YOUR_FOOT: off
               DOT: off
-              DOT_IPV6: off
+              #DOT_IPV6: off
               HTTP_CONTROL_SERVER_ADDRESS: ":80"
               HTTP_CONTROL_SERVER_LOG: off
-              VPN_ENDPOINT_IP_VERSION: v4
+              #VPN_ENDPOINT_IP_VERSION: v4
               WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 15s
-              FIREWALL_VPN_INPUT_PORTS: ${INBOUND_PORT}
+              FIREWALL_VPN_INPUT_PORTS: "${INBOUND_PORT}"
             envFrom:
               - secretRef:
                   name: *app
@@ -63,11 +63,8 @@ spec:
     networkpolicies:
       main:
         enabled: false
-
     publicPorts: ${PUBLIC_PORTS}
-
     routed_namespaces: ${ROUTED_NAMESPACES}
-
     service:
       main:
         controller: main
@@ -80,7 +77,6 @@ spec:
           gluetun:
             port: 80
             protocol: TCP
-
     settings:
       NOT_ROUTED_TO_GATEWAY_CIDRS: "${CLUSTER_CIDR} ${SERVICE_CIDR}"
       VPN_BLOCK_OTHER_TRAFFIC: true
@@ -94,7 +90,7 @@ spec:
         custom:
           matchExpressions:
             - key: kubernetes.io/metadata.name
-              operator: In
+              operator: "In"
               values: ${ROUTED_NAMESPACES}
       # -- boolean: Default behavior for new PODs in the evaluated namespace
       # if true then the gatewayLabel and gatewayAnnotation below will not be utilized and the
@@ -102,13 +98,13 @@ spec:
       gatewayDefault: false
       # -- boolean: gatewayLabel and gatewayAnnotation controls the label/annotation key of which the value,
       #   by default, must be 'true' on the pod in order for the gateway sidecar to be injected.
-      gatewayLabel: vpn-gateway
-      gatewayAnnotation: vpn-gateway
+      gatewayLabel: use-vpn-gateway
+      gatewayAnnotation: ""
       # -- string: When a value is configured for the gatewayLabelValue or setGatewayAnnotationValue,
       #   the value of the label and/or annotation set on the gatewayLabel or gatewayAnnotation
       #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
-      gatewayLabelValue: "enabled"
-      gatewayAnnotationValue: "enabled"
+      gatewayLabelValue:
+      gatewayAnnotationValue:
 
     configMaps:
       gluetun-config:

@@ -29,7 +29,6 @@ spec:
   path: ./kubernetes/base/downloads/flood
   postBuild:
     substitute:
-      PEER_PORT: ""
       APP: *app
       IGNORE_RULES: |
         [
