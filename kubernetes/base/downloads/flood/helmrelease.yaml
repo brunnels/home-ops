@@ -160,6 +160,12 @@ spec:
             transmission:
               - path: /config
                 subPath: transmission-config
+      transmission-config:
+        type: emptyDir
+        advancedMounts:
+          flood:
+            transmission:
+              - path: /config
       downloads:
         advancedMounts:
           flood:
