@@ -8,30 +8,27 @@ spec:
   chart:
     spec:
       chart: pod-gateway
-      version: 7.0.5
+      version: 7.1.1
       sourceRef:
         kind: HelmRepository
         name: angelnu-charts
   interval: 1h
   values:
-    global:
-      fullnameOverride: *app
-
     controllers:
       main:
-        pod:
-          annotations:
-            configmap.reloader.stakater.com/reload: vpn-gateway
-            secret.reloader.stakater.com/reload: vpn-gateway
+        #pod:
+        #  annotations:
+        #    configmap.reloader.stakater.com/reload: vpn-gateway
+        #    secret.reloader.stakater.com/reload: vpn-gateway
         containers:
-          main:
-            resources: &resources
-              requests:
-                cpu: 100m
-                memory: 64Mi
-              limits:
-                cpu: 175m
-                memory: 192Mi
+          #main:
+          #  resources: &resources
+          #    requests:
+          #      cpu: 100m
+          #      memory: 64Mi
+          #    limits:
+          #      cpu: 175m
+          #      memory: 192Mi
 
           gluetun:
             enabled: true
@@ -40,10 +37,10 @@ spec:
               TZ: "${TIMEZONE}"
               FIREWALL_ENABLED_DISABLING_IT_SHOOTS_YOU_IN_YOUR_FOOT: off
               DOT: off
-              #DOT_IPV6: off
+              DOT_IPV6: off
               HTTP_CONTROL_SERVER_ADDRESS: ":80"
               HTTP_CONTROL_SERVER_LOG: off
-              #VPN_ENDPOINT_IP_VERSION: v4
+              VPN_ENDPOINT_IP_VERSION: v4
               WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 15s
               FIREWALL_VPN_INPUT_PORTS: "${INBOUND_PORT}"
             envFrom:
@@ -53,13 +50,19 @@ spec:
               - containerPort: 80
                 name: gluetun
                 protocol: TCP
-            resources: *resources
-
-      webhook:
-        containers:
-          main:
-            resources: *resources
-
+            resources:
+              requests:
+                cpu: 100m
+                memory: 64Mi
+              limits:
+                cpu: 175m
+                memory: 192Mi
+            securityContext:
+              capabilities:
+                add:
+                  - NET_ADMIN
+    global:
+      fullnameOverride: *app
     networkpolicies:
       main:
         enabled: false
@@ -105,23 +108,21 @@ spec:
       #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
       gatewayLabelValue: "true"
       gatewayAnnotationValue:
-
-    configMaps:
-      gluetun-config:
-        forceRename: gluetun-config
-        data:
-          config.toml: |
-            [[roles]]
-            name = "homepage"
-            routes = ["GET /v1/publicip/ip", "GET /v1/vpn/status"]
-            auth = "none"
-
-    persistence:
-      gluetun-config:
-        type: configMap
-        identifier: gluetun-config
-        advancedMounts:
-          main:
-            gluetun:
-              - path: /gluetun/auth/config.toml
-                subPath: config.toml
+    #configMaps:
+    #  gluetun-config:
+    #    forceRename: gluetun-config
+    #    data:
+    #      config.toml: |
+    #        [[roles]]
+    #        name = "homepage"
+    #        routes = ["GET /v1/publicip/ip", "GET /v1/vpn/status"]
+    #        auth = "none"
+    #persistence:
+    #  gluetun-config:
+    #    type: configMap
+    #    identifier: gluetun-config
+    #    advancedMounts:
+    #      main:
+    #        gluetun:
+    #          - path: /gluetun/auth/config.toml
+    #            subPath: config.toml
