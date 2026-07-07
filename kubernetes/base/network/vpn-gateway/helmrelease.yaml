@@ -1,0 +1,127 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app vpn-gateway
+spec:
+  chart:
+    spec:
+      chart: pod-gateway
+      version: 7.0.5
+      sourceRef:
+        kind: HelmRepository
+        name: angelnu-charts
+  interval: 1h
+  values:
+    global:
+      fullnameOverride: *app
+
+    controllers:
+      main:
+        pod:
+          annotations:
+            configmap.reloader.stakater.com/reload: vpn-gateway
+            secret.reloader.stakater.com/reload: vpn-gateway
+        containers:
+          main:
+            resources: &resources
+              requests:
+                cpu: 100m
+                memory: 64Mi
+              limits:
+                cpu: 175m
+                memory: 192Mi
+
+          gluetun:
+            enabled: true
+            type: gluetun
+            env:
+              TZ: "${TIMEZONE}"
+              FIREWALL_ENABLED_DISABLING_IT_SHOOTS_YOU_IN_YOUR_FOOT: off
+              DOT: off
+              #DOT_IPV6: off
+              HTTP_CONTROL_SERVER_ADDRESS: ":80"
+              HTTP_CONTROL_SERVER_LOG: off
+              #VPN_ENDPOINT_IP_VERSION: v4
+              WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 15s
+              FIREWALL_VPN_INPUT_PORTS: "${INBOUND_PORT}"
+            envFrom:
+              - secretRef:
+                  name: *app
+            ports:
+              - containerPort: 80
+                name: gluetun
+                protocol: TCP
+            resources: *resources
+
+      webhook:
+        containers:
+          main:
+            resources: *resources
+
+    networkpolicies:
+      main:
+        enabled: false
+    publicPorts: ${PUBLIC_PORTS}
+    routed_namespaces: ${ROUTED_NAMESPACES}
+    service:
+      main:
+        controller: main
+        type: ClusterIP
+        clusterIP: None
+        ports:
+          http:
+            port: 4789
+            protocol: UDP
+          gluetun:
+            port: 80
+            protocol: TCP
+    settings:
+      NOT_ROUTED_TO_GATEWAY_CIDRS: "${CLUSTER_CIDR} ${SERVICE_CIDR}"
+      VPN_BLOCK_OTHER_TRAFFIC: true
+      VPN_LOCAL_CIDRS: "172.16.0.0/24 ${CLUSTER_CIDR} ${SERVICE_CIDR}"
+      GATEWAY_ENABLE_DNSSEC: false
+      VPN_INTERFACE: wg0
+      VPN_TRAFFIC_PORT: 1637
+    webhook:
+      namespaceSelector:
+        type: custom
+        custom:
+          matchExpressions:
+            - key: kubernetes.io/metadata.name
+              operator: "In"
+              values: ${ROUTED_NAMESPACES}
+      # -- boolean: Default behavior for new PODs in the evaluated namespace
+      # if true then the gatewayLabel and gatewayAnnotation below will not be utilized and the
+      # gateway will be injected into every pod in the routed_namespaces
+      gatewayDefault: false
+      # -- boolean: gatewayLabel and gatewayAnnotation controls the label/annotation key of which the value,
+      #   by default, must be 'true' on the pod in order for the gateway sidecar to be injected.
+      gatewayLabel: use-vpn-gateway
+      gatewayAnnotation: ""
+      # -- string: When a value is configured for the gatewayLabelValue or setGatewayAnnotationValue,
+      #   the value of the label and/or annotation set on the gatewayLabel or gatewayAnnotation
+      #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
+      gatewayLabelValue: "true"
+      gatewayAnnotationValue:
+
+    configMaps:
+      gluetun-config:
+        forceRename: gluetun-config
+        data:
+          config.toml: |
+            [[roles]]
+            name = "homepage"
+            routes = ["GET /v1/publicip/ip", "GET /v1/vpn/status"]
+            auth = "none"
+
+    persistence:
+      gluetun-config:
+        type: configMap
+        identifier: gluetun-config
+        advancedMounts:
+          main:
+            gluetun:
+              - path: /gluetun/auth/config.toml
+                subPath: config.toml
