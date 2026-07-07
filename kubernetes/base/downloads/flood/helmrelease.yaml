@@ -37,6 +37,15 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
           transmission:
+            args:
+              - |
+                wget -qO /config/settings.json.j2 https://raw.githubusercontent.com/brunnels/containers-1/46ee9636f88e57637e5f48df19b92fdc79362d53/apps/transmission/defaults/settings.json.j2 &&
+                minijinja-cli --env /config/settings.json.j2 > /config/settings.json &&
+                cat /config/settings/json &&
+                /usr/bin/transmission-daemon --foreground --config-dir /config --log-level info
+            command:
+              - /bin/bash
+              - -c
             image:
               repository: ghcr.io/home-operations/transmission
               tag: 4.1.3@sha256:bf99b6d4abbda8a027d985a0830f2f2352cb027263e1641f60158276a9d24987
@@ -157,12 +166,9 @@ spec:
             app:
               - path: /data
                 subPath: flood-data
-      transmission-config:
-        type: emptyDir
-        advancedMounts:
-          flood:
             transmission:
               - path: /config
+                subPath: transmission-config
       downloads:
         advancedMounts:
           flood:
