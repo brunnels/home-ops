@@ -157,9 +157,6 @@ spec:
             app:
               - path: /data
                 subPath: flood-data
-            transmission:
-              - path: /config
-                subPath: transmission-config
       transmission-config:
         type: emptyDir
         advancedMounts:
