@@ -103,7 +103,7 @@ spec:
       # -- string: When a value is configured for the gatewayLabelValue or setGatewayAnnotationValue,
       #   the value of the label and/or annotation set on the gatewayLabel or gatewayAnnotation
       #   must match the gatewayLabelValue or setGatewayAnnotationValue instead of the default 'true'.
-      gatewayLabelValue:
+      gatewayLabelValue: "true"
       gatewayAnnotationValue:
 
     configMaps:
