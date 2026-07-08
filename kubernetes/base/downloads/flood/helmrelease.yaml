@@ -42,11 +42,11 @@ spec:
               tag: 4.1.3@sha256:172ff08b53d10b8c83bc7e4d6c74e69d2276509c1997c173c001bbf8b2d0512a
             env:
               TRANSMISSION__IDLE_SEEDING_LIMIT: 10080
-              TRANSMISSION__IDLE_SEEDING_LIMIT_ENABLED: true
+              TRANSMISSION__IDLE_SEEDING_LIMIT_ENABLED: "true"
               TRANSMISSION__INCOMPLETE_DIR: /incomplete
               TRANSMISSION__RATIO_LIMIT: 1
-              TRANSMISSION__RATIO_LIMIT_ENABLED: true
-              TRANSMISSION__UTP_ENABLED: false
+              TRANSMISSION__RATIO_LIMIT_ENABLED: "true"
+              TRANSMISSION__UTP_ENABLED: "false"
               TZ: "${TIMEZONE}"
             envFrom:
               - secretRef:
