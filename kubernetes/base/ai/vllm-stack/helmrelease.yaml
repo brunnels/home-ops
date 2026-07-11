@@ -67,3 +67,18 @@ spec:
       labels:
         environment: cacheserver
         release: cacheserver
+
+    routerSpec:
+      enableRouter: true
+      route:
+        main:
+          enabled: true
+          hostnames:
+            - "llm-api.${SECRET_DOMAIN}"
+          parentRefs:
+            - name: envoy-internal
+              namespace: network
+          matches:
+            - path:
+                type: PathPrefix
+                value: /
