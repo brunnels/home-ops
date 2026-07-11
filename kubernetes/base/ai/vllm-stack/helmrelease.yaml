@@ -26,24 +26,22 @@ spec:
 
           replicaCount: 1
 
-          requestCPU: 8
+          requestCPU: 4
           requestMemory: 16Gi
           requestGPU: 1
-          requestGPUMem: 3000
-          limitGPUMem: 5500
 
           pvcStorage: 50Gi
           pvcAccessMode:
             - ReadWriteOnce
           storageClass: openebs-hostpath
 
-          #vllmConfig:
-          #  enablePrefixCaching: true
-          #  maxModelLen: 4096
-          #  dtype: bfloat16
-          #  gpuMemoryUtilization: 0.9
-          #  extraArgs:
-          #    - --enforce-eager
+          vllmConfig:
+            #  enablePrefixCaching: true
+            maxModelLen: 4096
+            dtype: bfloat16
+            gpuMemoryUtilization: 0.9
+            extraArgs:
+              - --enforce-eager
 
           #lmcacheConfig:
           #  enabled: true
