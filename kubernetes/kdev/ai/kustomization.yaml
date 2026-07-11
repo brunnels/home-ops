@@ -11,4 +11,4 @@ replacements:
 resources:
   - ./namespace.yaml
   - ./kuberay-operator.yaml
-  #- ./vllm-stack.yaml
+  - ./vllm-stack.yaml
