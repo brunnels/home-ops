@@ -34,7 +34,7 @@ yq = "4.53.3"
 zizmor = "1.26.1"
 envsubst = "1.4.3"
 "aqua:mitsuhiko/minijinja" = "2.21.0"
-oxfmt = "0.57.0"
+oxfmt = "0.58.0"
 "aqua:go-task/task" = "latest"
 "github:home-operations/flate" = "0.4.10"
 
