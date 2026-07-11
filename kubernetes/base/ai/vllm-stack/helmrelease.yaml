@@ -37,10 +37,16 @@ spec:
 
           vllmConfig:
             #enablePrefixCaching: true
-            maxModelLen: 4096
-            dtype: bfloat16
+            maxModelLen: 4096 # Constrains the KV cache length
+            dtype: "float16" # AWQ runs on float16/bfloat16
             extraArgs:
-              - --enforce-eager
+              - "--quantization"
+              - "awq"
+              - "--gpu-memory-utilization"
+              - "0.75"
+              - "--enforce-eager"
+              - "--max-num-seqs"
+              - "32"
 
           #lmcacheConfig:
           #  enabled: true
