@@ -29,11 +29,13 @@ spec:
           requestCPU: 8
           requestMemory: 16Gi
           requestGPU: 1
+          requestGPUMem: 3000
+          limitGPUMem: 5500
 
-          #pvcStorage: 50Gi
-          #pvcAccessMode:
-          #  - ReadWriteOnce
-          #storageClass: openebs-hostpath
+          pvcStorage: 50Gi
+          pvcAccessMode:
+            - ReadWriteOnce
+          storageClass: openebs-hostpath
 
           #vllmConfig:
           #  enablePrefixCaching: true
