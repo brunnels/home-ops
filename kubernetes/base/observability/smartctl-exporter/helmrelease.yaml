@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -7,21 +7,11 @@ metadata:
 spec:
   chartRef:
     kind: OCIRepository
-    name: *app
+    name: smartctl-exporter
   interval: 1h
   values:
     fullnameOverride: *app
-    image:
-      registry: quay.io
-    prometheusRules:
-      enabled: false
     serviceMonitor:
       enabled: true
-      relabelings:
-        - action: labeldrop
-          regex: (pod)
-        - action: replace
-          regex: (.*)
-          replacement: $1.${INTERNAL_DOMAIN}
-          sourceLabels:
-            - __meta_kubernetes_en
+    prometheusRules:
+      enabled: false
