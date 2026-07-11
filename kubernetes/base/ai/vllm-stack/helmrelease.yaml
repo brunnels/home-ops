@@ -30,43 +30,44 @@ spec:
           requestMemory: 16Gi
           requestGPU: 1
 
-          pvcStorage: 50Gi
-          pvcAccessMode:
-            - ReadWriteOnce
-          storageClass: openebs-hostpath
+          #pvcStorage: 50Gi
+          #pvcAccessMode:
+          #  - ReadWriteOnce
+          #storageClass: openebs-hostpath
 
-          vllmConfig:
-            enablePrefixCaching: true
-            maxModelLen: 4096
-            dtype: bfloat16
-            gpuMemoryUtilization: 0.9
-            extraArgs:
-              - --enforce-eager
+          #vllmConfig:
+          #  enablePrefixCaching: true
+          #  maxModelLen: 4096
+          #  dtype: bfloat16
+          #  gpuMemoryUtilization: 0.9
+          #  extraArgs:
+          #    - --enforce-eager
 
-          lmcacheConfig:
-            enabled: true
-            cpuOffloadingBufferSize: 20
+          #lmcacheConfig:
+          #  enabled: true
+          #  cpuOffloadingBufferSize: 20
+
           hf_token:
             secretName: *app
             secretKey: HF_TOKEN
 
-    cacheserverSpec:
-      replicaCount: 1
-      containerPort: 8080
-      servicePort: 81
-      serde: naive
-      repository: lmcache/vllm-openai
-      tag: latest-nightly
-      resources:
-        requests:
-          cpu: 2
-          memory: 2G
-        limits:
-          cpu: 2
-          memory: 10G
-      labels:
-        environment: cacheserver
-        release: cacheserver
+    #cacheserverSpec:
+    #  replicaCount: 1
+    #  containerPort: 8080
+    #  servicePort: 81
+    #  serde: naive
+    #  repository: lmcache/vllm-openai
+    #  tag: latest-nightly
+    #  resources:
+    #    requests:
+    #      cpu: 2
+    #      memory: 2G
+    #    limits:
+    #      cpu: 2
+    #      memory: 10G
+    #  labels:
+    #    environment: cacheserver
+    #    release: cacheserver
 
     routerSpec:
       enableRouter: true
