@@ -3,19 +3,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app vllm-stack
+  name: &app kuberay-operator
   annotations:
     fluxcd.io/helm-release-defaults: disabled
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: kuberay-operator
-    - name: nvidia-device-plugin
-      namespace: kube-system
   interval: 1h
-  path: ./kubernetes/base/ai/vllm-stack
+  path: ./kubernetes/base/ai/kuberay-operator
   prune: true
   sourceRef:
     kind: GitRepository
