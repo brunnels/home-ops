@@ -41,7 +41,6 @@ spec:
             dtype: bfloat16
             gpuMemoryUtilization: 0.9
             extraArgs:
-              - --disable-log-requests
               - --enforce-eager
 
           lmcacheConfig:
