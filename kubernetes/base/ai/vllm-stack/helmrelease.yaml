@@ -20,8 +20,8 @@ spec:
         type: Recreate
       modelSpec:
         - name: qwen35
-          repository: lmcache/vllm-openai
-          tag: latest-nightly
+          repository: vllm/vllm-openai
+          tag: latest
           modelURL: Qwen/Qwen2.5-3B-Instruct-AWQ
 
           replicaCount: 2
