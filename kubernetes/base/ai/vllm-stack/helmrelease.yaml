@@ -19,7 +19,7 @@ spec:
       strategy:
         type: Recreate
       modelSpec:
-        - name: qwen3.5
+        - name: qwen35
           repository: lmcache/vllm-openai
           tag: latest-nightly
           modelURL: Qwen/Qwen3.5-4B
