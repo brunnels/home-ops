@@ -34,7 +34,9 @@ spec:
           pvcAccessMode:
             - ReadWriteOnce
           storageClass: openebs-hostpath
-
+          env:
+            - name: PYTORCH_CUDA_ALLOC_CONF
+              value: "expandable_segments:True"
           vllmConfig:
             #enablePrefixCaching: true
             maxModelLen: 4096 # Constrains the KV cache length
