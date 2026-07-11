@@ -24,59 +24,47 @@ spec:
           tag: latest-nightly
           modelURL: Qwen/Qwen3.5-4B
 
-          replicaCount: 2
+          replicaCount: 1
 
           requestCPU: 8
           requestMemory: 16Gi
           requestGPU: 1
 
-          #pvcStorage: 50Gi
-          #pvcAccessMode:
-          #  - ReadWriteOnce
-          #storageClass: openebs-hostpath
+          pvcStorage: 50Gi
+          pvcAccessMode:
+            - ReadWriteOnce
+          storageClass: openebs-hostpath
 
           vllmConfig:
-            tensorParallelSize: 1
-            pipelineParallelSize: 3
-            #enablePrefixCaching: true
-            #maxModelLen: 4096
-            #dtype: bfloat16
-            #gpuMemoryUtilization: 0.9
-            #extraArgs:
-            #  - --disable-log-requests
-            #  - --enforce-eager
+            enablePrefixCaching: true
+            maxModelLen: 4096
+            dtype: bfloat16
+            gpuMemoryUtilization: 0.9
+            extraArgs:
+              - --disable-log-requests
+              - --enforce-eager
 
-          #lmcacheConfig:
-          #  enabled: true
-          #  cpuOffloadingBufferSize: 20
-
+          lmcacheConfig:
+            enabled: true
+            cpuOffloadingBufferSize: 20
           hf_token:
             secretName: *app
             secretKey: HF_TOKEN
 
-          raySpec:
-            enabled: true
-            headNode:
-              requestCPU: 2
-              requestMemory: 16Gi
-              requestGPU: 1
-
-          shmSize: 4Gi
-
-    #cacheserverSpec:
-    #  replicaCount: 1
-    #  containerPort: 8080
-    #  servicePort: 81
-    #  serde: naive
-    #  repository: lmcache/vllm-openai
-    #  tag: latest-nightly
-    #  resources:
-    #    requests:
-    #      cpu: 2
-    #      memory: 2G
-    #    limits:
-    #      cpu: 2
-    #      memory: 10G
-    #  labels:
-    #    environment: cacheserver
-    #    release: cacheserver
+    cacheserverSpec:
+      replicaCount: 1
+      containerPort: 8080
+      servicePort: 81
+      serde: naive
+      repository: lmcache/vllm-openai
+      tag: latest-nightly
+      resources:
+        requests:
+          cpu: 2
+          memory: 2G
+        limits:
+          cpu: 2
+          memory: 10G
+      labels:
+        environment: cacheserver
+        release: cacheserver
