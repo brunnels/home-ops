@@ -22,7 +22,7 @@ spec:
         - name: qwen35
           repository: lmcache/vllm-openai
           tag: latest-nightly
-          modelURL: RedHatAI/Qwen2.5-VL-7B-Instruct-quantized.w4a16
+          modelURL: Qwen/Qwen2.5-3B-Instruct-AWQ
 
           replicaCount: 1
 
@@ -37,13 +37,12 @@ spec:
 
           vllmConfig:
             enablePrefixCaching: true
-            maxModelLen: 1024
+            maxModelLen: 4096
             dtype: bfloat16
             gpuMemoryUtilization: 0.9
             extraArgs:
-              - "--quantization" # Required for RedHat's compressed-tensors quants
-              - "compressed-tensors"
-              - "--enforce-eager" # Crucial: Saves ~1.5GB of VRAM by avoiding CUDA graphs
+              - --quantization awq
+              - --enforce-eager
 
           lmcacheConfig:
             enabled: true
