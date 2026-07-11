@@ -5,14 +5,20 @@ kind: SnapshotPolicy
 metadata:
   name: ${APP}-backup
 spec:
+  compression:
+    compressor: zstd
+    neverCompress: ["*.zip", "*.gz", "*.jpeg", "*.webp", "*.mp4"]
+  copyMethod: Snapshot
   files:
     ignoreRules: ${IGNORE_RULES:-["lost+found", "*/lost+found"]}
   repository:
     kind: ClusterRepository
     name: nas
   retention:
-    keepDaily: 7
+    keepLatest: 3
     keepHourly: 24
+    keepDaily: 7
+    keepWeekly: 4
   sources:
     - pvc:
         name: ${APP}

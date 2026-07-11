@@ -10,39 +10,33 @@ spec:
     name: *app
   interval: 1h
   values:
-    controller:
-      extraVolumes:
-        - name: repo
-          nfs:
-            server: ${QNAP_HOSTNAME}
-            path: "/appdata/${VAULT_PREFIX}-kopia"
-      extraVolumeMounts:
-        - name: repo
-          mountPath: /repo
-      resources:
-        requests:
-          cpu: 100m
-        limits:
-          memory: 2Gi
-      streamingLists: true
-    grafanaDashboard:
-      enabled: true
-      grafanaOperator:
+    extraVolumes:
+      - name: repo
+        nfs:
+          server: ${QNAP_HOSTNAME}
+          path: "/appdata/${VAULT_PREFIX}-kopia"
+    extraVolumeMounts:
+      - name: repo
+        mountPath: /repo
+    monitoring:
+      dashboards:
         enabled: true
-        matchLabels:
-          dashboards: grafana
-    installScope: cluster
-    metrics:
-      serviceMonitor:
-        enabled: true
+        grafanaOperator:
+          enabled: true
+          matchLabels:
+            dashboards: grafana
       prometheusRule:
+        enabled: true
+      serviceMonitor:
         enabled: true
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
+      runAsGroup: 100
+      fsGroup: 100
       fsGroupChangePolicy: OnRootMismatch
-    webhook:
-      serviceMonitor:
-        enabled: true
+    resources:
+      requests:
+        cpu: 100m
+      limits:
+        memory: 2Gi
