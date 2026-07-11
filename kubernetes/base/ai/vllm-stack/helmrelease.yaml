@@ -24,7 +24,7 @@ spec:
           tag: latest
           modelURL: Qwen/Qwen2.5-3B-Instruct-AWQ
 
-          replicaCount: 2
+          replicaCount: 1
 
           requestCPU: 4
           requestMemory: 16Gi
@@ -38,8 +38,8 @@ spec:
             - name: PYTORCH_CUDA_ALLOC_CONF
               value: "expandable_segments:True"
           vllmConfig:
-            tensorParallelSize: 1
-            pipelineParallelSize: 3
+            #tensorParallelSize: 1
+            #pipelineParallelSize: 3
             #enablePrefixCaching: true
             maxModelLen: 4096 # Constrains the KV cache length
             dtype: "float16" # AWQ runs on float16/bfloat16
@@ -60,14 +60,14 @@ spec:
             secretName: *app
             secretKey: HF_TOKEN
 
-          raySpec:
-            enabled: true
-            headNode:
-              requestCPU: 2
-              requestMemory: 16Gi
-              requestGPU: 1
+          #raySpec:
+          #  enabled: true
+          #  headNode:
+          #    requestCPU: 2
+          #    requestMemory: 16Gi
+          #    requestGPU: 1
 
-          shmSize: 4Gi
+          #shmSize: 4Gi
 
     #cacheserverSpec:
     #  replicaCount: 1
