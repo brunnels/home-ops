@@ -50,7 +50,7 @@ spec:
       USERS: |
         [
           {"name": "postgres", "databases": ["postgres"], "password": {"type": "AlphaNumeric"}, "options": "SUPERUSER"},
-          {"name": "lidarr", "databases": ["open-webui"], "password": {"type": "AlphaNumeric"}}
+          {"name": "open-webui", "databases": ["open-webui"], "password": {"type": "AlphaNumeric"}}
         ]
   prune: true
   sourceRef:
