@@ -1,0 +1,123 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app open-webui
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  interval: 1h
+  values:
+    controllers:
+      open-webui:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/open-webui/open-webui
+              tag: main@sha256:a26effeb220e132482bf7e0560b3404843e7bc40d23051144e062960df8df6b0
+            env:
+              WEBUI_URL: https://chat.${SECRET_DOMAIN}
+              CORS_ALLOW_ORIGIN: https://chat.${SECRET_DOMAIN}
+              OPENAI_API_BASE_URL: http://llm-api:9000
+              ENABLE_SIGNUP: false
+              WEBUI_NAME: "${VAULT_PREFIX} AI"
+              ENABLE_OLLAMA_API: false
+              ENABLE_OPENAI_API: true
+              ENABLE_OAUTH_SIGNUP: true
+              ENABLE_LOGIN_FORM: false
+              ENABLE_WEB_SEARCH: true
+              ENABLE_SEARCH_QUERY_GENERATION: true
+              ENABLE_PERSISTENT_CONFIG: false
+              WEBUI_SESSION_COOKIE_SAME_SITE: lax
+              WEBUI_SESSION_COOKIE_SECURE: true
+              OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
+              OAUTH_UPDATE_PICTURE_ON_LOGIN: true
+              OAUTH_PROVIDER_NAME: Authelia
+              OAUTH_SCOPES: "openid profile email groups"
+              OPENID_PROVIDER_URL: https://auth.${SECRET_DOMAIN}/.well-known/openid-configuration
+              OPENID_REDIRECT_URI: https://chat.${SECRET_DOMAIN}/oauth/oidc/callback
+              ENABLE_WEBSOCKET_SUPPORT: "true"
+              WEBSOCKET_MANAGER: "redis"
+              WEBSOCKET_REDIS_URL: "redis://${NAMESPACE}-dragonfly:6379"
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: &httpGet
+                    path: /health
+                    port: &port 8080
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: *httpGet
+                  periodSeconds: 10
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: *httpGet
+                  initialDelaySeconds: 10
+                  periodSeconds: 5
+                  failureThreshold: 30
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities: { drop: ["ALL"] }
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: false
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+        fsGroupChangePolicy: OnRootMismatch
+    service:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        controller: *app
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Development
+          gethomepage.dev/name: Open WebUI
+          gethomepage.dev/icon: https://docs.openwebui.com/img/logo-dark.png
+          gethomepage.dev/pod-selector: app.kubernetes.io/component=open-webui
+        hostnames:
+          - "chat.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+    persistence:
+      data:
+        existingClaim: *app
+        globalMounts:
+          - path: /app/backend/data
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          open-webui:
+            app:
+              - path: /tmp
+                subPath: tmp

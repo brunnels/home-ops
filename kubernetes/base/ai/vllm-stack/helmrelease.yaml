@@ -61,6 +61,8 @@ spec:
             - ReadWriteOnce
           storageClass: openebs-hostpath
           env:
+            - name: COMPRESSED_TENSORS_IGNORE_SPARSITY
+              value: "1"
             - name: PYTORCH_CUDA_ALLOC_CONF
               value: "expandable_segments:True"
           vllmConfig:

@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app vllm-stack
+  annotations:
+    fluxcd.io/helm-release-defaults: disabled
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: authelia-oidc-operator
+      namespace: security
+    - name: ai-pgo-cluster
+    - name: dragonfly-operator
+      namespace: database
+  interval: 1h
+  path: ./kubernetes/base/ai/open-webui
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system

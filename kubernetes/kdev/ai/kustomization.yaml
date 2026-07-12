@@ -10,5 +10,7 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
+  - ./ai-pgo-cluster.yaml
   - ./kuberay-operator.yaml
+  - ./open-webui.yaml
   - ./vllm-stack.yaml
