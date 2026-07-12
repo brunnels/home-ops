@@ -15,7 +15,5 @@ resources:
   #- ../../common/observability/grafana-operator.yaml
   #- ../../common/observability/keda.yaml
   - ../../common/observability/kube-prometheus-stack.yaml
-  #- ../../common/observability/kube-state-metrics.yaml
-  #- ../../common/observability/node-exporter.yaml
   - ../../common/observability/silence-operator.yaml
   - ../../common/observability/smartctl-exporter.yaml
