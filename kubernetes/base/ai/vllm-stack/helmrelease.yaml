@@ -24,6 +24,10 @@ spec:
           tag: "latest"
           modelURL: "distilbert/distilgpt2"
 
+          env:
+            - name: LD_LIBRARY_PATH
+              value: "/home/ray/anaconda3/lib:$LD_LIBRARY_PATH"
+
           replicaCount: 1
 
           requestCPU: 1
