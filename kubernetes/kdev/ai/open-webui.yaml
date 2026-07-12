@@ -10,12 +10,17 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../components/kopiur/backup
+    - ../../../components/pgo-db-init
   dependsOn:
     - name: authelia-oidc-operator
       namespace: security
     - name: ai-pgo-cluster
     - name: dragonfly-operator
       namespace: database
+    - name: kopiur-repository
+      namespace: storage
   interval: 1h
   path: ./kubernetes/base/ai/open-webui
   prune: true
