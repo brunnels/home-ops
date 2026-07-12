@@ -72,7 +72,7 @@ spec:
             extraArgs:
               - "--quantization"
               - "compressed-tensors"
-              - "-reasoning-parser"
+              - "--reasoning-parser"
               - "qwen2"
               - "--gpu-memory-utilization"
               - "0.9"
