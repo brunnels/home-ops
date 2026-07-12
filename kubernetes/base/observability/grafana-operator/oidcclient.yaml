@@ -1,0 +1,20 @@
+---
+apiVersion: authelia.milas.dev/v1alpha2
+kind: OIDCClient
+metadata:
+  name: &name grafana
+  annotations:
+    authelia.milas.dev/oidc-provider: security/default
+spec:
+  description: Grafana
+  preconfigured_consent_duration: 1y
+  redirect_uris:
+    - https://grafana.${SECRET_DOMAIN}/login/generic_oauth
+  secret_ref:
+    name: *name
+    fields:
+      client_id: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
+      client_secret: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+  # default should not be needed, but it is required for the operator to work issue: #6
+  token_endpoint:
+    auth_method: client_secret_basic
