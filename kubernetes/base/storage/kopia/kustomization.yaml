@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ../../components/kopiur/secret/externalsecret.yaml
+  - ../../../components/kopiur/secret/externalsecret.yaml
