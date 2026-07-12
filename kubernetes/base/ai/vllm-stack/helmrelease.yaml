@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: *app
-      version: 0.1.4
+      version: 0.1.11
       sourceRef:
         kind: HelmRepository
         name: *app
@@ -19,79 +19,79 @@ spec:
       strategy:
         type: Recreate
       modelSpec:
-        - name: "distilgpt2-raycluster"
-          repository: "vllm/vllm-openai"
-          tag: "latest"
-          modelURL: "distilbert/distilgpt2"
-
-          replicaCount: 1
-
-          requestCPU: 1
-          requestMemory: "20Gi"
-          requestGPU: 1
-
-          vllmConfig:
-            tensorParallelSize: 1
-            pipelineParallelSize: 2
-
-          shmSize: "20Gi"
-
-          raySpec:
-            enabled: true
-            headNode:
-              requestCPU: 1
-              requestMemory: "20Gi"
-              requestGPU: 1
-
-        #- name: qwen25-vl-3b-w4
-        #  repository: vllm/vllm-openai
-        #  tag: latest
-        #  modelURL: RedHatAI/Qwen2.5-VL-3B-Instruct-quantized.w4a16
+        #- name: "distilgpt2-raycluster"
+        #  repository: "vllm/vllm-openai"
+        #  tag: "latest"
+        #  modelURL: "distilbert/distilgpt2"
         #
         #  replicaCount: 1
         #
-        #  requestCPU: 4
-        #  requestMemory: 16Gi
+        #  requestCPU: 1
+        #  requestMemory: "20Gi"
         #  requestGPU: 1
         #
-        #  pvcStorage: 50Gi
-        #  pvcAccessMode:
-        #    - ReadWriteOnce
-        #  storageClass: openebs-hostpath
-        #  env:
-        #    - name: PYTORCH_CUDA_ALLOC_CONF
-        #      value: "expandable_segments:True"
         #  vllmConfig:
-        #    #tensorParallelSize: 1
-        #    #pipelineParallelSize: 3
-        #    #enablePrefixCaching: true
-        #    maxModelLen: 4096 # Constrains the KV cache length
-        #    dtype: "bfloat16" # AWQ runs on float16/bfloat16
-        #    extraArgs:
-        #      - "--quantization"
-        #      - "compressed-tensors"
-        #      - "--gpu-memory-utilization"
-        #      - "0.9"
-        #      - "--enforce-eager"
-        #      - "--max-num-seqs"
-        #      - "32"
+        #    tensorParallelSize: 1
+        #    pipelineParallelSize: 2
         #
-        #  #lmcacheConfig:
-        #  #  enabled: true
-        #  #  cpuOffloadingBufferSize: 20
+        #  shmSize: "20Gi"
         #
-        #  hf_token:
-        #    secretName: *app
-        #    secretKey: HF_TOKEN
-        #
-        #  #raySpec:
-        #  #  enabled: true
-        #  #  headNode:
-        #  #    requestCPU: 2
-        #  #    requestMemory: 16Gi
-        #  #    requestGPU: 1
-        #
-        #  #shmSize: 16Gi
+        #  raySpec:
+        #    enabled: true
+        #    headNode:
+        #      requestCPU: 1
+        #      requestMemory: "20Gi"
+        #      requestGPU: 1
+
+        - name: qwen25-vl-3b-w4
+          repository: vllm/vllm-openai
+          tag: latest
+          modelURL: RedHatAI/Qwen2.5-VL-3B-Instruct-quantized.w4a16
+
+          replicaCount: 1
+
+          requestCPU: 4
+          requestMemory: 16Gi
+          requestGPU: 1
+
+          pvcStorage: 50Gi
+          pvcAccessMode:
+            - ReadWriteOnce
+          storageClass: openebs-hostpath
+          env:
+            - name: PYTORCH_CUDA_ALLOC_CONF
+              value: "expandable_segments:True"
+          vllmConfig:
+            #tensorParallelSize: 1
+            #pipelineParallelSize: 3
+            #enablePrefixCaching: true
+            maxModelLen: 4096 # Constrains the KV cache length
+            dtype: "bfloat16" # AWQ runs on float16/bfloat16
+            extraArgs:
+              - "--quantization"
+              - "compressed-tensors"
+              - "--gpu-memory-utilization"
+              - "0.9"
+              - "--enforce-eager"
+              - "--max-num-seqs"
+              - "32"
+
+          #lmcacheConfig:
+          #  enabled: true
+          #  cpuOffloadingBufferSize: 20
+
+          hf_token:
+            secretName: *app
+            secretKey: HF_TOKEN
+
+          #raySpec:
+          #  enabled: true
+          #  headNode:
+          #    requestCPU: 2
+          #    requestMemory: 16Gi
+          #    requestGPU: 1
+
+          #shmSize: 16Gi
 
     #cacheserverSpec:
     #  replicaCount: 1
