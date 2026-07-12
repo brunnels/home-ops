@@ -41,29 +41,29 @@ spec:
               ENABLE_WEBSOCKET_SUPPORT: "true"
               WEBSOCKET_MANAGER: "redis"
               WEBSOCKET_REDIS_URL: "redis://${NAMESPACE}-dragonfly:6379"
-            probes:
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet: &httpGet
-                    path: /health
-                    port: &port 8080
-                  periodSeconds: 30
-              readiness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet: *httpGet
-                  periodSeconds: 10
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet: *httpGet
-                  initialDelaySeconds: 10
-                  periodSeconds: 5
-                  failureThreshold: 30
+            #probes:
+            #  liveness:
+            #    enabled: true
+            #    custom: true
+            #    spec:
+            #      httpGet: &httpGet
+            #        path: /health
+            #        port: &port 8080
+            #      periodSeconds: 30
+            #  readiness:
+            #    enabled: true
+            #    custom: true
+            #    spec:
+            #      httpGet: *httpGet
+            #      periodSeconds: 10
+            #  startup:
+            #    enabled: true
+            #    custom: true
+            #    spec:
+            #      httpGet: *httpGet
+            #      initialDelaySeconds: 10
+            #      periodSeconds: 5
+            #      failureThreshold: 30
             resources:
               requests:
                 cpu: 100m
