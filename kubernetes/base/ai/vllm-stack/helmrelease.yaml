@@ -67,7 +67,7 @@ spec:
             #tensorParallelSize: 1
             #pipelineParallelSize: 3
             #enablePrefixCaching: true
-            maxModelLen: 4096
+            #maxModelLen: 4096
             dtype: bfloat16
             extraArgs:
               - "--quantization"
