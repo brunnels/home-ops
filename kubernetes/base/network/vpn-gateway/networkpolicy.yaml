@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumnetworkpolicy_v2.json
 # This policy allows the vpn-gateway to go out to the internet on port 1637 and also to talk to any cluster entities
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
