@@ -20,7 +20,7 @@ spec:
             env:
               WEBUI_URL: https://chat.${SECRET_DOMAIN}
               CORS_ALLOW_ORIGIN: https://chat.${SECRET_DOMAIN}
-              OPENAI_API_BASE_URL: http://llm-api:9000
+              OPENAI_API_BASE_URL: http://vllm-stack-router-service:9000
               ENABLE_SIGNUP: false
               WEBUI_NAME: "${VAULT_PREFIX} AI"
               ENABLE_OLLAMA_API: false
