@@ -10,10 +10,11 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
+  - ../../common/observability/blackbox-exporter.yaml
   - ../../common/observability/gatus-sidecar.yaml
-  #- ../../common/observability/grafana-instance.yaml
-  #- ../../common/observability/grafana-operator.yaml
-  #- ../../common/observability/keda.yaml
+  - ../../common/observability/grafana-instance.yaml
+  - ../../common/observability/grafana-operator.yaml
+  - ../../common/observability/kromgo.yaml
   - ../../common/observability/kube-prometheus-stack.yaml
   - ../../common/observability/silence-operator.yaml
   - ../../common/observability/smartctl-exporter.yaml
