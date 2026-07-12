@@ -12,5 +12,5 @@ resources:
   - ./namespace.yaml
   - ./ai-pgo-cluster.yaml
   - ./kuberay-operator.yaml
-  #- ./open-webui.yaml
+  - ./open-webui.yaml
   - ./vllm-stack.yaml
