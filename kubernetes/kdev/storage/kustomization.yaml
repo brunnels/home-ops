@@ -6,6 +6,7 @@ namespace: storage
 components:
   - ../../clusters/kdev
   - ../../components/common
+  - ../../components/kopiur/secret
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
