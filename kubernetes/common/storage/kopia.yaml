@@ -15,7 +15,6 @@ spec:
       namespace: security
     - name: external-secrets-stores
       namespace: external-secrets
-    - name: kopiur-repository
   interval: 1h
   path: ./kubernetes/base/storage/kopia
   postBuild:
