@@ -32,6 +32,7 @@ spec:
       name_attribute_path: name
       scopes: openid groups profile email
       token_url: https://auth.${SECRET_DOMAIN}/api/oidc/token
+      jwk_set_url: https://auth.${SECRET_DOMAIN}/.well-known/openid-configuration
     auth.generic_oauth.group_mapping:
       role_attribute_path: |
         contains(groups[*], 'Admins') && 'Admin' || contains(groups[*], 'Domain Users') && 'Viewer'
@@ -47,6 +48,7 @@ spec:
       angular_support_enabled: "true"
     server:
       enable_gzip: "true"
+      root_url: https://grafana.${SECRET_DOMAIN}
   deployment:
     spec:
       strategy:

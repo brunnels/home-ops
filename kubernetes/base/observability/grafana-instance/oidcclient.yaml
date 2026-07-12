@@ -15,6 +15,11 @@ spec:
     fields:
       client_id: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
       client_secret: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+  scopes:
+    - email
+    - openid
+    - profile
+    - groups
   # default should not be needed, but it is required for the operator to work issue: #6
   token_endpoint:
     auth_method: client_secret_basic
