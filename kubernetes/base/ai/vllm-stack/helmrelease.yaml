@@ -84,6 +84,8 @@ spec:
               - "--enable-auto-tool-choice"
               - "--tool-call-parser"
               - "qwen3_xml"
+              - "--load-format"
+              - "dummy_sparse" # If trying to bypass check, or specify explicit dense format if available
 
           #lmcacheConfig:
           #  enabled: true
