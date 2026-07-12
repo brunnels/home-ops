@@ -15,8 +15,8 @@ spec:
   secret_ref:
     name: *name
     fields:
-      client_id: OPEN_WEBUI_OIDC_CLIENT_ID
-      client_secret: OPEN_WEBUI_SECRET_KEY
+      client_id: OAUTH_CLIENT_ID
+      client_secret: OAUTH_CLIENT_SECRET
   scopes:
     - email
     - openid
