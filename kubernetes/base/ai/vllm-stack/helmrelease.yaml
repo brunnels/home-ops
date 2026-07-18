@@ -79,7 +79,7 @@ spec:
               - "--enforce-eager"
               - "--enable-auto-tool-choice"
               - "--tool-call-parser"
-              - "qwen"
+              - "hermes"
 
           hf_token:
             secretName: *app
