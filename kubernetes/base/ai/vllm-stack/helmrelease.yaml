@@ -74,8 +74,8 @@ spec:
             extraArgs:
               - "--quantization"
               - "awq"
-              - "--reasoning-parser"
-              - "qwen3"
+              #- "--reasoning-parser"
+              #- "qwen3"
               - "--gpu-memory-utilization"
               - "0.9"
               - "--enforce-eager"
