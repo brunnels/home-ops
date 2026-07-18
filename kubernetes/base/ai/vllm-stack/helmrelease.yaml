@@ -21,60 +21,84 @@ spec:
       strategy:
         type: Recreate
       modelSpec:
-        - name: qwen25-vl-3b-instruct-awq
-          repository: lmcache/vllm-openai
-          tag: latest
-          modelURL: Qwen/Qwen2.5-3B-Instruct-AWQ
+        - name: "distilgpt2-raycluster"
+          repository: "lmcache/vllm-openai"
+          tag: "latest"
+          modelURL: "distilbert/distilgpt2"
 
-          replicaCount: &replicas 2
+          replicaCount: 1
 
-          requestCPU: 4
-          requestMemory: 16Gi
+          requestCPU: 1
+          requestMemory: "20Gi"
           requestGPU: 1
 
-          pvcStorage: 50Gi
-          pvcAccessMode:
-            - ReadWriteOnce
-          storageClass: openebs-hostpath
-          env:
-            - name: PYTORCH_CUDA_ALLOC_CONF
-              value: "expandable_segments:True"
           vllmConfig:
             tensorParallelSize: 1
-            pipelineParallelSize: 3
-            #enablePrefixCaching: true
-            #maxModelLen: 4096
-            dtype: bfloat16
-            extraArgs:
-              - "--quantization"
-              - "awq"
-              - "--reasoning-parser"
-              - "qwen3"
-              - "--gpu-memory-utilization"
-              - "0.9"
-              - "--enforce-eager"
-              - "--max-num-seqs"
-              - "32"
-              - "--enable-auto-tool-choice"
-              - "--tool-call-parser"
-              - "qwen3_xml"
+            pipelineParallelSize: 2
 
-          #lmcacheConfig:
-          #  enabled: true
-          #  cpuOffloadingBufferSize: 20
-
-          hf_token:
-            secretName: *app
-            secretKey: HF_TOKEN
+          shmSize: "20Gi"
 
           raySpec:
             enabled: true
             headNode:
-              requestCPU: *replicas
-              requestMemory: 16Gi
+              requestCPU: 1
+              requestMemory: "20Gi"
               requestGPU: 1
 
-          shmSize: 16Gi
+        #- name: qwen25-vl-3b-instruct-awq
+        #  repository: lmcache/vllm-openai
+        #  tag: latest
+        #  modelURL: Qwen/Qwen2.5-3B-Instruct-AWQ
+        #
+        #  replicaCount: &replicas 2
+        #
+        #  requestCPU: 4
+        #  requestMemory: 16Gi
+        #  requestGPU: 1
+        #
+        #  pvcStorage: 50Gi
+        #  pvcAccessMode:
+        #    - ReadWriteOnce
+        #  storageClass: openebs-hostpath
+        #  env:
+        #    - name: PYTORCH_CUDA_ALLOC_CONF
+        #      value: "expandable_segments:True"
+        #  vllmConfig:
+        #    tensorParallelSize: 1
+        #    pipelineParallelSize: 3
+        #    #enablePrefixCaching: true
+        #    #maxModelLen: 4096
+        #    dtype: bfloat16
+        #    extraArgs:
+        #      - "--quantization"
+        #      - "awq"
+        #      - "--reasoning-parser"
+        #      - "qwen3"
+        #      - "--gpu-memory-utilization"
+        #      - "0.9"
+        #      - "--enforce-eager"
+        #      - "--max-num-seqs"
+        #      - "32"
+        #      - "--enable-auto-tool-choice"
+        #      - "--tool-call-parser"
+        #      - "qwen3_xml"
+
+        #lmcacheConfig:
+        #  enabled: true
+        #  cpuOffloadingBufferSize: 20
+
+        #hf_token:
+        #  secretName: *app
+        #  secretKey: HF_TOKEN
+        #
+        #raySpec:
+        #  enabled: true
+        #  headNode:
+        #    requestCPU: *replicas
+        #    requestMemory: 16Gi
+        #    requestGPU: 1
+
+        #shmSize: 16Gi
 
     #cacheserverSpec:
     #  replicaCount: 1
