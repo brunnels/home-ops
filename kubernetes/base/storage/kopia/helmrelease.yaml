@@ -100,8 +100,6 @@ spec:
     route:
       app:
         annotations:
-          gatus.home-operations.com/endpoint: |-
-            conditions: ["[STATUS] == 401"]
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Storage
           gethomepage.dev/name: Kopia
@@ -114,6 +112,10 @@ spec:
         parentRefs:
           - name: envoy-internal
             namespace: network
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     service:
       app:
         annotations:
