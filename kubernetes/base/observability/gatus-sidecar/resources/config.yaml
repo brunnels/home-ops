@@ -17,19 +17,19 @@ connectivity:
     interval: 1m
     target: 1.1.1.1:53
 endpoints:
-  - name: nas-cert-expiration
-    group: domain
-    url: "https://${QNAP_HOSTNAME}"
-    interval: 1h
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 240h"
+  #- name: nas-cert-expiration
+  #  group: domain
+  #  url: "https://${QNAP_HOSTNAME}"
+  #  interval: 1h
+  #  conditions:
+  #    - "[CERTIFICATE_EXPIRATION] > 240h"
 
-  - name: cert-expiration
-    group: domain
-    url: "https://status.${SECRET_DOMAIN}"
-    interval: 1h
-    conditions:
-      - "[CERTIFICATE_EXPIRATION] > 240h"
+  #- name: cert-expiration
+  #  group: domain
+  #  url: "https://status.${SECRET_DOMAIN}"
+  #  interval: 1h
+  #  conditions:
+  #    - "[CERTIFICATE_EXPIRATION] > 240h"
 
   - name: Cloudflare
     group: connectivity

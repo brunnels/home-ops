@@ -11,7 +11,7 @@ replacements:
 resources:
   - ./namespace.yaml
   - ../../common/observability/blackbox-exporter.yaml
-  #- ../../common/observability/gatus-sidecar.yaml
+  - ../../common/observability/gatus-sidecar.yaml
   - ../../common/observability/grafana-instance.yaml
   - ../../common/observability/grafana-operator.yaml
   - ../../common/observability/kromgo.yaml
