@@ -1,5 +1,8 @@
+# mise cleanup command
+# mise uninstall $(mise ls --installed --json | jq -r 'to_entries[] | .key as $tool | .value[] | select(.active == false) | "\($tool)@\(.version)"')
+
 [env]
-_.python.venv = { path = "{{config_root}}/.venv", create = true } # required:template
+#_.python.venv = { path = "{{config_root}}/.venv", create = true } # required:template
 KUBECONFIG = "{{config_root}}/kubeconfig"
 SOPS_CONFIG = "{{config_root}}/.sops.yaml"
 SOPS_AGE_KEY_FILE = "{{config_root}}/age.key"
@@ -7,13 +10,13 @@ TALOSCONFIG = "{{config_root}}/talos/clusterconfig/talosconfig"
 JUST_UNSTABLE = "1"
 
 [tools]
-python = "3.14.6"                         # required:template
-uv = "0.11.29"                            # required:template
-pipx = "1.15.0"                           # required:template
-"pipx:makejinja" = "2.8.2"                # required:template
+#python = "3.13.0"                         # required:template
+#uv = "0.11.29"                            # required:template
+#pipx = "1.15.0"                           # required:template
+#"pipx:makejinja" = "2.8.2"                # required:template
 age = "1.3.1"
-cloudflared = "2026.7.2"
-cue = "0.17.1"                            # required:template
+#cloudflared = "2026.7.2"
+#cue = "0.17.1"                            # required:template
 flux2 = "2.9.2"
 gh = "2.96.0"
 gum = "0.17.0"
@@ -25,7 +28,7 @@ kubeconform = "0.8.0"
 kubectl = "1.36.2"
 kustomize = "5.8.1"
 lefthook = "2.1.10"
-sd = "1.1.0"                              # required:template
+#sd = "1.1.0"                              # required:template
 sops = "3.13.2"
 talhelper = "3.1.13"
 talosctl = "1.13.6"
