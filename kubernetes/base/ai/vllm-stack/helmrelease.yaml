@@ -21,36 +21,12 @@ spec:
       strategy:
         type: Recreate
       modelSpec:
-        #- name: "distilgpt2-raycluster"
-        #  repository: "vllm/vllm-openai"
-        #  tag: "latest"
-        #  modelURL: "distilbert/distilgpt2"
-        #
-        #  replicaCount: 1
-        #
-        #  requestCPU: 1
-        #  requestMemory: "20Gi"
-        #  requestGPU: 1
-        #
-        #  vllmConfig:
-        #    tensorParallelSize: 1
-        #    pipelineParallelSize: 2
-        #
-        #  shmSize: "20Gi"
-        #
-        #  raySpec:
-        #    enabled: true
-        #    headNode:
-        #      requestCPU: 1
-        #      requestMemory: "20Gi"
-        #      requestGPU: 1
-
         - name: qwen25-vl-3b-instruct-awq
-          repository: vllm/vllm-openai
+          repository: lmcache/vllm-openai
           tag: latest
           modelURL: Qwen/Qwen2.5-3B-Instruct-AWQ
 
-          replicaCount: 1
+          replicaCount: &replicas 2
 
           requestCPU: 4
           requestMemory: 16Gi
@@ -64,8 +40,8 @@ spec:
             - name: PYTORCH_CUDA_ALLOC_CONF
               value: "expandable_segments:True"
           vllmConfig:
-            #tensorParallelSize: 1
-            #pipelineParallelSize: 3
+            tensorParallelSize: 1
+            pipelineParallelSize: 3
             #enablePrefixCaching: true
             #maxModelLen: 4096
             dtype: bfloat16
@@ -91,14 +67,14 @@ spec:
             secretName: *app
             secretKey: HF_TOKEN
 
-          #raySpec:
-          #  enabled: true
-          #  headNode:
-          #    requestCPU: 2
-          #    requestMemory: 16Gi
-          #    requestGPU: 1
+          raySpec:
+            enabled: true
+            headNode:
+              requestCPU: *replicas
+              requestMemory: 16Gi
+              requestGPU: 1
 
-          #shmSize: 16Gi
+          shmSize: 16Gi
 
     #cacheserverSpec:
     #  replicaCount: 1
