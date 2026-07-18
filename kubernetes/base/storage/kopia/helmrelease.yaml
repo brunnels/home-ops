@@ -116,6 +116,11 @@ spec:
             namespace: network
     service:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
         ports:
           http:
             port: *port
