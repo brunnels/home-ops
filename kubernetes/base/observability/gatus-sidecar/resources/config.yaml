@@ -61,7 +61,7 @@ ui:
     - name: Github
       link: https://github.com/brunnels
     - name: Homelab
-      link: https://github.com/brunnels/talos-cluster
+      link: https://github.com/brunnels/home-ops
   default-sort-by: group
   header: Status
   link: https://github.com/brunnels
