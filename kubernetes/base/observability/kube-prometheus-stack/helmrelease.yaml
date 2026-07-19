@@ -21,6 +21,11 @@ spec:
         main:
           enabled: true
           annotations:
+            gatus.home-operations.com/endpoint: |
+              name: alertmanager
+              group: internal
+              alerts:
+                - type: pushover
             gethomepage.dev/enabled: "true"
             gethomepage.dev/icon: alertmanager
             gethomepage.dev/name: Alert Manager
@@ -96,6 +101,7 @@ spec:
     grafana:
       enabled: false
       forceDeployDashboards: true
+      fullnameOverride: grafana
       operator:
         dashboardsConfigMapRefEnabled: true
         folder: observability
