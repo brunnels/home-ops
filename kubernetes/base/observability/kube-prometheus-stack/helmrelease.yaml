@@ -49,7 +49,6 @@ spec:
           global:
             resolveTimeout: 5m
         externalUrl: "https://alertmanager.${SECRET_DOMAIN}"
-        serviceName: alertmanager
         storage:
           volumeClaimTemplate:
             spec:
@@ -72,7 +71,6 @@ spec:
         retentionSize: 50GB
         ruleSelectorNilUsesHelmValues: false
         scrapeConfigSelectorNilUsesHelmValues: false
-        serviceName: prometheus
         serviceMonitorSelectorNilUsesHelmValues: false
         resources:
           requests:
@@ -151,34 +149,34 @@ spec:
                 expr: node_zfs_zpool_state{state!="online"} > 0
                 labels:
                   severity: critical
-  postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              kind: Service
-              name: *app
-            patch: |
-              - op: add
-                path: /spec/ports/-
-                value:
-                  name: gluetun
-                  port: 80
-                  protocol: TCP
-                  targetPort: 80
-          - target:
-              kind: Deployment
-              name: *app
-            patch: |
-              - op: add
-                path: /spec/template/spec/containers/1/ports
-                value: []
-          - target:
-              kind: Deployment
-              name: *app
-            patch: |
-              - op: add
-                path: /spec/template/spec/containers/1/ports/-
-                value:
-                  containerPort: 80
-                  name: gluetun
-                  protocol: TCP
+  #postRenderers:
+  #  - kustomize:
+  #      patches:
+  #        - target:
+  #            kind: Service
+  #            name: *app
+  #          patch: |
+  #            - op: add
+  #              path: /spec/ports/-
+  #              value:
+  #                name: gluetun
+  #                port: 80
+  #                protocol: TCP
+  #                targetPort: 80
+  #        - target:
+  #            kind: Deployment
+  #            name: *app
+  #          patch: |
+  #            - op: add
+  #              path: /spec/template/spec/containers/1/ports
+  #              value: []
+  #        - target:
+  #            kind: Deployment
+  #            name: *app
+  #          patch: |
+  #            - op: add
+  #              path: /spec/template/spec/containers/1/ports/-
+  #              value:
+  #                containerPort: 80
+  #                name: gluetun
+  #                protocol: TCP
