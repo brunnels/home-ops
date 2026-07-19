@@ -35,15 +35,14 @@ spec:
           parentRefs:
             - name: envoy-internal
               namespace: network
+      service:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            alerts:
+              - type: pushover
+            group: internal
+            name: alertmanager
       alertmanagerSpec:
-        additionalConfig:
-          service:
-            annotations:
-              gatus.home-operations.com/endpoint: |
-                alerts:
-                  - type: pushover
-                group: internal
-                name: alertmanager
         alertmanagerConfiguration:
           name: alertmanager
           global:
