@@ -122,7 +122,7 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - reference: app
+              - identifier: app
                 port: *port
       code-server:
         annotations:
@@ -140,7 +140,7 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - reference: code-server
+              - identifier: code-server
                 port: *codeserverPort
     persistence:
       config:
