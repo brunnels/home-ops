@@ -70,15 +70,10 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        #supplementalGroups: [65536]
     service:
       app:
         type: LoadBalancer
         annotations:
-          #gatus.home-operations.com/endpoint: |
-          #  group: external
-          #  alerts:
-          #    - type: pushover
           lbipam.cilium.io/ips: ${SVC_PLEX_ADDR}
         externalTrafficPolicy: Local
         ports:
@@ -87,6 +82,11 @@ spec:
     route:
       app:
         annotations:
+          gatus.home-operations.com/endpoint: |-
+            path: /identity
+            group: external
+            alerts:
+              - type: pushover
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Media
           gethomepage.dev/name: Plex
