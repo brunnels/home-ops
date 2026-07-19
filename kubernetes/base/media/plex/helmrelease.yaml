@@ -75,10 +75,10 @@ spec:
       app:
         type: LoadBalancer
         annotations:
-        gatus.home-operations.com/endpoint: |
-          group: external
-          alerts:
-            - type: pushover
+          gatus.home-operations.com/endpoint: |
+            group: external
+            alerts:
+              - type: pushover
           lbipam.cilium.io/ips: ${SVC_PLEX_ADDR}
         externalTrafficPolicy: Local
         ports:
