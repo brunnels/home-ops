@@ -14,7 +14,9 @@ spec:
       annotations:
         dashboard:
           gatus.home-operations.com/endpoint: |-
-            guarded: true
+            alerts:
+              - type: pushover
+            group: internal
             name: rook
       cephConfig:
         global:
@@ -102,9 +104,6 @@ spec:
         annotations:
           gatus.home-operations.com/endpoint: |
             name: rook
-            group: internal
-            alerts:
-              - type: pushover
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Management
           gethomepage.dev/name: Rook Dashboard

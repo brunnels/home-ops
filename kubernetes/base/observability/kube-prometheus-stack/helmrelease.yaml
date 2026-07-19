@@ -23,9 +23,6 @@ spec:
           annotations:
             gatus.home-operations.com/endpoint: |
               name: alertmanager
-              group: internal
-              alerts:
-                - type: pushover
             gethomepage.dev/enabled: "true"
             gethomepage.dev/icon: alertmanager
             gethomepage.dev/name: Alert Manager
@@ -39,11 +36,20 @@ spec:
             - name: envoy-internal
               namespace: network
       alertmanagerSpec:
+        additionalConfig:
+          service:
+            annotations:
+              gatus.home-operations.com/endpoint: |
+                alerts:
+                  - type: pushover
+                group: internal
+                name: alertmanager
         alertmanagerConfiguration:
           name: alertmanager
           global:
             resolveTimeout: 5m
         externalUrl: "https://alertmanager.${SECRET_DOMAIN}"
+        serviceName: alertmanager
         storage:
           volumeClaimTemplate:
             spec:
@@ -66,6 +72,7 @@ spec:
         retentionSize: 50GB
         ruleSelectorNilUsesHelmValues: false
         scrapeConfigSelectorNilUsesHelmValues: false
+        serviceName: prometheus
         serviceMonitorSelectorNilUsesHelmValues: false
         resources:
           requests:
@@ -107,6 +114,12 @@ spec:
         folder: observability
         matchLabels:
           dashboards: grafana
+      service:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            alerts:
+              - type: pushover
+            group: internal
     additionalPrometheusRulesMap:
       dockerhub-rules:
         groups:
@@ -138,3 +151,34 @@ spec:
                 expr: node_zfs_zpool_state{state!="online"} > 0
                 labels:
                   severity: critical
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Service
+              name: *app
+            patch: |
+              - op: add
+                path: /spec/ports/-
+                value:
+                  name: gluetun
+                  port: 80
+                  protocol: TCP
+                  targetPort: 80
+          - target:
+              kind: Deployment
+              name: *app
+            patch: |
+              - op: add
+                path: /spec/template/spec/containers/1/ports
+                value: []
+          - target:
+              kind: Deployment
+              name: *app
+            patch: |
+              - op: add
+                path: /spec/template/spec/containers/1/ports/-
+                value:
+                  containerPort: 80
+                  name: gluetun
+                  protocol: TCP
