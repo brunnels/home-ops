@@ -95,11 +95,11 @@ spec:
     route:
       dashboard:
         annotations:
-          annotations:
-            gatus.home-operations.com/endpoint: |
-              group: internal
-              alerts:
-                - type: pushover
+          gatus.home-operations.com/endpoint: |
+            name: rook
+            group: internal
+            alerts:
+              - type: pushover
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Management
           gethomepage.dev/name: Rook Dashboard
