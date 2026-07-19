@@ -82,20 +82,30 @@ spec:
       app:
         type: LoadBalancer
         annotations:
-          gatus.home-operations.com/endpoint: |
-            group: internal
+          gatus.home-operations.com/endpoint: |-
             alerts:
               - type: pushover
+            group: internal
+            name: home-assistant
           lbipam.cilium.io/ips: ${SVC_HAAS_ADDR}
         externalTrafficPolicy: Local
         ports:
           http:
             port: &port 8123
-          code-server:
+      code-server:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        ports:
+          http:
             port: &codeserverPort 8080
     route:
       app:
         annotations:
+          gatus.home-operations.com/endpoint: |-
+            name: home-assistant
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Automation
           gethomepage.dev/name: Home Assistant
