@@ -10,28 +10,28 @@ A personal Kubernetes GitOps infrastructure project using Talos Linux, Flux, and
 
 ![Talos](https://kromgo.kraven.dev/badges/talos_version)
 ![Kubernetes](https://kromgo.kraven.dev/badges/kubernetes_version)
-![Flux](https://kromgo.kraven.dev/badges/flux_version)
+![Flux](https://kromgo.kraven.dev/badges/flux_version)\
 ![Nodes](https://kromgo.kraven.dev/badges/cluster_node_count)
 ![Pods](https://kromgo.kraven.dev/badges/cluster_pod_count)
 ![CPU](https://kromgo.kraven.dev/badges/cluster_cpu_usage)
 ![Memory](https://kromgo.kraven.dev/badges/cluster_memory_usage)
-![Uptime](https://kromgo.kraven.dev/badges/cluster_uptime_age)
-![Alerts](https://kromgo.kraven.dev/badges/cluster_alert_count)
-
+![Uptime](https://kromgo.kraven.dev/badges/cluster_uptime_age)\
+![Better Stack Monitor](https://uptime.betterstack.com/status-badges/v1/monitor/2sjqy.svg)
+![Alerts](https://kromgo.kraven.dev/badges/cluster_alert_count)\
 [View kdev Status Dashboard](https://status.kraven.dev/)
 
 ### korg (Production)
 
 ![Talos](https://kromgo.kraven.org/badges/talos_version)
 ![Kubernetes](https://kromgo.kraven.org/badges/kubernetes_version)
-![Flux](https://kromgo.kraven.org/badges/flux_version)
+![Flux](https://kromgo.kraven.org/badges/flux_version)\
 ![Nodes](https://kromgo.kraven.org/badges/cluster_node_count)
 ![Pods](https://kromgo.kraven.org/badges/cluster_pod_count)
 ![CPU](https://kromgo.kraven.org/badges/cluster_cpu_usage)
 ![Memory](https://kromgo.kraven.org/badges/cluster_memory_usage)
-![Uptime](https://kromgo.kraven.org/badges/cluster_uptime_age)
-![Alerts](https://kromgo.kraven.org/badges/cluster_alert_count)
-
+![Uptime](https://kromgo.kraven.org/badges/cluster_uptime_age)\
+![Better Stack Monitor](https://uptime.betterstack.com/status-badges/v1/monitor/1r5x7.svg)
+![Alerts](https://kromgo.kraven.org/badges/cluster_alert_count)\
 [View korg Status Dashboard](https://status.kraven.org/)
 
 ## 🏗️ Quick Overview
