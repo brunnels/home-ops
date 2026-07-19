@@ -11,6 +11,10 @@ spec:
   interval: 1h
   values:
     cephClusterSpec:
+      annotations:
+        dashboard:
+          gatus.home-operations.com/endpoint: |-
+            name: rook
       cephConfig:
         global:
           bdev_enable_discard: "true" # quote
