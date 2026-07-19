@@ -123,7 +123,6 @@ spec:
         rules:
           - backendRefs:
               - identifier: app
-                port: *port
       code-server:
         annotations:
           gethomepage.dev/enabled: "true"
@@ -141,7 +140,6 @@ spec:
         rules:
           - backendRefs:
               - identifier: code-server
-                port: *codeserverPort
     persistence:
       config:
         existingClaim: *app
