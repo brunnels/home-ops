@@ -4,8 +4,8 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: &name "${APP}-db-init"
-  #annotations:
-  #  kustomize.toolkit.fluxcd.io/reconcile: disabled
+  annotations:
+    kustomize.toolkit.fluxcd.io/reconcile: disabled
   labels:
     app.kubernetes.io/instance: *name
     app.kubernetes.io/name: *name
