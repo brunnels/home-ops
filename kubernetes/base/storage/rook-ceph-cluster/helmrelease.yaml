@@ -14,7 +14,14 @@ spec:
       annotations:
         dashboard:
           gatus.home-operations.com/endpoint: |-
+            alerts:
+              - type: pushover
+            group: guarded
+            guarded: true
             name: rook
+            ui:
+              hide-hostname: true
+              hide-url: true
       cephConfig:
         global:
           bdev_enable_discard: "true" # quote
