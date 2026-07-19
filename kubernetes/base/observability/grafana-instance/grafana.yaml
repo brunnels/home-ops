@@ -93,6 +93,10 @@ spec:
               persistentVolumeClaim:
                 claimName: grafana-pvc
   httpRoute:
+    metadata:
+      annotations:
+        gatus.home-operations.com/endpoint: |-
+          name: grafana
     spec:
       hostnames:
         - "grafana.${SECRET_DOMAIN}"
@@ -107,4 +111,12 @@ spec:
         requests:
           storage: 5Gi
       storageClassName: ceph-block
+  service:
+    metadata:
+      annotations:
+        gatus.home-operations.com/endpoint: |
+          alerts:
+            - type: pushover
+          group: internal
+          name: grafana
   disableDefaultSecurityContext: All

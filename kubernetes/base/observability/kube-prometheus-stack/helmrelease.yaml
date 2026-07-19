@@ -105,18 +105,11 @@ spec:
     grafana:
       enabled: false
       forceDeployDashboards: true
-      fullnameOverride: grafana
       operator:
         dashboardsConfigMapRefEnabled: true
         folder: observability
         matchLabels:
           dashboards: grafana
-      service:
-        annotations:
-          gatus.home-operations.com/endpoint: |
-            alerts:
-              - type: pushover
-            group: internal
     additionalPrometheusRulesMap:
       dockerhub-rules:
         groups:
