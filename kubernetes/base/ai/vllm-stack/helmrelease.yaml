@@ -101,7 +101,7 @@ spec:
               - "--quantization"
               - "awq"
               - "--gpu-memory-utilization"
-              - "0.8"
+              - "0.7"
               - "--enforce-eager"
               - "--enable-auto-tool-choice"
               - "--tool-call-parser"
