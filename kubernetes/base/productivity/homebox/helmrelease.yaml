@@ -25,7 +25,7 @@ spec:
               # (rename() syscall fails across different filesystems)
               TMPDIR: /data/.tmp
               # Application mode
-              HBOX_LOG_LEVEL: warning
+              HBOX_LOG_LEVEL: warn
               HBOX_MODE: production
               # Web server configuration
               HBOX_WEB_PORT: &port 8080
