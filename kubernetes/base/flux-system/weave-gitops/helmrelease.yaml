@@ -39,3 +39,10 @@ spec:
         memory: 70Mi
       limits:
         memory: 210Mi
+    service:
+      annotations:
+        gatus.home-operations.com/endpoint: |
+          alerts:
+            - type: pushover
+          group: internal
+          name: weave-gitops

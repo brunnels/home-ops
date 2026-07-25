@@ -121,8 +121,11 @@ spec:
       route:
         main:
           enabled: true
+          annotations:
+            gatus.home-operations.com/endpoint: |
+              name: vllm-api
           hostnames:
-            - "llm-api.${SECRET_DOMAIN}"
+            - "vllm-api.${SECRET_DOMAIN}"
           parentRefs:
             - name: envoy-internal
               namespace: network
@@ -130,3 +133,10 @@ spec:
             - path:
                 type: PathPrefix
                 value: /
+      service:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            alerts:
+              - type: pushover
+            group: internal
+            name: vllm-api
