@@ -16,4 +16,4 @@ resources:
   - ./homebox-companion.yaml
   - ./kuberay-operator.yaml
   - ./open-webui.yaml
-  - ./vllm-stack.yaml
+  #- ./vllm-stack.yaml
