@@ -28,14 +28,14 @@ spec:
       mode: Ephemeral
       storageClassName: openebs-hostpath
     podSecurityContext:
-      fsGroup: 1000
+      fsGroup: 100
       fsGroupChangePolicy: OnRootMismatch
     scratch:
       capacity: 1Mi
       storageClassName: openebs-hostpath
     securityContext:
       runAsUser: 1000
-      runAsGroup: 1000
+      runAsGroup: 100
     ttlSecondsAfterFinished: 300
   scheduleDefaults:
     timezone: ${TIMEZONE}

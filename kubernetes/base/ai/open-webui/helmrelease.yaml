@@ -44,29 +44,29 @@ spec:
             envFrom:
               - secretRef:
                   name: *app
-            #probes:
-            #  liveness:
-            #    enabled: true
-            #    custom: true
-            #    spec:
-            #      httpGet: &httpGet
-            #        path: /health
-            #        port: &port 8080
-            #      periodSeconds: 30
-            #  readiness:
-            #    enabled: true
-            #    custom: true
-            #    spec:
-            #      httpGet: *httpGet
-            #      periodSeconds: 10
-            #  startup:
-            #    enabled: true
-            #    custom: true
-            #    spec:
-            #      httpGet: *httpGet
-            #      initialDelaySeconds: 10
-            #      periodSeconds: 5
-            #      failureThreshold: 30
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: &httpGet
+                    path: /health
+                    port: &port 8080
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: *httpGet
+                  periodSeconds: 10
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: *httpGet
+                  initialDelaySeconds: 10
+                  periodSeconds: 5
+                  failureThreshold: 30
             resources:
               requests:
                 cpu: 100m
@@ -75,14 +75,14 @@ spec:
                 memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: false
-        runAsUser: 0
-        runAsGroup: 0
-        fsGroup: 0
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 100
+        fsGroup: 100
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
@@ -94,7 +94,7 @@ spec:
         controller: *app
         ports:
           http:
-            port: &port 8080
+            port: *port
     route:
       app:
         annotations:
@@ -110,8 +110,7 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - name: *app
-                port: *port
+              - identifier: app
     persistence:
       data:
         existingClaim: *app

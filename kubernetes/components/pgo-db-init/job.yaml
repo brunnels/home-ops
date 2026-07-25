@@ -51,6 +51,8 @@ spec:
               drop: ["ALL"]
             readOnlyRootFilesystem: true
       securityContext:
-        runAsGroup: 65534
         runAsNonRoot: true
-        runAsUser: 65534
+        runAsUser: 1000
+        runAsGroup: 100
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
