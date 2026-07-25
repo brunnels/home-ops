@@ -87,9 +87,9 @@ spec:
             - ReadWriteOnce
           storageClass: openebs-hostpath
 
-          env:
-            - name: PYTORCH_CUDA_ALLOC_CONF
-              value: "expandable_segments:True"
+          #env:
+          #  - name: PYTORCH_CUDA_ALLOC_CONF
+          #    value: "expandable_segments:True"
 
           vllmConfig:
             #tensorParallelSize: 1
@@ -101,7 +101,7 @@ spec:
               - "--quantization"
               - "awq"
               - "--gpu-memory-utilization"
-              - "0.7"
+              - "0.5"
               - "--enforce-eager"
               - "--enable-auto-tool-choice"
               - "--tool-call-parser"
