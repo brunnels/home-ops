@@ -19,7 +19,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      APP_SUBDOMAIN: haas-code
+      APP_SUBDOMAIN: hass-code
       OIDC_DESCRIPTION: Home Assistant CodeServer
       OIDC_ROUTE_NAME: home-assistant-code-server
   prune: true

@@ -87,7 +87,7 @@ spec:
               - type: pushover
             group: internal
             name: home-assistant
-          lbipam.cilium.io/ips: ${SVC_HAAS_ADDR}
+          lbipam.cilium.io/ips: ${SVC_HASS_ADDR}
         externalTrafficPolicy: Local
         ports:
           http:
@@ -98,7 +98,7 @@ spec:
             alerts:
               - type: pushover
             group: internal
-            name: haas-code
+            name: hass-code
         ports:
           http:
             port: &codeserverPort 8080
@@ -113,9 +113,9 @@ spec:
           gethomepage.dev/icon: *app
           gethomepage.dev/app: *app
           gethomepage.dev/description: Open Source Home Automation
-        #          gethomepage.dev/widget.type: homeassistant
-        #          gethomepage.dev/widget.url: "http://${SVC_HAAS_ADDR}:8123"
-        #          gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_HASS_TOKEN}}`}}"
+          gethomepage.dev/widget.type: homeassistant
+          gethomepage.dev/widget.url: "http://${SVC_HASS_ADDR}:8123"
+          gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_HASS_TOKEN}}`}}"
         hostnames:
           - "hass.${SECRET_DOMAIN}"
         parentRefs:
@@ -127,7 +127,7 @@ spec:
       code-server:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            name: haas-code
+            name: hass-code
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: "Development"
           gethomepage.dev/name: "Code Server"
