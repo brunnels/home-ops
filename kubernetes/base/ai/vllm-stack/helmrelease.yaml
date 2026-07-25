@@ -99,7 +99,7 @@ spec:
             dtype: float16
             extraArgs:
               - "--gpu-memory-utilization"
-              - "0.9"
+              - "0.7"
               - "--enforce-eager"
               - "--enable-auto-tool-choice"
               - "--tool-call-parser"
