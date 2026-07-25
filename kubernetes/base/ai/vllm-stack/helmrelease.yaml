@@ -71,10 +71,10 @@ spec:
         #      requestMemory: "20Gi"
         #      requestGPU: 1
 
-        - name: qwen25-vl-3b-instruct
+        - name: qwen25-vl-3b-instruct-awq
           repository: lmcache/vllm-openai
           tag: latest
-          modelURL: Qwen/Qwen2.5-VL-3B-Instruct
+          modelURL: Qwen/Qwen2.5-VL-3B-Instruct-AWQ
 
           replicaCount: &replicas 1
 
@@ -98,8 +98,10 @@ spec:
             #maxModelLen: 4096
             dtype: float16
             extraArgs:
+              - "--quantization"
+              - "awq"
               - "--gpu-memory-utilization"
-              - "0.7"
+              - "0.9"
               - "--enforce-eager"
               - "--enable-auto-tool-choice"
               - "--tool-call-parser"
