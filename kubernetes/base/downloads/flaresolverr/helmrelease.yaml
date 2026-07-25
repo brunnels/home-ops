@@ -63,7 +63,7 @@ spec:
               - "-c"
               - |
                 cp -R /app/* /appdir/ \
-                && chown 1000:1000 -R /appdir/*
+                && chown 1000:100 -R /appdir/*
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
