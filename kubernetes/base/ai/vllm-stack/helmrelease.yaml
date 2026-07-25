@@ -134,9 +134,10 @@ spec:
                 type: PathPrefix
                 value: /
       service:
-        annotations:
-          gatus.home-operations.com/endpoint: |
-            alerts:
-              - type: pushover
-            group: internal
-            name: vllm-api
+        main:
+          annotations:
+            gatus.home-operations.com/endpoint: |
+              alerts:
+                - type: pushover
+              group: internal
+              name: vllm-api
