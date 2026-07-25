@@ -9,7 +9,7 @@ spec:
   description: HomeBox
   preconfigured_consent_duration: 1y
   redirect_uris:
-    - https://homebox.${SECRET_DOMAIN}/oauth2/callback
+    - https://homebox.${SECRET_DOMAIN}/api/v1/users/login/oidc/callback
   claims:
     name: default
   secret_ref:
