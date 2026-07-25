@@ -127,6 +127,8 @@ spec:
               - identifier: web-ui
                 port: http
       web-ui-public:
+        annotations:
+          gatus.home-operations.com/enabled: "false"
         hostnames:
           - "garage.${SECRET_DOMAIN}"
         parentRefs:
