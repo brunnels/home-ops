@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -9,23 +9,11 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets
-      namespace: external-secrets
     - name: homebox
-  path: ./kubernetes/base/automation/homebox-companion
+  interval: 1h
+  path: ./kubernetes/base/productivity/homebox-companion
   prune: true
   sourceRef:
     kind: GitRepository
-    name: home-kubernetes
+    name: flux-system
     namespace: flux-system
-  targetNamespace: productivity
-  wait: false
-  interval: 30m
-  retryInterval: 1m
-  timeout: 5m
-  postBuild:
-    substitute:
-      APP: *app
-      NS: productivity
-      GATUS_PORT: "8000"
-      GATUS_SERVICE: homebox-companion

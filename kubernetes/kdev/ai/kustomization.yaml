@@ -13,6 +13,7 @@ resources:
   - ./namespace.yaml
   - ./ai-pgo-cluster.yaml
   - ./homebox.yaml
+  - ./homebox-companion.yaml
   - ./kuberay-operator.yaml
   - ./open-webui.yaml
   - ./vllm-stack.yaml
