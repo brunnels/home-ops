@@ -16,6 +16,33 @@ spec:
   upgrade:
     force: true
   values:
+    grafanaDashboards:
+      enabled: true
+    prometheus-adapter:
+      enabled: false
+    routerSpec:
+      enableRouter: true
+      route:
+        main:
+          enabled: true
+          annotations:
+            gatus.home-operations.com/endpoint: |
+              name: vllm-api
+          hostnames:
+            - "vllm-api.${SECRET_DOMAIN}"
+          parentRefs:
+            - name: envoy-internal
+              namespace: network
+          matches:
+            - path:
+                type: PathPrefix
+                value: /
+    serviceAnnotations:
+      gatus.home-operations.com/endpoint: |
+        alerts:
+          - type: pushover
+        group: internal
+        name: vllm-api
     servingEngineSpec:
       runtimeClassName: nvidia
       strategy:
@@ -115,29 +142,3 @@ spec:
     #  labels:
     #    environment: cacheserver
     #    release: cacheserver
-
-    routerSpec:
-      enableRouter: true
-      route:
-        main:
-          enabled: true
-          annotations:
-            gatus.home-operations.com/endpoint: |
-              name: vllm-api
-          hostnames:
-            - "vllm-api.${SECRET_DOMAIN}"
-          parentRefs:
-            - name: envoy-internal
-              namespace: network
-          matches:
-            - path:
-                type: PathPrefix
-                value: /
-      service:
-        main:
-          annotations:
-            gatus.home-operations.com/endpoint: |
-              alerts:
-                - type: pushover
-              group: internal
-              name: vllm-api
