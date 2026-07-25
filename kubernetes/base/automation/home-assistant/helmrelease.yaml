@@ -98,6 +98,7 @@ spec:
             alerts:
               - type: pushover
             group: internal
+            name: haas-code
         ports:
           http:
             port: &codeserverPort 8080
@@ -125,6 +126,8 @@ spec:
               - identifier: app
       code-server:
         annotations:
+          gatus.home-operations.com/endpoint: |-
+            name: haas-code
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: "Development"
           gethomepage.dev/name: "Code Server"
