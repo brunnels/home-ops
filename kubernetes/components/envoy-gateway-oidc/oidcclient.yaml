@@ -2,7 +2,7 @@
 apiVersion: authelia.milas.dev/v1alpha2
 kind: OIDCClient
 metadata:
-  name: ${APP}
+  name: ${APP_SUBDOMAIN:-${APP}}
   annotations:
     authelia.milas.dev/oidc-provider: security/default
 spec:
@@ -16,7 +16,7 @@ spec:
   response_types:
     - code
   secret_ref:
-    name: ${APP}-oidc
+    name: ${APP_SUBDOMAIN:-${APP}}-oidc
     fields:
       client_id: client-id
       client_secret: client-secret

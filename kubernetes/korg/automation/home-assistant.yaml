@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    #- ../../../components/envoy-gateway-oidc
+    - ../../../components/envoy-gateway-oidc
     - ../../../components/kopiur/backup
   dependsOn:
     - name: kopiur-repository
@@ -19,6 +19,8 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      APP_SUBDOMAIN: haas-code
+      OIDC_DESCRIPTION: Home Assistant CodeServer
       OIDC_ROUTE_NAME: home-assistant-code-server
   prune: true
   sourceRef:
