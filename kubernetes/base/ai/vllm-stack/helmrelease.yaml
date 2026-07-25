@@ -89,21 +89,23 @@ spec:
             - ReadWriteOnce
           storageClass: openebs-hostpath
 
-          #env:
-          #  - name: PYTORCH_CUDA_ALLOC_CONF
-          #    value: "expandable_segments:True"
+          env:
+            - name: PYTORCH_CUDA_ALLOC_CONF
+              value: "expandable_segments:True"
 
           vllmConfig:
+            v0: "1"
             #tensorParallelSize: 1
             #pipelineParallelSize: 3
-            #enablePrefixCaching: true
-            #maxModelLen: 4096
+            enablePrefixCaching: false
+            gpuMemoryUtilization: 0.95
+            maxModelLen: 4096
             dtype: float16
             extraArgs:
               - "--quantization"
               - "awq"
               - "--gpu-memory-utilization"
-              - "0.50"
+              - "0.40"
               - "--enforce-eager"
               - "--enable-auto-tool-choice"
               - "--tool-call-parser"
