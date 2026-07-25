@@ -97,14 +97,14 @@ spec:
             #tensorParallelSize: 1
             #pipelineParallelSize: 3
             enablePrefixCaching: false
-            gpuMemoryUtilization: 0.95
+            gpuMemoryUtilization: 0.4
             maxModelLen: 4096
             dtype: bfloat16
             extraArgs:
+              - "--max-num-batched-tokens"
+              - "2048"
               - "--quantization"
               - "awq"
-              - "--gpu-memory-utilization"
-              - "0.40"
               - "--enforce-eager"
               - "--enable-auto-tool-choice"
               - "--tool-call-parser"
