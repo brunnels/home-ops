@@ -16,8 +16,8 @@ spec:
   upgrade:
     force: true
   values:
-    cacheserverSpec:
-      enabled: true
+    #cacheserverSpec:
+    #  enabled: true
     grafanaDashboards:
       enabled: true
     prometheus-adapter:
@@ -117,9 +117,9 @@ spec:
           #
           #shmSize: 16Gi
           #
-          lmcacheConfig:
-            enabled: true
-            cpuOffloadingBufferSize: "8"
+          #lmcacheConfig:
+          #  enabled: true
+          #  cpuOffloadingBufferSize: "8"
 
     #  replicaCount: 1
     #  containerPort: 8080
