@@ -1,0 +1,124 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app homebox
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: homebox
+  interval: 1h
+  values:
+    controllers:
+      homebox:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/sysadminsmedia/homebox
+              tag: latest@sha256:b1ad7e3c63f732a5f6daa466e8116be4f545b3b120383a64dcb62beb00a660cc
+            env:
+              TZ: "${TIMEZONE}"
+              # Temp directory must be on same filesystem as /data for file uploads
+              # (rename() syscall fails across different filesystems)
+              TMPDIR: /data/.tmp
+              # Application mode
+              HBOX_MODE: production
+              # Web server configuration
+              HBOX_WEB_PORT: &port 80
+              HBOX_WEB_MAX_UPLOAD_SIZE: 50
+              # Database driver
+              HBOX_DATABASE_DRIVER: postgres
+              # Storage configuration - use mounted /data volume
+              HBOX_STORAGE_CONN_STRING: "file:///data"
+              # Disable public registration
+              HBOX_OPTIONS_ALLOW_REGISTRATION: "false"
+              # Trust proxy headers for HTTPS
+              HBOX_OPTIONS_TRUST_PROXY: "true"
+              HBOX_OPTIONS_HOSTNAME: homebox.${SECRET_DOMAIN}
+              # OIDC configuration for Authelia
+              HBOX_OIDC_ENABLED: "true"
+              HBOX_OIDC_ISSUER_URL: https://auth.${SECRET_DOMAIN}
+              HBOX_OIDC_SCOPE: "openid profile email groups"
+              HBOX_OIDC_BUTTON_TEXT: "Sign in with Authelia"
+              HBOX_OIDC_AUTO_REDIRECT: "false"
+              HBOX_OPTIONS_ALLOW_LOCAL_LOGIN: "false"
+              # Disable analytics
+              HBOX_OPTIONS_ALLOW_ANALYTICS: "false"
+              HBOX_OPTIONS_GITHUB_RELEASE_CHECK: "false"
+              HBOX_DATABASE_HOST: "{{ .Release.Namespace }}-pgbouncer.{{ .Release.Namespace }}.svc"
+              HBOX_DATABASE_DATABASE: *app
+              HBOX_DATABASE_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
+                    key: password
+              HBOX_DATABASE_PORT: 5432
+              HBOX_DATABASE_USERNAME: *app
+            envFrom:
+              - secretRef:
+                  name: *app
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/status
+                    port: *port
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 30
+                  failureThreshold: 5
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 100
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+    service:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        annotations:
+          gethomepage.dev/description: Home Inventory
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Productivity
+          gethomepage.dev/icon: *app
+          gethomepage.dev/name: Homebox
+        parentRefs:
+          - name: internal
+            namespace: network
+        hostnames:
+          - homebox.${SECRET_DOMAIN}
+    persistence:
+      data:
+        existingClaim: *app
+        globalMounts:
+          - path: /data
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /.cache

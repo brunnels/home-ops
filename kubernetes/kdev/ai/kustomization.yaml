@@ -12,6 +12,7 @@ replacements:
 resources:
   - ./namespace.yaml
   - ./ai-pgo-cluster.yaml
+  - ./homebox.yaml
   - ./kuberay-operator.yaml
   - ./open-webui.yaml
   - ./vllm-stack.yaml

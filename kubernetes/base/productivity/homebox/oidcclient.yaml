@@ -1,0 +1,22 @@
+---
+apiVersion: authelia.milas.dev/v1alpha2
+kind: OIDCClient
+metadata:
+  name: &name homebox
+  annotations:
+    authelia.milas.dev/oidc-provider: security/default
+spec:
+  description: HomeBox
+  preconfigured_consent_duration: 1y
+  redirect_uris:
+    - https://homebox.${SECRET_DOMAIN}/oauth2/callback
+  claims:
+    name: default
+  secret_ref:
+    name: *name
+    fields:
+      client_id: HBOX_OIDC_CLIENT_ID
+      client_secret: HBOX_OIDC_CLIENT_SECRET
+  # default should not be needed, but it is required for the operator to work issue: #6
+  token_endpoint:
+    auth_method: client_secret_basic

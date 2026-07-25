@@ -3,28 +3,26 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app open-webui
+  name: &app homebox
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../components/dragonfly-cluster
     - ../../../components/kopiur/backup
     - ../../../components/pgo-db-init
   dependsOn:
     - name: authelia-oidc-operator
       namespace: security
     - name: ai-pgo-cluster
-    - name: dragonfly-operator
-      namespace: database
     - name: kopiur-repository
       namespace: storage
   interval: 1h
-  path: ./kubernetes/base/ai/open-webui
+  path: ./kubernetes/base/productivity/homebox
   postBuild:
     substitute:
       APP: *app
+      KOPIUR_CAPACITY: 10Gi
   prune: true
   sourceRef:
     kind: GitRepository
