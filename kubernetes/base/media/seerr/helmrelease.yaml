@@ -57,9 +57,10 @@ spec:
         fsGroup: 100
         fsGroupChangePolicy: OnRootMismatch
     service:
-      ports:
-        http:
-          port: *port
+      app:
+        ports:
+          http:
+            port: *port
     route:
       app:
         annotations:
