@@ -73,7 +73,7 @@ spec:
         #      requestMemory: "20Gi"
         #      requestGPU: 1
 
-        - name: intern-vl3_5-2b-hf
+        - name: intern-vl35-2b-hf
           repository: lmcache/vllm-openai
           tag: latest
           modelURL: OpenGVLab/InternVL3_5-2B-HF
