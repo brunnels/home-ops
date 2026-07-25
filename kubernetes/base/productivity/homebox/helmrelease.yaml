@@ -35,20 +35,20 @@ spec:
               # Storage configuration - use mounted /data volume
               HBOX_STORAGE_CONN_STRING: "file:///data"
               # Disable public registration
-              HBOX_OPTIONS_ALLOW_REGISTRATION: "false"
+              HBOX_OPTIONS_ALLOW_REGISTRATION: false
               # Trust proxy headers for HTTPS
-              HBOX_OPTIONS_TRUST_PROXY: "true"
+              HBOX_OPTIONS_TRUST_PROXY: true
               HBOX_OPTIONS_HOSTNAME: homebox.${SECRET_DOMAIN}
               # OIDC configuration for Authelia
-              HBOX_OIDC_ENABLED: "true"
+              HBOX_OIDC_ENABLED: true
               HBOX_OIDC_ISSUER_URL: https://auth.${SECRET_DOMAIN}
               HBOX_OIDC_SCOPE: "openid profile email groups"
               HBOX_OIDC_BUTTON_TEXT: "Sign in with Authelia"
-              HBOX_OIDC_AUTO_REDIRECT: "false"
-              HBOX_OPTIONS_ALLOW_LOCAL_LOGIN: "false"
+              HBOX_OIDC_AUTO_REDIRECT: false
+              HBOX_OPTIONS_ALLOW_LOCAL_LOGIN: true
               # Disable analytics
-              HBOX_OPTIONS_ALLOW_ANALYTICS: "false"
-              HBOX_OPTIONS_GITHUB_RELEASE_CHECK: "false"
+              HBOX_OPTIONS_ALLOW_ANALYTICS: false
+              HBOX_OPTIONS_GITHUB_RELEASE_CHECK: false
               HBOX_DATABASE_HOST: "{{ .Release.Namespace }}-pgbouncer.{{ .Release.Namespace }}.svc"
               HBOX_DATABASE_DATABASE: *app
               HBOX_DATABASE_PASSWORD:
