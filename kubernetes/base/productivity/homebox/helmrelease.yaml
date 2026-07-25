@@ -27,7 +27,7 @@ spec:
               # Application mode
               HBOX_MODE: production
               # Web server configuration
-              HBOX_WEB_PORT: &port 80
+              HBOX_WEB_PORT: &port 8080
               HBOX_WEB_MAX_UPLOAD_SIZE: 50
               # Database driver
               HBOX_DATABASE_DRIVER: postgres
