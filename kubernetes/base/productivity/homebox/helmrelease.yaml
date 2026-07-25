@@ -35,7 +35,7 @@ spec:
               # Storage configuration - use mounted /data volume
               HBOX_STORAGE_CONN_STRING: "file:///data"
               # Disable public registration
-              HBOX_OPTIONS_ALLOW_REGISTRATION: false
+              HBOX_OPTIONS_ALLOW_REGISTRATION: true
               # Trust proxy headers for HTTPS
               HBOX_OPTIONS_TRUST_PROXY: true
               HBOX_OPTIONS_HOSTNAME: homebox.${SECRET_DOMAIN}
