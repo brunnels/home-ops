@@ -86,11 +86,21 @@ spec:
       route:
         main:
           enabled: true
+          annotations:
+            gatus.home-operations.com/endpoint: |
+              name: prometheus
           hostnames:
             - "prometheus.${SECRET_DOMAIN}"
           parentRefs:
             - name: envoy-internal
               namespace: network
+      service:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            alerts:
+              - type: pushover
+            group: internal
+            name: prometheus
     prometheus-node-exporter:
       fullnameOverride: node-exporter
       serviceMonitor:
