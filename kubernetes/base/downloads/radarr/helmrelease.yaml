@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -85,14 +85,14 @@ spec:
     route:
       app:
         annotations:
+          gethomepage.dev/description: Movie Downloads
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Downloads
-          gethomepage.dev/name: Radarr
           gethomepage.dev/icon: *app
-          gethomepage.dev/description: Movie Downloads
+          gethomepage.dev/name: Radarr
+          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_RADARR_TOKEN}}` }}"
           gethomepage.dev/widget.type: *app
           gethomepage.dev/widget.url: "http://radarr.{{ .Release.Namespace }}"
-          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_RADARR_TOKEN}}` }}"
         hostnames:
           - "radarr.${SECRET_DOMAIN}"
         parentRefs:
@@ -100,8 +100,7 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - name: *app
-                port: *port
+              - identifier: app
     persistence:
       config:
         existingClaim: *app

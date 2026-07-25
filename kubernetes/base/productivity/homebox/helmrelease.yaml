@@ -109,11 +109,14 @@ spec:
           gethomepage.dev/group: Productivity
           gethomepage.dev/icon: *app
           gethomepage.dev/name: Homebox
-        parentRefs:
-          - name: internal
-            namespace: network
         hostnames:
-          - homebox.${SECRET_DOMAIN}
+          - "homebox.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
     persistence:
       data:
         existingClaim: *app
