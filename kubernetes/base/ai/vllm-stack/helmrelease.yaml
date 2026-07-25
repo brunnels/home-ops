@@ -94,13 +94,12 @@ spec:
               value: "expandable_segments:True"
 
           vllmConfig:
-            v0: "1"
             #tensorParallelSize: 1
             #pipelineParallelSize: 3
             enablePrefixCaching: false
             gpuMemoryUtilization: 0.95
             maxModelLen: 4096
-            dtype: float16
+            dtype: bfloat16
             extraArgs:
               - "--quantization"
               - "awq"
