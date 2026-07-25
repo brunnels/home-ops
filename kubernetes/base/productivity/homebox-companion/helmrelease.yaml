@@ -92,3 +92,8 @@ spec:
         rules:
           - backendRefs:
               - identifier: app
+    persistence:
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /home/appuser/.cache
