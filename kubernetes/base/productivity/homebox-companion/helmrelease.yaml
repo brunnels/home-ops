@@ -23,7 +23,7 @@ spec:
               TZ: "${TIMEZONE}"
               HBC_HOMEBOX_URL: http://homebox:8080
               HBC_LINK_BASE_URL: https://homebox.${SECRET_DOMAIN}
-              HBC_LLM_MODEL: hosted_vllm/Qwen/Qwen2.5-VL-1.5B-Instruct-AWQ
+              HBC_LLM_MODEL: hosted_vllm/Qwen/Qwen2.5-VL-3B-Instruct-AWQ
               HBC_LLM_API_KEY: "insecure"
               HBC_LLM_API_BASE: http://vllm-stack-router-service/v1
               HBC_LLM_ALLOW_UNSAFE_MODELS: true

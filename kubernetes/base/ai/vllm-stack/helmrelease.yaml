@@ -16,6 +16,8 @@ spec:
   upgrade:
     force: true
   values:
+    cacheserverSpec:
+      enabled: true
     grafanaDashboards:
       enabled: true
     prometheus-adapter:
@@ -71,10 +73,10 @@ spec:
         #      requestMemory: "20Gi"
         #      requestGPU: 1
 
-        - name: qwen25-vl-1-5b-instruct-awq
+        - name: qwen25-vl-3b-instruct-awq
           repository: lmcache/vllm-openai
           tag: latest
-          modelURL: Qwen/Qwen2.5-VL-1.5B-Instruct-AWQ
+          modelURL: Qwen/Qwen2.5-VL-3B-Instruct-AWQ
 
           replicaCount: &replicas 1
 
@@ -120,11 +122,10 @@ spec:
           #
           #shmSize: 16Gi
           #
-          #lmcacheConfig:
-          #  enabled: true
-          #  cpuOffloadingBufferSize: 20
+          lmcacheConfig:
+            enabled: true
+            cpuOffloadingBufferSize: "8"
 
-    #cacheserverSpec:
     #  replicaCount: 1
     #  containerPort: 8080
     #  servicePort: 81
