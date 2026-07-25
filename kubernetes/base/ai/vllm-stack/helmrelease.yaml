@@ -21,7 +21,6 @@ spec:
     prometheus-adapter:
       enabled: false
     routerSpec:
-      enableRouter: true
       route:
         main:
           enabled: true
@@ -37,12 +36,12 @@ spec:
             - path:
                 type: PathPrefix
                 value: /
-    serviceAnnotations:
-      gatus.home-operations.com/endpoint: |
-        alerts:
-          - type: pushover
-        group: internal
-        name: vllm-api
+      serviceAnnotations:
+        gatus.home-operations.com/endpoint: |
+          alerts:
+            - type: pushover
+          group: internal
+          name: vllm-api
     servingEngineSpec:
       runtimeClassName: nvidia
       strategy:
