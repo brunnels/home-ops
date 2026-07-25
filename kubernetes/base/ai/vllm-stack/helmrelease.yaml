@@ -71,7 +71,7 @@ spec:
         #      requestMemory: "20Gi"
         #      requestGPU: 1
 
-        - name: qwen25-vl-1_5b-instruct-awq
+        - name: qwen25-vl-1-5b-instruct-awq
           repository: lmcache/vllm-openai
           tag: latest
           modelURL: Qwen/Qwen2.5-VL-1.5B-Instruct-AWQ
