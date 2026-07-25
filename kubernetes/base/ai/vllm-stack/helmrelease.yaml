@@ -97,9 +97,9 @@ spec:
             #tensorParallelSize: 1
             #pipelineParallelSize: 3
             enablePrefixCaching: false
-            gpuMemoryUtilization: 0.55
+            gpuMemoryUtilization: 0.95
             maxModelLen: 2048
-            dtype: float16
+            dtype: bfloat16
             extraArgs:
               - "--trust-remote-code"
               - "--enforce-eager"
