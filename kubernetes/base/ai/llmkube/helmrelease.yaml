@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name llmkube
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *name
+  interval: 1h
+  values:
+    controllerManager:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 78Mi
+        limits:
+          memory: 90Mi
+      podSecurityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      securityContext:
+        readOnlyRootFilesystem: true
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+    prometheus:
+      inferencePodMonitor:
+        enabled: true
+    modelCache:
+      accessMode: ReadWriteMany
+      enabled: true
+      mode: shared
+      size: 200Gi
+      storageClass: nfs-slow
