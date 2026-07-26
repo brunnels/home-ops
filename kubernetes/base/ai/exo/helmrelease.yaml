@@ -31,9 +31,14 @@ spec:
               repository: docker.io/library/node
               tag: latest
             workingDir: /home/exo
-            command: ["sh", "-c", "tail -f /dev/null"]
-            #command: ["/bin/sh", "-c"]
-            #args: ["/root/.local/bin/uv run exo"]
+            #command: ["sh", "-c", "tail -f /dev/null"]
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                export PATH="/usr/local/cargo/bin:/root/.cargo/bin:/root/.local/bin:$PATH" \
+                && cd /home/exo \
+                && uv run exo
+
             #probes:
             #  liveness:
             #    enabled: true
@@ -46,7 +51,7 @@ spec:
                 cpu: 1000m
                 memory: 2Gi
               limits:
-                memory: 4Gi
+                memory: 16Gi
         pod:
           runtimeClassName: nvidia
     service:
@@ -54,6 +59,16 @@ spec:
         ports:
           http:
             port: 52415
+    route:
+      app:
+        hostnames:
+          - "exo.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
     configMaps:
       install-script:
         data:
@@ -121,3 +136,7 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /usr/local/rustup
+      uv-cache:
+        type: emptyDir
+        globalMounts:
+          - path: /root/.local
