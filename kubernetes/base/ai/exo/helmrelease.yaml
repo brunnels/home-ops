@@ -21,8 +21,8 @@ spec:
               CARGO_HOME: /usr/local/cargo
               RUSTUP_HOME: /usr/local/rustup
               PATH: /usr/local/cargo/bin:/usr/local/bin:/usr/bin:/bin
-            command:
-              - /bin/sh
+            command: ["/bin/sh", "-c"]
+            args:
               - /scripts/install.sh
 
         containers:
@@ -46,6 +46,8 @@ spec:
                 memory: 2Gi
               limits:
                 memory: 4Gi
+        pod:
+          runtimeClassName: nvidia
     service:
       app:
         ports:
