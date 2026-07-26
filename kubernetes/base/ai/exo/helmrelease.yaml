@@ -31,13 +31,6 @@ spec:
                 git clone https://github.com /home/exo
                 cd /home/exo && $HOME/.local/bin/uv sync
                 cd /home/exo/dashboard && npm install && npm run build
-            volumeMounts:
-              - name: app-volume
-                mountPath: /home/exo
-              - name: cargo-cache
-                mountPath: /usr/local/cargo
-              - name: rustup-cache
-                mountPath: /usr/local/rustup
 
         containers:
           app:
@@ -72,25 +65,13 @@ spec:
     persistence:
       app-volume:
         type: emptyDir
-        advancedMounts:
-          exo:
-            install-exo:
-              - path: /home/exo
-            app:
-              - path: /home/exo
+        globalMounts:
+          - path: /home/exo
       cargo-cache:
         type: emptyDir
-        advancedMounts:
-          exo:
-            install-exo:
-              - path: /usr/local/cargo
-            app:
-              - path: /usr/local/cargo
+        globalMounts:
+          - path: /usr/local/cargo
       rustup-cache:
         type: emptyDir
-        advancedMounts:
-          exo:
-            install-exo:
-              - path: /usr/local/rustup
-            app:
-              - path: /usr/local/rustup
+        globalMounts:
+          - path: /usr/local/rustup
