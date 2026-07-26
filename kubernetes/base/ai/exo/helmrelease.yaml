@@ -1,0 +1,96 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: exo
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  interval: 1h
+  values:
+    controllers:
+      exo:
+        # 1. Init Container: Clones, installs rust/uv, builds frontend
+        initContainers:
+          install-exo:
+            image:
+              repository: docker.io/library/node
+              tag: latest
+            env:
+              CARGO_HOME: /usr/local/cargo
+              RUSTUP_HOME: /usr/local/rustup
+              PATH: /usr/local/cargo/bin:/usr/local/bin:/usr/bin:/bin
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                set -e
+                curl -LsSf https://astral.sh | sh
+                curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh -s -- -y --default-toolchain nightly
+                git clone https://github.com /home/exo
+                cd /home/exo && $HOME/.local/bin/uv sync
+                cd /home/exo/dashboard && npm install && npm run build
+            volumeMounts:
+              - name: app-volume
+                mountPath: /home/exo
+              - name: cargo-cache
+                mountPath: /usr/local/cargo
+              - name: rustup-cache
+                mountPath: /usr/local/rustup
+
+        containers:
+          app:
+            image:
+              repository: docker.io/library/node
+              tag: latest
+            workingDir: /home/exo
+            command: ["/bin/sh", "-c"]
+            args: ["/root/.local/bin/uv run exo"]
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 52415
+            resources:
+              requests:
+                cpu: 1000m
+                memory: 2Gi
+              limits:
+                memory: 4Gi
+
+    # 3. Services
+    service:
+      app:
+        ports:
+          http:
+            port: 52415
+
+    # 4. Shared EmptyDir Volumes
+    persistence:
+      app-volume:
+        type: emptyDir
+        advancedMounts:
+          exo:
+            install-exo:
+              - path: /home/exo
+            app:
+              - path: /home/exo
+      cargo-cache:
+        type: emptyDir
+        advancedMounts:
+          exo:
+            install-exo:
+              - path: /usr/local/cargo
+            app:
+              - path: /usr/local/cargo
+      rustup-cache:
+        type: emptyDir
+        advancedMounts:
+          exo:
+            install-exo:
+              - path: /usr/local/rustup
+            app:
+              - path: /usr/local/rustup
