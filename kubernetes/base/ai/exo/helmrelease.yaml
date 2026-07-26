@@ -31,8 +31,9 @@ spec:
               repository: docker.io/library/node
               tag: latest
             workingDir: /home/exo
-            command: ["/bin/sh", "-c"]
-            args: ["/root/.local/bin/uv run exo"]
+            command: ["sh", "-c", "tail -f /dev/null"]
+            #command: ["/bin/sh", "-c"]
+            #args: ["/root/.local/bin/uv run exo"]
             probes:
               liveness:
                 enabled: true
