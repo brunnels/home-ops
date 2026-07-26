@@ -59,7 +59,7 @@ spec:
           http:
             port: 52415
     configMaps:
-      install:
+      install-script:
         data:
           install.sh: |
             set -e
@@ -71,7 +71,7 @@ spec:
     persistence:
       install-script:
         type: configMap
-        name: install-script
+        identifier: install-script
         defaultMode: 0755
         advancedMounts:
           exo:
