@@ -53,6 +53,7 @@ spec:
                 memory: 16Gi
         pod:
           runtimeClassName: nvidia
+          terminationGracePeriodSeconds: 5
     service:
       app:
         ports:
