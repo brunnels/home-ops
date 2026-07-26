@@ -34,13 +34,13 @@ spec:
             command: ["sh", "-c", "tail -f /dev/null"]
             #command: ["/bin/sh", "-c"]
             #args: ["/root/.local/bin/uv run exo"]
-            probes:
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  tcpSocket:
-                    port: 52415
+            #probes:
+            #  liveness:
+            #    enabled: true
+            #    custom: true
+            #    spec:
+            #      tcpSocket:
+            #        port: 52415
             resources:
               requests:
                 cpu: 1000m
