@@ -18,6 +18,7 @@ spec:
               repository: docker.io/library/node
               tag: latest
             env:
+              UV_LINK_MODE: copy
               CARGO_HOME: /usr/local/cargo
               RUSTUP_HOME: /usr/local/rustup
               PATH: /usr/local/cargo/bin:/usr/local/bin:/usr/bin:/bin
@@ -31,6 +32,7 @@ spec:
               repository: docker.io/library/node
               tag: latest
             workingDir: /home/exo
+            #command: ["sh", "-c", "tail -f /dev/null"]
             command: ["/bin/sh", "-c"]
             args:
               - |
@@ -96,11 +98,21 @@ spec:
             fi
             export PATH="/usr/local/cargo/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
-            echo "=== Fetching Exo repository ==="
+            #echo "=== Fetching Exo repository ==="
+            #if [ ! -d "/home/exo/.git" ]; then
+            #  git clone https://github.com/exo-explore/exo /home/exo
+            #else
+            #  cd /home/exo && git pull
+            #fi
+
+            echo "=== Fetching Exo repository (brydenver2/exo:copilot/merge-gpu-support-features) ==="
             if [ ! -d "/home/exo/.git" ]; then
-              git clone https://github.com/exo-explore/exo /home/exo
+              git clone -b copilot/merge-gpu-support-features https://github.com/brydenver2/exo /home/exo
             else
-              cd /home/exo && git pull
+              cd /home/exo
+              git fetch origin
+              git checkout copilot/merge-gpu-support-features
+              git pull origin copilot/merge-gpu-support-features
             fi
 
             echo "=== Syncing Python dependencies ==="
