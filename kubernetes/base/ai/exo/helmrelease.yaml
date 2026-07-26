@@ -24,7 +24,7 @@ spec:
               PATH: /usr/local/cargo/bin:/usr/local/bin:/usr/bin:/bin
             command: ["/bin/sh", "-c"]
             args:
-              - |-
+              - |
                 set -e
                 curl -LsSf https://astral.sh | sh
                 curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh -s -- -y --default-toolchain nightly
@@ -53,16 +53,32 @@ spec:
                 memory: 2Gi
               limits:
                 memory: 4Gi
-
-    # 3. Services
     service:
       app:
         ports:
           http:
             port: 52415
-
-    # 4. Shared EmptyDir Volumes
+    configMaps:
+      install:
+        data:
+          install.sh: |
+            set -e
+            curl -LsSf https://astral.sh | sh
+            curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh -s -- -y --default-toolchain nightly
+            git clone https://github.com /home/exo
+            cd /home/exo && $HOME/.local/bin/uv sync
+            cd /home/exo/dashboard && npm install && npm run build
     persistence:
+      install-script:
+        type: configMap
+        name: install-script
+        defaultMode: 0755
+        advancedMounts:
+          exo:
+            install-exo:
+              - path: /scripts/install.sh
+                subPath: install.sh
+                readOnly: true
       app-volume:
         type: emptyDir
         globalMounts:
