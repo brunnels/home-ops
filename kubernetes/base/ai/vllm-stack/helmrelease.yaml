@@ -72,10 +72,10 @@ spec:
         #      requestCPU: 1
         #      requestMemory: "20Gi"
         #      requestGPU: 1
-        - name: gemma4-e2b-it
+        - name: gemma-3-1b-it
           repository: "vllm/vllm-openai"
           tag: "latest"
-          modelURL: google/gemma-4-E2B-it
+          modelURL: google/gemma-3-1b-it
           replicaCount: 1
           pvcStorage: 20Gi
 
@@ -85,7 +85,7 @@ spec:
           requestGPU: 1
 
           vllmConfig:
-            gpuMemoryUtilization: 0.65
+            gpuMemoryUtilization: 0.85
             maxModelLen: 8192
             extraArgs:
               - "--trust-remote-code"
