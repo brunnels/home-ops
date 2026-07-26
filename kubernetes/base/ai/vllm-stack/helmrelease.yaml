@@ -87,7 +87,7 @@ spec:
           vllmConfig:
             enablePrefixCaching: false
             gpuMemoryUtilization: 0.85
-            #maxModelLen: 6144
+            maxModelLen: 8192
             dtype: bfloat16
             extraArgs:
               - "--quantization"
