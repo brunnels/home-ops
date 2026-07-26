@@ -57,12 +57,40 @@ spec:
       install-script:
         data:
           install.sh: |
+            #!/bin/sh
             set -e
-            curl -LsSf https://astral.sh | sh
-            curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh -s -- -y --default-toolchain nightly
-            git clone https://github.com /home/exo
-            cd /home/exo && $HOME/.local/bin/uv sync
-            cd /home/exo/dashboard && npm install && npm run build
+            echo "=== Installing dependencies ==="
+            apt-get update -y && apt-get install -y git curl build-essential
+
+            echo "=== Installing Rust toolchain ==="
+            if ! command -v rustup >/dev/null 2>&1; then
+              curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly
+            fi
+            . "$HOME/.cargo/env"
+
+            echo "=== Installing Astral UV ==="
+            if ! command -v uv >/dev/null 2>&1; then
+              curl -LsSf https://astral.sh/uv/install.sh | sh
+            fi
+            export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+
+            echo "=== Fetching Exo repository ==="
+            if [ ! -d "/home/exo/.git" ]; then
+              git clone https://github.com/exo-explore/exo /home/exo
+            else
+              cd /home/exo && git pull
+            fi
+
+            echo "=== Syncing Python dependencies ==="
+            cd /home/exo
+            uv sync
+
+            echo "=== Building Exo Dashboard UI ==="
+            cd /home/exo/dashboard
+            npm install
+            npm run build
+
+            echo "=== Installation complete ==="
     persistence:
       install-script:
         type: configMap
