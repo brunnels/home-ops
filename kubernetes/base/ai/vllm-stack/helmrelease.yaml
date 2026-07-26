@@ -85,7 +85,7 @@ spec:
           requestGPU: 1
 
           vllmConfig:
-            gpuMemoryUtilization: 0.95
+            gpuMemoryUtilization: 0.65
             maxModelLen: 8192
             extraArgs:
               - "--trust-remote-code"
