@@ -72,35 +72,26 @@ spec:
         #      requestCPU: 1
         #      requestMemory: "20Gi"
         #      requestGPU: 1
+        - name: "gemma4-e4b-it-awq"
+          repository: "vllm/vllm-openai"
+          tag: "latest"
+          modelURL: Chunity/gemma-4-E4B-it-AWQ-4bit
+          replicaCount: 1
+          pvcStorage: 20Gi
 
-        - name: intern-vl35-2b-hf
-          repository: lmcache/vllm-openai
-          tag: latest
-          modelURL: OpenGVLab/InternVL3_5-2B-HF
-
-          replicaCount: &replicas 1
-
+          # Match your system node resources
           requestCPU: 4
-          requestMemory: 16Gi
+          requestMemory: 12Gi
           requestGPU: 1
 
-          pvcStorage: 50Gi
-          pvcAccessMode:
-            - ReadWriteOnce
-          storageClass: openebs-hostpath
-
-          #env:
-          #  - name: PYTORCH_CUDA_ALLOC_CONF
-          #    value: "expandable_segments:True"
-
           vllmConfig:
-            #tensorParallelSize: 1
-            #pipelineParallelSize: 3
             enablePrefixCaching: false
-            gpuMemoryUtilization: 0.95
-            maxModelLen: 8192
+            gpuMemoryUtilization: 0.85
+            #maxModelLen: 6144
             dtype: bfloat16
             extraArgs:
+              - "--quantization"
+              - "awq"
               - "--trust-remote-code"
               - "--enforce-eager"
 
@@ -108,18 +99,53 @@ spec:
             secretName: *app
             secretKey: HF_TOKEN
 
-          #raySpec:
-          #  enabled: true
-          #  headNode:
-          #    requestCPU: *replicas
-          #    requestMemory: 16Gi
-          #    requestGPU: 1
-          #
-          #shmSize: 16Gi
-          #
-          #lmcacheConfig:
-          #  enabled: true
-          #  cpuOffloadingBufferSize: "8"
+        #- name: intern-vl35-2b-hf
+        #  repository: lmcache/vllm-openai
+        #  tag: latest
+        #  modelURL: OpenGVLab/InternVL3_5-2B-HF
+        #
+        #  replicaCount: &replicas 1
+        #
+        #  requestCPU: 4
+        #  requestMemory: 16Gi
+        #  requestGPU: 1
+        #
+        #  pvcStorage: 50Gi
+        #  pvcAccessMode:
+        #    - ReadWriteOnce
+        #  storageClass: openebs-hostpath
+        #
+        #  #env:
+        #  #  - name: PYTORCH_CUDA_ALLOC_CONF
+        #  #    value: "expandable_segments:True"
+        #
+        #  vllmConfig:
+        #    #tensorParallelSize: 1
+        #    #pipelineParallelSize: 3
+        #    enablePrefixCaching: false
+        #    gpuMemoryUtilization: 0.95
+        #    maxModelLen: 6144
+        #    dtype: bfloat16
+        #    extraArgs:
+        #      - "--trust-remote-code"
+        #      - "--enforce-eager"
+        #
+        #  hf_token:
+        #    secretName: *app
+        #    secretKey: HF_TOKEN
+
+        #raySpec:
+        #  enabled: true
+        #  headNode:
+        #    requestCPU: *replicas
+        #    requestMemory: 16Gi
+        #    requestGPU: 1
+        #
+        #shmSize: 16Gi
+        #
+        #lmcacheConfig:
+        #  enabled: true
+        #  cpuOffloadingBufferSize: "8"
 
     #  replicaCount: 1
     #  containerPort: 8080
