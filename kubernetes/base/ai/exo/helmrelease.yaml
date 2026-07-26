@@ -31,7 +31,8 @@ spec:
               repository: docker.io/library/node
               tag: latest
             workingDir: /home/exo
-            #command: ["sh", "-c", "tail -f /dev/null"]
+            env:
+              EXO_INFERENCE_ENGINE: tinygrad
             command: ["/bin/sh", "-c"]
             args:
               - |
