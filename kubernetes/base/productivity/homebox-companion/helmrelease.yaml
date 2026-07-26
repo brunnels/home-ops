@@ -27,6 +27,7 @@ spec:
               HBC_LLM_API_KEY: "insecure"
               HBC_LLM_API_BASE: http://vllm-stack-router-service/v1
               HBC_LLM_ALLOW_UNSAFE_MODELS: true
+              HBC_LLM_TIMEOUT: 240
               HBC_SERVER_HOST: 0.0.0.0
               HBC_SERVER_PORT: &port 8000
               HBC_LOG_LEVEL: INFO
