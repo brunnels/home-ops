@@ -12,7 +12,7 @@ replacements:
 resources:
   - ./namespace.yaml
   - ./ai-pgo-cluster.yaml
-  - ./exo.yaml
+  #- ./exo.yaml
   - ./homebox.yaml
   - ./homebox-companion.yaml
   #- ./kuberay-operator.yaml
