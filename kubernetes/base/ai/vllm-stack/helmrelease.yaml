@@ -72,10 +72,10 @@ spec:
         #      requestCPU: 1
         #      requestMemory: "20Gi"
         #      requestGPU: 1
-        - name: "gemma4-e4b-it-awq"
+        - name: gemma4-e2b-it
           repository: "vllm/vllm-openai"
           tag: "latest"
-          modelURL: Chunity/gemma-4-E4B-it-AWQ-4bit
+          modelURL: Chunity/google/gemma-4-E2B-it
           replicaCount: 1
           pvcStorage: 20Gi
 
@@ -85,13 +85,9 @@ spec:
           requestGPU: 1
 
           vllmConfig:
-            enablePrefixCaching: false
-            gpuMemoryUtilization: 0.55
+            gpuMemoryUtilization: 0.95
             maxModelLen: 8192
-            dtype: float16
             extraArgs:
-              - "--quantization"
-              - "awq"
               - "--trust-remote-code"
               - "--enforce-eager"
 
