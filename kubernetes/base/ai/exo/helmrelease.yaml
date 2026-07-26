@@ -32,7 +32,6 @@ spec:
               repository: docker.io/library/node
               tag: latest
             workingDir: /home/exo
-            #command: ["sh", "-c", "tail -f /dev/null"]
             command: ["/bin/sh", "-c"]
             args:
               - |
@@ -118,10 +117,6 @@ spec:
             echo "=== Syncing Python dependencies ==="
             cd /home/exo
             uv sync
-
-            echo "=== Installing MLX CPU support for Linux ==="
-            uv pip install "mlx[cpu]" "mlx-lm"
-            python3 -c "import sysconfig, os; p = os.path.join(sysconfig.get_path('purelib'), 'mlx_lm', 'models'); os.makedirs(p, exist_ok=True); open(os.path.join(p, 'deepseek_v4.py'), 'w').write('class DeepseekV4Cache:\n    pass\n')"
 
             echo "=== Building Exo Dashboard UI ==="
             cd /home/exo/dashboard
