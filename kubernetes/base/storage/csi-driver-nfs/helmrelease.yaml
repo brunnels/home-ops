@@ -9,4 +9,20 @@ spec:
     kind: OCIRepository
     name: csi-driver-nfs
   interval: 1h
-  values: {}
+  values:
+    storageClass:
+      create: true
+      name: nfs-slow
+      parameters:
+        server: ${QNAP_HOSTNAME}
+        share: "/appdata/${VAULT_PREFIX}-k8s"
+      mountOptions:
+        - nfsvers=4.1
+        - nconnect=16
+        - hard
+        - noatime
+        - nodiratime
+        - rsize=1048576
+        - wsize=1048576
+      reclaimPolicy: Delete
+      volumeBindingMode: Immediate
