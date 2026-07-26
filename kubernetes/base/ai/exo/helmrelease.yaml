@@ -12,7 +12,6 @@ spec:
   values:
     controllers:
       exo:
-        # 1. Init Container: Clones, installs rust/uv, builds frontend
         initContainers:
           install-exo:
             image:
@@ -22,15 +21,9 @@ spec:
               CARGO_HOME: /usr/local/cargo
               RUSTUP_HOME: /usr/local/rustup
               PATH: /usr/local/cargo/bin:/usr/local/bin:/usr/bin:/bin
-            command: ["/bin/sh", "-c"]
-            args:
-              - |
-                set -e
-                curl -LsSf https://astral.sh | sh
-                curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh -s -- -y --default-toolchain nightly
-                git clone https://github.com /home/exo
-                cd /home/exo && $HOME/.local/bin/uv sync
-                cd /home/exo/dashboard && npm install && npm run build
+          command:
+            - /bin/sh
+            - /scripts/install.sh
 
         containers:
           app:
