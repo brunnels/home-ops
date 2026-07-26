@@ -107,6 +107,9 @@ spec:
             cd /home/exo
             uv sync
 
+            echo "=== Installing MLX CPU support for Linux ==="
+            uv pip install "mlx[cpu]" "mlx-lm"
+
             echo "=== Building Exo Dashboard UI ==="
             cd /home/exo/dashboard
             npm install
@@ -124,19 +127,19 @@ spec:
               - path: /scripts/install.sh
                 subPath: install.sh
                 readOnly: true
-      app-volume:
-        type: emptyDir
+
+      exo-data:
+        enabled: true
+        type: persistentVolumeClaim
+        storageClass: openebs-hostpath
+        accessMode: ReadWriteOnce
+        size: 50Gi
         globalMounts:
           - path: /home/exo
-      cargo-cache:
-        type: emptyDir
-        globalMounts:
+            subPath: exo
           - path: /usr/local/cargo
-      rustup-cache:
-        type: emptyDir
-        globalMounts:
+            subPath: cargo
           - path: /usr/local/rustup
-      uv-cache:
-        type: emptyDir
-        globalMounts:
+            subPath: rustup
           - path: /root/.local
+            subPath: uv
