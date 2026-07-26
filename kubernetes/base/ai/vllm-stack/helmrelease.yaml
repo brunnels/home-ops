@@ -75,7 +75,7 @@ spec:
         - name: gemma4-e2b-it
           repository: "vllm/vllm-openai"
           tag: "latest"
-          modelURL: Chunity/google/gemma-4-E2B-it
+          modelURL: google/gemma-4-E2B-it
           replicaCount: 1
           pvcStorage: 20Gi
 
