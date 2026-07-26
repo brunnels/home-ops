@@ -32,7 +32,8 @@ spec:
               HBC_SERVER_PORT: &port 8000
               HBC_LOG_LEVEL: INFO
               HBC_DISABLE_UPDATE_CHECK: true
-              HBC_IMAGE_QUALITY: medium
+              HBC_IMAGE_QUALITY: low
+              HBC_RATE_LIMIT_ENABLED: false
               UV_LINK_MODE: copy
             #envFrom:
             #  - secretRef:
