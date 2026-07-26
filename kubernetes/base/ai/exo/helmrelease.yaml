@@ -66,13 +66,19 @@ spec:
             if ! command -v rustup >/dev/null 2>&1; then
               curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly
             fi
-            . "$HOME/.cargo/env"
+
+            # Source the cargo environment from wherever rustup created it
+            if [ -f "/usr/local/cargo/env" ]; then
+              . "/usr/local/cargo/env"
+            elif [ -f "$HOME/.cargo/env" ]; then
+              . "$HOME/.cargo/env"
+            fi
 
             echo "=== Installing Astral UV ==="
             if ! command -v uv >/dev/null 2>&1; then
               curl -LsSf https://astral.sh/uv/install.sh | sh
             fi
-            export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+            export PATH="/usr/local/cargo/bin:$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
             echo "=== Fetching Exo repository ==="
             if [ ! -d "/home/exo/.git" ]; then
