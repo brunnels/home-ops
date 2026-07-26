@@ -24,7 +24,7 @@ spec:
               PATH: /usr/local/cargo/bin:/usr/local/bin:/usr/bin:/bin
             command: ["/bin/sh", "-c"]
             args:
-              - |
+              - |-
                 set -e
                 curl -LsSf https://astral.sh | sh
                 curl --proto '=https' --tlsv1.2 -sSf https://rustup.rs | sh -s -- -y --default-toolchain nightly
