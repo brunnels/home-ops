@@ -21,6 +21,7 @@ spec:
               NODE_ENV: production
               PORT: &port 20128
               REDIS_URL: "redis://${NAMESPACE}-dragonfly:6379"
+              NEXT_PUBLIC_BASE_URL: &hostname omniroute.${SECRET_DOMAIN}
             probes:
               liveness:
                 enabled: true
@@ -59,7 +60,7 @@ spec:
     route:
       app:
         hostnames:
-          - "omniroute.${SECRET_DOMAIN}"
+          - *hostname
         parentRefs:
           - name: envoy-internal
             namespace: network

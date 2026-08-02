@@ -15,6 +15,7 @@ resources:
   #- ./exo.yaml
   - ./homebox.yaml
   - ./homebox-companion.yaml
+  - ./litellm-operator.yaml
   - ./llmkube.yaml
   #- ./kuberay-operator.yaml
   - ./omniroute.yaml
