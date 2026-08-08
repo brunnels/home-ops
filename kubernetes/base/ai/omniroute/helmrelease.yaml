@@ -21,9 +21,6 @@ spec:
               - sh
               - -c
               - find /tmp -mindepth 1 -maxdepth 1 -exec cp -r {} /tmpfs-mount/ \; 2>/dev/null || true
-            volumeMounts:
-              - name: tmpfs
-                path: /tmpfs-mount
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
