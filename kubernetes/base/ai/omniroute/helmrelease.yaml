@@ -77,8 +77,10 @@ spec:
           - path: /app/data
       tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /app/.build/next/cache
-            subPath: cache
-          - path: /tmp
-            subPath: tmp
+        advancedMounts:
+          omniroute:
+            app:
+              - path: /app/.build/next/cache
+                subPath: cache
+              - path: /tmp
+                subPath: tmp
