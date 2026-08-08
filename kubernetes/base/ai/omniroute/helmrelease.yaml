@@ -38,7 +38,7 @@ spec:
               LIVE_WS_HOST: 0.0.0.0
               LIVE_WS_ALLOWED_ORIGINS: *hostname
               OMNIROUTE_MEMORY_MB: 1024
-              CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY: 1
+              #CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY: 1
             probes:
               liveness:
                 enabled: true
