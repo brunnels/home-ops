@@ -75,3 +75,7 @@ spec:
         existingClaim: *app
         globalMounts:
           - path: /app/data
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /app/.build/next/cache
