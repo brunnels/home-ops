@@ -82,5 +82,5 @@ spec:
             app:
               - path: /app/.build/next/cache
                 subPath: cache
-              - path: /tmp
-                subPath: tmp
+              #- path: /tmp
+              #  subPath: tmp
