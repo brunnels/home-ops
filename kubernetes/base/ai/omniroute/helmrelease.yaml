@@ -96,6 +96,6 @@ spec:
         type: secret
         name: omnniroute-files
         advancedMounts:
-          authelia:
+          omniroute:
             app:
               - path: /app/secrets
