@@ -22,14 +22,10 @@ spec:
               PORT: &port 20128
               API_PORT: &apiPort 20129
               REDIS_URL: redis://${NAMESPACE}-dragonfly:6379
-              NEXT_PUBLIC_BASE_URL: &hostname https://omniroute.${SECRET_DOMAIN}
+              #NEXT_PUBLIC_BASE_URL: &hostname https://omniroute.${SECRET_DOMAIN}
               LIVE_WS_HOST: 0.0.0.0
               LIVE_WS_PORT: &liveWsPort 20130
-              LIVE_WS_ALLOWED_ORIGINS: *hostname
-              OMNIROUTE_API_KEY_ID: ${VAULT_PREFIX}
-            envFrom:
-              - secretRef:
-                  name: *app
+              LIVE_WS_ALLOWED_ORIGINS: https://omniroute.${SECRET_DOMAIN}
             probes:
               liveness:
                 enabled: true
@@ -68,9 +64,6 @@ spec:
           api:
             port: *apiPort
             protocol: TCP
-          live-ws:
-            port: *liveWsPort
-            protocol: TCP
     route:
       app:
         hostnames:
@@ -79,13 +72,13 @@ spec:
           - name: envoy-internal
             namespace: network
         rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /v1
-            backendRefs:
-              - identifier: app
-                port: *apiPort
+          #- matches:
+          #    - path:
+          #        type: PathPrefix
+          #        value: /v1
+          #  backendRefs:
+          #    - identifier: app
+          #      port: *apiPort
           - backendRefs:
               - identifier: app
                 port: *port
