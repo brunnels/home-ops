@@ -37,6 +37,7 @@ spec:
               NEXT_PUBLIC_BASE_URL: &hostname https://omniroute.${SECRET_DOMAIN}
               LIVE_WS_HOST: 0.0.0.0
               LIVE_WS_ALLOWED_ORIGINS: *hostname
+              OMNIROUTE_MEMORY_MB: 1024
             probes:
               liveness:
                 enabled: true
@@ -49,7 +50,7 @@ spec:
                 cpu: 200m
                 memory: 512Mi
               limits:
-                memory: 2Gi
+                memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
