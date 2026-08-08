@@ -22,10 +22,10 @@ spec:
               PORT: &port 20128
               API_PORT: &apiPort 20129
               REDIS_URL: redis://${NAMESPACE}-dragonfly:6379
-              NEXT_PUBLIC_BASE_URL: &hostname omniroute.${SECRET_DOMAIN}
+              NEXT_PUBLIC_BASE_URL: &hostname https://omniroute.${SECRET_DOMAIN}
               LIVE_WS_HOST: 0.0.0.0
               LIVE_WS_PORT: &liveWsPort 20130
-              LIVE_WS_ALLOWED_ORIGINS: https://omniroute.${SECRET_DOMAIN}
+              LIVE_WS_ALLOWED_ORIGINS: *hostname
             probes:
               liveness:
                 enabled: true
@@ -70,7 +70,7 @@ spec:
     route:
       app:
         hostnames:
-          - *hostname
+          - omniroute.${SECRET_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network
