@@ -26,6 +26,8 @@ spec:
               LIVE_WS_HOST: 0.0.0.0
               LIVE_WS_PORT: &liveWsPort 20130
               LIVE_WS_ALLOWED_ORIGINS: *hostname
+              OMNIROUTE_API_KEY_FILE: /app/secrets/OMNIROUTE_API_KEY
+              OMNIROUTE_API_KEY_ID: ${VAULT_PREFIX}
             probes:
               liveness:
                 enabled: true
@@ -90,3 +92,10 @@ spec:
         existingClaim: *app
         globalMounts:
           - path: /app/data
+      secret-files:
+        type: secret
+        name: omnniroute-files
+        advancedMounts:
+          authelia:
+            app:
+              - path: /app/secrets
