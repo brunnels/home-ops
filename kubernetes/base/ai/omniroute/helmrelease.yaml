@@ -16,7 +16,7 @@ spec:
           app:
             image:
               repository: ghcr.io/diegosouzapw/omniroute
-              tag: 3.8.49-web@sha256:a3155c4163ff3ee652868f04e5c34054e08f811da63110fe4ef0e1096d50312c
+              tag: main-web@sha256:d02b8efe35c24bd575722a3f454270d5f8a8f7fd3f13f1df9bfa8a059f61577f
             env:
               NODE_ENV: production
               PORT: &port 20128
