@@ -12,6 +12,22 @@ spec:
   values:
     controllers:
       omniroute:
+        initContainers:
+          copy-tmpfs:
+            image:
+              repository: ghcr.io/diegosouzapw/omniroute
+              tag: main-web@sha256:d02b8efe35c24bd575722a3f454270d5f8a8f7fd3f13f1df9bfa8a059f61577f
+            command:
+              - sh
+              - -c
+              - find /tmp -mindepth 1 -maxdepth 1 -exec cp -r {} /tmpfs-mount/ \; 2>/dev/null || true
+            volumeMounts:
+              - name: tmpfs
+                path: /tmpfs-mount
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
         containers:
           app:
             image:
@@ -82,5 +98,8 @@ spec:
             app:
               - path: /app/.build/next/cache
                 subPath: cache
-              #- path: /tmp
-              #  subPath: tmp
+              - path: /tmp
+                subPath: tmp
+            copy-tmpfs:
+              - path: /tmpfs-mount
+                subPath: tmp
