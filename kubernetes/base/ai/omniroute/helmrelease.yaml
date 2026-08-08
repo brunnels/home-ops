@@ -79,4 +79,6 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /app/.build/next/cache
+            subPath: cache
           - path: /tmp
+            subPath: tmp
