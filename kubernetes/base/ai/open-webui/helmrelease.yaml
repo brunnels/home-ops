@@ -20,7 +20,7 @@ spec:
             env:
               WEBUI_URL: https://chat.${SECRET_DOMAIN}
               CORS_ALLOW_ORIGIN: https://chat.${SECRET_DOMAIN}
-              OPENAI_API_BASE_URL: http://omniroute:20129/v1
+              OPENAI_API_BASE_URL: https://omniroute.${SECRET_DOMAIN}/api/v1
               ENABLE_SIGNUP: false
               WEBUI_NAME: "${VAULT_PREFIX} AI"
               ENABLE_OLLAMA_API: false
