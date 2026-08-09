@@ -18,8 +18,10 @@ spec:
       enabled: true
     bpf:
       datapathMode: netkit
+      lbModeAnnotation: true
       masquerade: true
       preallocateMaps: true
+      mapSizeFlows: 65536
     bpfClockProbe: true
     cgroup:
       automount:
@@ -49,6 +51,7 @@ spec:
     loadBalancer:
       algorithm: maglev
       mode: dsr
+      dsrDispatch: opt
     localRedirectPolicies:
       enabled: true
     operator:
