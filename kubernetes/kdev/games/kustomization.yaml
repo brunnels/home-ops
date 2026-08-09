@@ -10,4 +10,4 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
-  - ./direwolf-operator.yaml
+  #- ./direwolf-operator.yaml
