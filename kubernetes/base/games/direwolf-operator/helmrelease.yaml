@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -12,18 +12,120 @@ spec:
   upgrade:
     crds: CreateReplace
     force: true
+  # Upstream chart defaults are already correct for this cluster:
+  # - Cilium LB-IPAM shares one LB IP between the proxy and per-session services
+  # - cert-manager Issuers/Certificates via rawResources (cert-manager is installed)
   values:
+    # The SNAPSHOT chart was built from PR #7 and bakes the CI ref "7/merge"
+    # into its image tags, which kubelet rejects (InvalidImageName). Override
+    # all three with the published "main" tag (pullPolicy is Always upstream).
+    configMaps:
+      wolf-root:
+        forceRename: wolf-root
+        data:
+          entrypoint.sh: |
+            #!/usr/bin/env bash
+            set -e
+
+            source /opt/gow/bash-lib/utils.sh
+
+            # Force root: 10-setup_user.sh becomes a no-op and we never gosu.
+            export UNAME=root PUID=0 PGID=0 HOME=/root
+
+            for init_script in /etc/cont-init.d/*.sh; do
+              gow_log
+              gow_log "[ ${init_script}: executing... ]"
+              # shellcheck source=/dev/null
+              source "${init_script}"
+            done
+
+            gow_log "Launching the container's startup script as root"
+            chmod +x /opt/gow/startup.sh
+            exec /opt/gow/startup.sh
+    controllers:
+      direwolf_operator:
+        containers:
+          operator:
+            image:
+              # Patched fork: retries stream reconciliation (upstream stalls
+              # the session until the 1-minute reaper kills it whenever
+              # wolf-agent isn't up on the first try) and prunes stale
+              # trackedSessions entries that spam the logs.
+              # Built from https://github.com/shrinedogg/fenrir (tag v0.1.0).
+              repository: docker.io/shrinedogg/operator
+              tag: v0.1.0
+            env:
+              # Patched fork: the agent acts as fake-udev for hotplugged
+              # input devices (writes /run/udev/data entries to the shared
+              # udev-data volume and broadcasts synthetic udev netlink
+              # events in the pod netns) so SDL/Steam detect controllers.
+              # Built from https://github.com/shrinedogg/fenrir (tag v0.1.0).
+              AGENT_IMAGE: docker.io/shrinedogg/wolf-agent:v0.1.1
+              # Patched wolf: gst-wayland-display no longer advertises the
+              # legacy wl_drm global when dmabuf v4 feedback is active, which
+              # crashed nested wlroots compositors (sway) with
+              # assert(wl->drm_render_name == NULL). Overlay built from
+              # https://github.com/shrinedogg/gst-wayland-display
+              # (branch fix/optional-wl-drm) on ghcr.io/games-on-whales/wolf:stable.
+              WOLF_IMAGE: docker.io/shrinedogg/wolf:v0.1.0
+      moonlight_proxy:
+        containers:
+          proxy:
+            image:
+              # Patched fork: /launch waits up to 120s (upstream 25s) for the
+              # session pod to come up. A cold start (image pull + wolf boot +
+              # agent readiness) exceeds 25s, so upstream returned 500 right
+              # before the pod was ready and the client canceled the session.
+              # Built from https://github.com/shrinedogg/fenrir (tag v0.1.1).
+              repository: docker.io/shrinedogg/moonlight-proxy
+              tag: v0.1.1
+    rawResources:
+      direwolf-dsr-policy:
+        forceRename: direwolf-dsr
+        manifest:
+          apiVersion: admissionregistration.k8s.io/v1
+          kind: MutatingAdmissionPolicy
+          spec:
+            failurePolicy: Fail
+            matchConstraints:
+              resourceRules:
+                - apiGroups: [""]
+                  apiVersions: ["v1"]
+                  operations: ["CREATE", "UPDATE"]
+                  resources: ["services"]
+            matchConditions:
+              - name: in-namespace
+                expression: "object.metadata.namespace == '{{ .Release.Namespace }}'"
+              - name: is-loadbalancer
+                expression: "object.spec.type == 'LoadBalancer'"
+              - name: is-direwolf-shared
+                expression: >
+                  has(object.metadata.annotations) &&
+                  'lbipam.cilium.io/sharing-key' in object.metadata.annotations &&
+                  object.metadata.annotations['lbipam.cilium.io/sharing-key'] == '{{ .Release.Namespace }}'
+            reinvocationPolicy: IfNeeded
+            mutations:
+              - patchType: ApplyConfiguration
+                applyConfiguration:
+                  expression: >
+                    Object{
+                      metadata: Object.metadata{
+                        annotations: {"service.cilium.io/forwarding-mode": "dsr"}
+                      }
+                    }
+      direwolf-dsr-binding:
+        forceRename: direwolf-dsr
+        manifest:
+          apiVersion: admissionregistration.k8s.io/v1
+          kind: MutatingAdmissionPolicyBinding
+          spec:
+            policyName: direwolf-dsr
+            matchResources: {}
+    # Pin the shared moonlight-proxy LoadBalancer VIP. This is so the whole
+    # direwolf group stays on a stable address instead of drifting across the
+    # pool on recreation.
     service:
       app:
         annotations:
+          io.cilium/lb-ipam-ips: ${SVC_DIREWOLF_ADDR}
           io.cilium/lb-ipam-sharing-key: "{{ .Release.Namespace }}"
-          metallb.universe.tf/allow-shared-ip: "{{ .Release.Namespace }}"
-        controller: moonlight_proxy
-        type: LoadBalancer
-
-#    controllers:
-#      direwolf_operator:
-#        containers:
-#          operator:
-#            env:
-#              WOLF_IMAGE: ghcr.io/games-on-whales/wolf:dev-moonlight-fixes

@@ -36,3 +36,5 @@ data:
 
   KOPIUR_SNAPSHOTCLASS: "csi-ceph-blockpool"
   KOPIUR_STORAGECLASS: "ceph-block"
+
+  SVC_DIREWOLF_ADDR: "10.0.150.135"
