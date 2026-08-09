@@ -69,6 +69,7 @@ nodes:
             - siderolabs/intel-ice-firmware
             - siderolabs/intel-ucode
             - siderolabs/iscsi-tools
+            - siderolabs/joydev
             - siderolabs/mei
             - siderolabs/nfs-utils
             - siderolabs/nfsrahead
@@ -76,6 +77,8 @@ nodes:
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nvme-cli
             - siderolabs/thunderbolt
+            - siderolabs/uhid
+            - siderolabs/uinput
     networkInterfaces: &networkInterfaces
       - interface: bond0
         mtu: 9000
