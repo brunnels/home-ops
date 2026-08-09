@@ -79,40 +79,40 @@ spec:
               # Built from https://github.com/shrinedogg/fenrir (tag v0.1.1).
               repository: docker.io/shrinedogg/moonlight-proxy
               tag: v0.1.1
-    #rawResources:
-    #  direwolf-dsr-policy:
-    #    forceRename: direwolf-dsr
-    #    manifest:
-    #      apiVersion: admissionregistration.k8s.io/v1
-    #      kind: MutatingAdmissionPolicy
-    #      spec:
-    #        failurePolicy: Fail
-    #        matchConstraints:
-    #          resourceRules:
-    #            - apiGroups: [""]
-    #              apiVersions: ["v1"]
-    #              operations: ["CREATE", "UPDATE"]
-    #              resources: ["services"]
-    #        matchConditions:
-    #          - name: in-namespace
-    #            expression: "object.metadata.namespace == '{{ .Release.Namespace }}'"
-    #          - name: is-loadbalancer
-    #            expression: "object.spec.type == 'LoadBalancer'"
-    #          - name: is-direwolf-shared
-    #            expression: >
-    #              has(object.metadata.annotations) &&
-    #              'lbipam.cilium.io/sharing-key' in object.metadata.annotations &&
-    #              object.metadata.annotations['lbipam.cilium.io/sharing-key'] == '{{ .Release.Namespace }}'
-    #        reinvocationPolicy: IfNeeded
-    #        mutations:
-    #          - patchType: ApplyConfiguration
-    #            applyConfiguration:
-    #              expression: >
-    #                Object{
-    #                  metadata: Object.metadata{
-    #                    annotations: {"service.cilium.io/forwarding-mode": "dsr"}
-    #                  }
-    #                }
+    rawResources:
+      direwolf-dsr-policy:
+        #forceRename: direwolf-dsr
+        manifest:
+          apiVersion: admissionregistration.k8s.io/v1
+          kind: MutatingAdmissionPolicy
+          spec:
+            failurePolicy: Fail
+            matchConstraints:
+              resourceRules:
+                - apiGroups: [""]
+                  apiVersions: ["v1"]
+                  operations: ["CREATE", "UPDATE"]
+                  resources: ["services"]
+            matchConditions:
+              - name: in-namespace
+                expression: "object.metadata.namespace == '{{ .Release.Namespace }}'"
+              - name: is-loadbalancer
+                expression: "object.spec.type == 'LoadBalancer'"
+              - name: is-direwolf-shared
+                expression: >
+                  has(object.metadata.annotations) &&
+                  'lbipam.cilium.io/sharing-key' in object.metadata.annotations &&
+                  object.metadata.annotations['lbipam.cilium.io/sharing-key'] == '{{ .Release.Namespace }}'
+            reinvocationPolicy: IfNeeded
+            mutations:
+              - patchType: ApplyConfiguration
+                applyConfiguration:
+                  expression: >
+                    Object{
+                      metadata: Object.metadata{
+                        annotations: {"service.cilium.io/forwarding-mode": "dsr"}
+                      }
+                    }
     #  direwolf-dsr-binding:
     #    forceRename: direwolf-dsr
     #    manifest:
