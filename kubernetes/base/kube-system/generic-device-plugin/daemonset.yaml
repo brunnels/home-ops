@@ -1,4 +1,6 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.32.1/daemonset-apps-v1.json
+#
 # Vendored from fenrir examples/generic_devices/generic-devices.yaml, trimmed
 # to the uinput device only (the dri/kfd group is for AMD GPUs; NVIDIA goes
 # through nvidia.com/gpu from the gpu-operator).
