@@ -81,11 +81,10 @@ spec:
               tag: v0.1.1
     rawResources:
       ssi:
-        manifest:
-          apiVersion: cert-manager.io/v1
-          kind: Issuer
-          spec:
-            selfSigned: {}
+        apiVersion: cert-manager.io/v1
+        kind: Issuer
+        spec:
+          selfSigned: {}
       #direwolf-dsr-policy:
       #  #forceRename: direwolf-dsr
       #  manifest:
