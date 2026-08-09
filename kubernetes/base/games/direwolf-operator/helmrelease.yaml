@@ -41,9 +41,9 @@ spec:
 
             for init_script in /etc/cont-init.d/*.sh; do
               gow_log
-              gow_log "[ ${init_script}: executing... ]"
+              gow_log "[ $${init_script}: executing... ]"
               # shellcheck source=/dev/null
-              source "${init_script}"
+              source "$${init_script}"
             done
 
             gow_log "Launching the container's startup script as root"
