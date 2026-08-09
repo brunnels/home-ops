@@ -23,6 +23,13 @@ spec:
       wolf-root:
         forceRename: wolf-root
         data:
+          # Shadows the GOW base-image /entrypoint.sh in the wolf sidecar (mounted via
+          # the alex User's volumes + sidecarPolicies.wolf.volumeMounts). The stock
+          # entrypoint runs the cont-init.d scripts and then gosu's to ${UNAME}, and the
+          # operator hardcodes PUID=1000/UNAME=ubuntu -- but wolf's supervisord.conf has
+          # user=root, so a non-root supervisord dies with "Can't drop privilege as
+          # nonroot user". This wrapper keeps the init-script behavior but forces root
+          # and execs the startup script without dropping privileges.
           entrypoint.sh: |
             #!/usr/bin/env bash
             set -e
@@ -86,41 +93,43 @@ spec:
         apiVersion: admissionregistration.k8s.io/v1
         kind: MutatingAdmissionPolicy
         spec:
-          failurePolicy: Fail
-          matchConstraints:
-            resourceRules:
-              - apiGroups: [""]
-                apiVersions: ["v1"]
-                operations: ["CREATE", "UPDATE"]
-                resources: ["services"]
-          matchConditions:
-            - name: in-namespace
-              expression: "object.metadata.namespace == '{{ .Release.Namespace }}'"
-            - name: is-loadbalancer
-              expression: "object.spec.type == 'LoadBalancer'"
-            - name: is-direwolf-shared
-              expression: >
-                has(object.metadata.annotations) &&
-                'lbipam.cilium.io/sharing-key' in object.metadata.annotations &&
-                object.metadata.annotations['lbipam.cilium.io/sharing-key'] == '{{ .Release.Namespace }}'
-          reinvocationPolicy: IfNeeded
-          mutations:
-            - patchType: ApplyConfiguration
-              applyConfiguration:
+          spec:
+            failurePolicy: Fail
+            matchConstraints:
+              resourceRules:
+                - apiGroups: [""]
+                  apiVersions: ["v1"]
+                  operations: ["CREATE", "UPDATE"]
+                  resources: ["services"]
+            matchConditions:
+              - name: in-namespace
+                expression: "object.metadata.namespace == '{{ .Release.Namespace }}'"
+              - name: is-loadbalancer
+                expression: "object.spec.type == 'LoadBalancer'"
+              - name: is-direwolf-shared
                 expression: >
-                  Object{
-                    metadata: Object.metadata{
-                      annotations: {"service.cilium.io/forwarding-mode": "dsr"}
+                  has(object.metadata.annotations) &&
+                  'lbipam.cilium.io/sharing-key' in object.metadata.annotations &&
+                  object.metadata.annotations['lbipam.cilium.io/sharing-key'] == '{{ .Release.Namespace }}'
+            reinvocationPolicy: IfNeeded
+            mutations:
+              - patchType: ApplyConfiguration
+                applyConfiguration:
+                  expression: >
+                    Object{
+                      metadata: Object.metadata{
+                        annotations: {"service.cilium.io/forwarding-mode": "dsr"}
+                      }
                     }
-                  }
       direwolf-dsr-binding:
         forceRename: direwolf-dsr
         #manifest:
         apiVersion: admissionregistration.k8s.io/v1
         kind: MutatingAdmissionPolicyBinding
         spec:
-          policyName: direwolf-dsr
-          matchResources: {}
+          spec:
+            policyName: direwolf-dsr
+            matchResources: {}
     # Pin the shared moonlight-proxy LoadBalancer VIP. This is so the whole
     # direwolf group stays on a stable address instead of drifting across the
     # pool on recreation.
