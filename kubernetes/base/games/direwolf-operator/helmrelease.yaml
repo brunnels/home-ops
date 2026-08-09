@@ -122,7 +122,8 @@ spec:
                       metadata: Object.metadata{
                         annotations: {
                           "service.cilium.io/forwarding-mode": "dsr",
-                          "io.cilium/lb-ipam-sharing-key": "{{ .Release.Namespace }}"
+                          "io.cilium/lb-ipam-sharing-key": "{{ .Release.Namespace }}",
+                          "io.cilium/lb-ipam-ips": "${SVC_DIREWOLF_ADDR}"
                         }
                       }
                     }
