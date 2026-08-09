@@ -10,6 +10,13 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       omniroute:
         initContainers:
@@ -20,24 +27,25 @@ spec:
             command:
               - sh
               - -c
-              - find /tmp -mindepth 1 -maxdepth 1 -exec cp -r {} /tmpfs-mount/ \; 2>/dev/null || true
+              - find /tmp -mindepth 1 -maxdepth 1 -exec cp -r {} /tmpfs-mount/
+                \; 2>/dev/null || true
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
         containers:
           app:
             image:
               repository: ghcr.io/diegosouzapw/omniroute
               tag: main-web@sha256:d02b8efe35c24bd575722a3f454270d5f8a8f7fd3f13f1df9bfa8a059f61577f
             env:
+              NEXT_PUBLIC_BASE_URL: &hostname https://omniroute.${SECRET_DOMAIN}
+              LIVE_WS_ALLOWED_ORIGINS: *hostname
+              LIVE_WS_HOST: 0.0.0.0
               NODE_ENV: production
+              OMNIROUTE_MEMORY_MB: 1024
               PORT: &port 20128
               REDIS_URL: redis://${NAMESPACE}-dragonfly:6379
-              NEXT_PUBLIC_BASE_URL: &hostname https://omniroute.${SECRET_DOMAIN}
-              LIVE_WS_HOST: 0.0.0.0
-              LIVE_WS_ALLOWED_ORIGINS: *hostname
-              OMNIROUTE_MEMORY_MB: 1024
               #CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY: 1
             probes:
               liveness:
@@ -54,37 +62,8 @@ spec:
                 memory: 4Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-    service:
-      app:
-        annotations:
-          gatus.home-operations.com/endpoint: |
-            group: internal
-            alerts:
-              - type: pushover
-        controller: *app
-        ports:
-          http:
-            port: *port
-    route:
-      app:
-        hostnames:
-          - omniroute.${SECRET_DOMAIN}
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
+              readOnlyRootFilesystem: true
     persistence:
       data:
         existingClaim: *app
@@ -102,3 +81,25 @@ spec:
             copy-tmpfs:
               - path: /tmpfs-mount
                 subPath: tmp
+    route:
+      app:
+        hostnames:
+          - omniroute.${SECRET_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+    service:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        controller: *app
+        ports:
+          http:
+            port: *port

@@ -10,66 +10,6 @@ spec:
     name: app-template
   interval: 1h
   values:
-    controllers:
-      exo:
-        initContainers:
-          install-exo:
-            image:
-              repository: docker.io/library/node
-              tag: latest
-            env:
-              UV_LINK_MODE: copy
-              CARGO_HOME: /usr/local/cargo
-              RUSTUP_HOME: /usr/local/rustup
-              PATH: /usr/local/cargo/bin:/usr/local/bin:/usr/bin:/bin
-            command: ["/bin/sh", "-c"]
-            args:
-              - /scripts/install.sh
-
-        containers:
-          app:
-            image:
-              repository: docker.io/library/node
-              tag: latest
-            workingDir: /home/exo
-            command: ["/bin/sh", "-c"]
-            args:
-              - |
-                export PATH="/usr/local/cargo/bin:/root/.cargo/bin:/root/.local/bin:$PATH" \
-                && cd /home/exo \
-                && uv run exo
-
-            #probes:
-            #  liveness:
-            #    enabled: true
-            #    custom: true
-            #    spec:
-            #      tcpSocket:
-            #        port: 52415
-            resources:
-              requests:
-                cpu: 1000m
-                memory: 2Gi
-              limits:
-                memory: 16Gi
-        pod:
-          runtimeClassName: nvidia
-          terminationGracePeriodSeconds: 5
-    service:
-      app:
-        ports:
-          http:
-            port: 52415
-    route:
-      app:
-        hostnames:
-          - "exo.${SECRET_DOMAIN}"
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
     configMaps:
       install-script:
         data:
@@ -124,24 +64,69 @@ spec:
             npm run build
 
             echo "=== Installation complete ==="
+    controllers:
+      exo:
+        pod:
+          runtimeClassName: nvidia
+          terminationGracePeriodSeconds: 5
+        initContainers:
+          install-exo:
+            image:
+              repository: docker.io/library/node
+              tag: latest
+            args:
+              - /scripts/install.sh
+            command: ["/bin/sh", "-c"]
+            env:
+              CARGO_HOME: /usr/local/cargo
+              PATH: /usr/local/cargo/bin:/usr/local/bin:/usr/bin:/bin
+              RUSTUP_HOME: /usr/local/rustup
+              UV_LINK_MODE: copy
+
+        containers:
+          app:
+            image:
+              repository: docker.io/library/node
+              tag: latest
+            args:
+              - |
+                export PATH="/usr/local/cargo/bin:/root/.cargo/bin:/root/.local/bin:$PATH" \
+                && cd /home/exo \
+                && uv run exo
+            command: ["/bin/sh", "-c"]
+
+            #probes:
+            #  liveness:
+            #    enabled: true
+            #    custom: true
+            #    spec:
+            #      tcpSocket:
+            #        port: 52415
+            resources:
+              requests:
+                cpu: 1000m
+                memory: 2Gi
+              limits:
+                memory: 16Gi
+            workingDir: /home/exo
     persistence:
       install-script:
         type: configMap
+        defaultMode: 755
         identifier: install-script
-        defaultMode: 0755
         advancedMounts:
           exo:
             install-exo:
               - path: /scripts/install.sh
-                subPath: install.sh
                 readOnly: true
+                subPath: install.sh
 
       exo-data:
-        enabled: true
         type: persistentVolumeClaim
-        storageClass: openebs-hostpath
         accessMode: ReadWriteOnce
+        enabled: true
         size: 50Gi
+        storageClass: openebs-hostpath
         globalMounts:
           - path: /home/exo
             subPath: exo
@@ -151,3 +136,18 @@ spec:
             subPath: rustup
           - path: /root/.local
             subPath: uv
+    route:
+      app:
+        hostnames:
+          - exo.${SECRET_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+    service:
+      app:
+        ports:
+          http:
+            port: 52415

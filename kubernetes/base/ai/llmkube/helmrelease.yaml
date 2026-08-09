@@ -11,28 +11,28 @@ spec:
   interval: 1h
   values:
     controllerManager:
-      resources:
-        requests:
-          cpu: 10m
-          memory: 78Mi
-        limits:
-          memory: 90Mi
       podSecurityContext:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
+      resources:
+        limits:
+          memory: 90Mi
+        requests:
+          cpu: 10m
+          memory: 78Mi
       securityContext:
-        readOnlyRootFilesystem: true
         allowPrivilegeEscalation: false
         capabilities:
           drop:
             - ALL
-    prometheus:
-      inferencePodMonitor:
-        enabled: true
+        readOnlyRootFilesystem: true
     modelCache:
       accessMode: ReadWriteMany
       enabled: true
       mode: shared
       size: 200Gi
       storageClass: nfs-slow
+    prometheus:
+      inferencePodMonitor:
+        enabled: true

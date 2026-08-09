@@ -10,6 +10,14 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      hostUsers: false
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       home-assistant:
         annotations:
@@ -20,8 +28,8 @@ spec:
               repository: ghcr.io/home-operations/home-assistant
               tag: 2026.8.1@sha256:e1f54eb0306d7ded8b3cdee70c21178413cd175aa3e526452af0e086a39ecc51
             env:
-              HASS_URL: "https://hass.${SECRET_DOMAIN}"
-              TZ: "${TIMEZONE}"
+              HASS_URL: https://hass.${SECRET_DOMAIN}
+              TZ: ${TIMEZONE}
             resources:
               requests:
                 cpu: 10m
@@ -30,8 +38,8 @@ spec:
                 memory: 2Gi
             securityContext: &securityContext
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
           code-server:
             image:
               repository: ghcr.io/coder/code-server
@@ -54,8 +62,8 @@ spec:
               TZ: "${TIMEZONE}"
             probes:
               liveness: &probes
-                custom: true
                 enabled: true
+                custom: true
                 spec:
                   failureThreshold: 3
                   httpGet:
@@ -70,14 +78,75 @@ spec:
                 cpu: 10m
               limits:
                 memory: 512Mi
-    defaultPodOptions:
-      hostUsers: false
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
+    persistence:
+      config:
+        existingClaim: *app
+        globalMounts:
+          - path: /config
+      cache:
+        type: custom
+        volumeSpec:
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi
+                storageClassName: openebs-hostpath
+        globalMounts:
+          - path: /config/.venv
+      secrets:
+        type: secret
+        name: *app
+        globalMounts:
+          - path: /config/secrets.yaml
+            subPath: secrets.yaml
+            readOnly: true
+      tmp:
+        type: emptyDir
+    route:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            name: home-assistant
+          gethomepage.dev/app: *app
+          gethomepage.dev/description: Open Source Home Automation
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Automation
+          gethomepage.dev/icon: *app
+          gethomepage.dev/name: Home Assistant
+          gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_HASS_TOKEN}}`}}"
+          gethomepage.dev/widget.type: homeassistant
+          gethomepage.dev/widget.url: http://${SVC_HASS_ADDR}:8123
+        hostnames:
+          - hass.${SECRET_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+      code-server:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            name: hass-code
+          gethomepage.dev/app: home-assistant
+          gethomepage.dev/description: "Remote Development Machine"
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Development
+          gethomepage.dev/icon: code-server.png
+          gethomepage.dev/name: "Code Server"
+          gethomepage.dev/namespace: default
+        hostnames:
+          - hass-code.${SECRET_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: code-server
     service:
       app:
         type: LoadBalancer
@@ -102,72 +171,3 @@ spec:
         ports:
           http:
             port: 8080
-    route:
-      app:
-        annotations:
-          gatus.home-operations.com/endpoint: |-
-            name: home-assistant
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Automation
-          gethomepage.dev/name: Home Assistant
-          gethomepage.dev/icon: *app
-          gethomepage.dev/app: *app
-          gethomepage.dev/description: Open Source Home Automation
-          gethomepage.dev/widget.type: homeassistant
-          gethomepage.dev/widget.url: "http://${SVC_HASS_ADDR}:8123"
-          gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_HASS_TOKEN}}`}}"
-        hostnames:
-          - "hass.${SECRET_DOMAIN}"
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
-      code-server:
-        annotations:
-          gatus.home-operations.com/endpoint: |-
-            name: hass-code
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Development"
-          gethomepage.dev/name: "Code Server"
-          gethomepage.dev/app: home-assistant
-          gethomepage.dev/namespace: default
-          gethomepage.dev/icon: code-server.png
-          gethomepage.dev/description: "Remote Development Machine"
-        hostnames:
-          - "hass-code.${SECRET_DOMAIN}"
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        rules:
-          - backendRefs:
-              - identifier: code-server
-    persistence:
-      config:
-        existingClaim: *app
-        globalMounts:
-          - path: /config
-      cache:
-        type: custom
-        volumeSpec:
-          ephemeral:
-            volumeClaimTemplate:
-              spec:
-                storageClassName: openebs-hostpath
-                accessModes:
-                  - ReadWriteOnce
-                resources:
-                  requests:
-                    storage: 1Gi
-        globalMounts:
-          - path: /config/.venv
-      secrets:
-        type: secret
-        name: *app
-        globalMounts:
-          - path: /config/secrets.yaml
-            subPath: secrets.yaml
-            readOnly: true
-      tmp:
-        type: emptyDir

@@ -10,6 +10,16 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      labels:
+        use-vpn-gateway: "true"
+      hostname: *app
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       flood:
         annotations:
@@ -26,7 +36,7 @@ spec:
               FLOOD_OPTION_trpass: none
               FLOOD_OPTION_trurl: http://flood:9091/transmission/rpc
               FLOOD_OPTION_truser: none
-              TZ: "${TIMEZONE}"
+              TZ: ${TIMEZONE}
             resources:
               requests:
                 cpu: 10m
@@ -34,8 +44,8 @@ spec:
                 memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
           transmission:
             image:
               repository: ghcr.io/home-operations/transmission
@@ -47,7 +57,7 @@ spec:
               TRANSMISSION__RATIO_LIMIT: 1
               TRANSMISSION__RATIO_LIMIT_ENABLED: "true"
               TRANSMISSION__UTP_ENABLED: "false"
-              TZ: "${TIMEZONE}"
+              TZ: ${TIMEZONE}
             envFrom:
               - secretRef:
                   name: *app
@@ -58,13 +68,13 @@ spec:
                 memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
           exporter:
-            dependsOn: app
             image:
               repository: ghcr.io/frantathefranta/transmission-exporter
               tag: 0.3.2@sha256:26d149c4f9fb574e847b27348302e0abcd1cdc7e3a5b957e393c76d81c68b2bc
+            dependsOn: app
             env:
               TRANSMISSION_ADDR: http://flood:9091
             resources:
@@ -74,55 +84,59 @@ spec:
                 memory: 50Mi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      hostname: *app
-      labels:
-        use-vpn-gateway: "true"
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-    service:
-      app:
-        annotations:
-          gatus.home-operations.com/endpoint: |
-            group: internal
-            alerts:
-              - type: pushover
-        controller: *app
-        ports:
-          http:
-            port: *port
-          rpc:
-            port: 9091
-          metrics:
-            port: 19091
-    serviceMonitor:
-      app:
-        serviceName: *app
-        endpoints:
-          - port: metrics
-            scheme: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 10s
+              readOnlyRootFilesystem: true
+
+    persistence:
+      config:
+        existingClaim: *app
+        advancedMounts:
+          flood:
+            app:
+              - path: /data
+                subPath: flood-data
+            transmission:
+              - path: /config
+                subPath: transmission-config
+      downloads:
+        type: nfs
+        path: /downloads/${VAULT_PREFIX}/complete
+        server: ${QNAP_HOSTNAME}
+        advancedMounts:
+          flood:
+            app:
+              - path: /downloads
+                subPath: *app
+            transmission:
+              - path: /downloads
+                subPath: *app
+      incomplete:
+        type: nfs
+        path: /downloads/${VAULT_PREFIX}/incomplete
+        server: ${QNAP_HOSTNAME}
+        advancedMounts:
+          flood:
+            app:
+              - path: /incomplete
+                subPath: *app
+            transmission:
+              - path: /incomplete
+                subPath: *app
+      tmp:
+        type: emptyDir
     route:
       flood:
-        forceRename: flood
         annotations:
+          gethomepage.dev/description: Bittorrent UI
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Downloads
-          gethomepage.dev/name: Flood
           gethomepage.dev/icon: *app
-          gethomepage.dev/description: Bittorrent UI
+          gethomepage.dev/name: Flood
           gethomepage.dev/widget.type: *app
           gethomepage.dev/widget.url: "http://flood.{{ .Release.Namespace }}"
+        forceRename: flood
         hostnames:
-          - "flood.${SECRET_DOMAIN}"
+          - flood.${SECRET_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network
@@ -134,7 +148,7 @@ spec:
         annotations:
           gatus.home-operations.com/enabled: "false"
         hostnames:
-          - "flood.${SECRET_DOMAIN}"
+          - flood.${SECRET_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network
@@ -149,41 +163,27 @@ spec:
             backendRefs:
               - identifier: app
                 port: *port
-
-    persistence:
-      config:
-        existingClaim: *app
-        advancedMounts:
-          flood:
-            app:
-              - path: /data
-                subPath: flood-data
-            transmission:
-              - path: /config
-                subPath: transmission-config
-      downloads:
-        advancedMounts:
-          flood:
-            app:
-              - path: /downloads
-                subPath: *app
-            transmission:
-              - path: /downloads
-                subPath: *app
-        path: /downloads/${VAULT_PREFIX}/complete
-        server: ${QNAP_HOSTNAME}
-        type: nfs
-      incomplete:
-        advancedMounts:
-          flood:
-            app:
-              - path: /incomplete
-                subPath: *app
-            transmission:
-              - path: /incomplete
-                subPath: *app
-        path: /downloads/${VAULT_PREFIX}/incomplete
-        server: ${QNAP_HOSTNAME}
-        type: nfs
-      tmp:
-        type: emptyDir
+    service:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        controller: *app
+        ports:
+          http:
+            port: *port
+          metrics:
+            port: 19091
+          rpc:
+            port: 9091
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: metrics
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
+        serviceName: *app

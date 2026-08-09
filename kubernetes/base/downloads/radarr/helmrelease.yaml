@@ -10,6 +10,13 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       radarr:
         annotations:
@@ -20,7 +27,6 @@ spec:
               repository: ghcr.io/home-operations/radarr
               tag: 6.4.1.10545@sha256:260469d707617f4b5be1cd11a40be7e4889c63c5e7cdbc6a429626dc05863b6b
             env:
-              TZ: "${TIMEZONE}"
               RADARR__APP__INSTANCENAME: Radarr
               RADARR__APP__THEME: dark
               RADARR__AUTH__METHOD: External
@@ -33,12 +39,13 @@ spec:
               RADARR__POSTGRES__PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
                     key: password
+                    name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
               RADARR__POSTGRES__PORT: 5432
               RADARR__POSTGRES__USER: *app
               RADARR__SERVER__PORT: &port 80
               RADARR__UPDATE__BRANCH: develop
+              TZ: "${TIMEZONE}"
             envFrom:
               - secretRef:
                   name: *app
@@ -47,13 +54,13 @@ spec:
                 enabled: true
                 custom: true
                 spec:
+                  failureThreshold: 5
                   httpGet:
                     path: /ping
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 3
-                  failureThreshold: 5
               readiness: *probes
             resources:
               requests:
@@ -63,25 +70,30 @@ spec:
                 memory: 2.5Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-    service:
-      app:
-        annotations:
-          gatus.home-operations.com/endpoint: |
-            group: internal
-            alerts:
-              - type: pushover
-        ports:
-          http:
-            port: *port
+              readOnlyRootFilesystem: true
+    persistence:
+      config:
+        existingClaim: *app
+      downloads:
+        type: nfs
+        path: /downloads/${VAULT_PREFIX}/complete
+        server: ${QNAP_HOSTNAME}
+        advancedMounts:
+          radarr:
+            app:
+              - path: /downloads/complete/downloaded_movies
+                subPath: sabnzbd/downloaded_movies
+              - path: /downloads/movies-radarr
+                subPath: flood/movies-radarr
+      movies:
+        type: nfs
+        path: /movies
+        server: ${QNAP_HOSTNAME}
+        globalMounts:
+          - path: /media/movies
+      tmp:
+        type: emptyDir
     route:
       app:
         annotations:
@@ -101,25 +113,13 @@ spec:
         rules:
           - backendRefs:
               - identifier: app
-    persistence:
-      config:
-        existingClaim: *app
-      downloads:
-        advancedMounts:
-          radarr:
-            app:
-              - path: /downloads/complete/downloaded_movies
-                subPath: sabnzbd/downloaded_movies
-              - path: /downloads/movies-radarr
-                subPath: flood/movies-radarr
-        path: /downloads/${VAULT_PREFIX}/complete
-        server: ${QNAP_HOSTNAME}
-        type: nfs
-      movies:
-        globalMounts:
-          - path: /media/movies
-        path: /movies
-        server: ${QNAP_HOSTNAME}
-        type: nfs
-      tmp:
-        type: emptyDir
+    service:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        ports:
+          http:
+            port: *port

@@ -18,8 +18,8 @@ spec:
       createSecret: false
       username: admin
     image:
-      repository: ghcr.io/gkalian/wego-app
       pullPolicy: IfNotPresent
+      repository: ghcr.io/gkalian/wego-app
       tag: v0.39.0-rc.3@sha256:abc892644b38f4b4a49f1f5dcaf8b15a219a3e6104a632bc9824b2f2365659e8
     ingress:
       enabled: false
@@ -34,11 +34,11 @@ spec:
       viewSecretsResourceNames:
         - weave-gitops-oidc-auth
     resources:
+      limits:
+        memory: 210Mi
       requests:
         cpu: 30m
         memory: 70Mi
-      limits:
-        memory: 210Mi
     service:
       annotations:
         gatus.home-operations.com/endpoint: |

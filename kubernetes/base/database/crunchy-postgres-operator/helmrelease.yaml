@@ -10,7 +10,7 @@ spec:
     name: *app
   interval: 1h
   values:
-    monitoring: true
     install:
       clusterLabels:
         app.kubernetes.io/name: *app
+    monitoring: true

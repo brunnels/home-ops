@@ -10,6 +10,29 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
+    configMaps:
+      config:
+        data:
+          repository.config: |-
+            {
+              "storage": {
+                "type": "filesystem",
+                "config": {
+                  "path": "/repository"
+                }
+              },
+              "hostname": "kopiur.{{ .Release.Namespace }}.svc.cluster.local",
+              "username": "kopiur",
+              "description": "kopiur",
+              "enableActions": false
+            }
     controllers:
       kopia:
         annotations:
@@ -35,13 +58,13 @@ spec:
                 enabled: true
                 custom: true
                 spec:
+                  failureThreshold: 3
                   httpGet:
                     path: /
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 5
-                  failureThreshold: 3
               readiness: *probes
             resources:
               requests:
@@ -50,31 +73,8 @@ spec:
                 memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    configMaps:
-      config:
-        data:
-          repository.config: |-
-            {
-              "storage": {
-                "type": "filesystem",
-                "config": {
-                  "path": "/repository"
-                }
-              },
-              "hostname": "kopiur.{{ .Release.Namespace }}.svc.cluster.local",
-              "username": "kopiur",
-              "description": "kopiur",
-              "enableActions": false
-            }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
+              readOnlyRootFilesystem: true
     persistence:
       config:
         type: configMap
@@ -83,9 +83,9 @@ spec:
           - path: /config/repository.config
             subPath: repository.config
       repository:
+        type: nfs
         path: "/appdata/${VAULT_PREFIX}-kopia"
         server: ${QNAP_HOSTNAME}
-        type: nfs
       tmpfs:
         type: emptyDir
         advancedMounts:
@@ -100,11 +100,11 @@ spec:
     route:
       app:
         annotations:
+          gethomepage.dev/description: Backup/Restore Tool
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Storage
-          gethomepage.dev/name: Kopia
           gethomepage.dev/icon: *app
-          gethomepage.dev/description: Backup/Restore Tool
+          gethomepage.dev/name: Kopia
           gethomepage.dev/widget.type: *app
           gethomepage.dev/widget.url: "https://kopia.${SECRET_DOMAIN}"
         hostnames:

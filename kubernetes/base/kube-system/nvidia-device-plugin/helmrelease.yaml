@@ -12,6 +12,10 @@ spec:
   # https://github.com/NVIDIA/k8s-device-plugin/blob/main/deployments/helm/nvidia-device-plugin/values.yaml
   values:
     config:
+      # Default config name within the ConfigMap
+      default: "default"
+      # List of fallback strategies to attempt if no config is selected and no default is provided
+      fallbackStrategies: ["named", "single"]
       map:
         default: |-
           version: v1
@@ -22,15 +26,6 @@ spec:
               resources:
               - name: nvidia.com/gpu
                 replicas: 3
-        mig-single: |-
-          version: v1
-          flags:
-            migStrategy: single
-            sharing:
-              timeSlicing:
-                resources:
-                - name: nvidia.com/gpu
-                  replicas: 3
         mig-mixed: |-
           version: v1
           flags:
@@ -40,18 +35,22 @@ spec:
                 resources:
                 - name: nvidia.com/gpu
                   replicas: 3
-
-      # Default config name within the ConfigMap
-      default: "default"
-      # List of fallback strategies to attempt if no config is selected and no default is provided
-      fallbackStrategies: ["named", "single"]
-
-    runtimeClassName: nvidia
-    # all nodes hava a nvidia GPU
-    nodeSelector:
-      kubernetes.io/os: linux
+        mig-single: |-
+          version: v1
+          flags:
+            migStrategy: single
+            sharing:
+              timeSlicing:
+                resources:
+                - name: nvidia.com/gpu
+                  replicas: 3
+    gfd:
+      enabled: false
     # Subcharts
     # disable feature discovery
     nfd: {}
-    gfd:
-      enabled: false
+    # all nodes hava a nvidia GPU
+    nodeSelector:
+      kubernetes.io/os: linux
+
+    runtimeClassName: nvidia

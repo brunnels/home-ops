@@ -10,6 +10,13 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       homebox-companion:
         annotations:
@@ -20,20 +27,20 @@ spec:
               repository: ghcr.io/duelion/homebox-companion
               tag: 3.0.2@sha256:3c381c647f9ec776e1b6d7d49164591c78ef1af5a29a6cae343542ffcffd15c4
             env:
-              TZ: "${TIMEZONE}"
+              HBC_DISABLE_UPDATE_CHECK: true
               HBC_HOMEBOX_URL: http://homebox:8080
+              HBC_IMAGE_QUALITY: medium
               HBC_LINK_BASE_URL: https://homebox.${SECRET_DOMAIN}
-              HBC_LLM_MODEL: hosted_vllm/google/gemma-3-1b-it
-              HBC_LLM_API_KEY: "insecure"
-              HBC_LLM_API_BASE: http://vllm-stack-router-service/v1
               HBC_LLM_ALLOW_UNSAFE_MODELS: true
+              HBC_LLM_API_BASE: http://vllm-stack-router-service/v1
+              HBC_LLM_API_KEY: "insecure"
+              HBC_LLM_MODEL: hosted_vllm/google/gemma-3-1b-it
               HBC_LLM_TIMEOUT: 240
+              HBC_LOG_LEVEL: DEBUG
+              HBC_RATE_LIMIT_ENABLED: false
               HBC_SERVER_HOST: 0.0.0.0
               HBC_SERVER_PORT: &port 8000
-              HBC_LOG_LEVEL: DEBUG
-              HBC_DISABLE_UPDATE_CHECK: true
-              HBC_IMAGE_QUALITY: medium
-              HBC_RATE_LIMIT_ENABLED: false
+              TZ: "${TIMEZONE}"
               UV_LINK_MODE: copy
             #envFrom:
             #  - secretRef:
@@ -43,13 +50,13 @@ spec:
                 enabled: true
                 custom: true
                 spec:
+                  failureThreshold: 3
                   httpGet:
                     path: /health
                     port: *port
                   initialDelaySeconds: 15
                   periodSeconds: 10
                   timeoutSeconds: 10
-                  failureThreshold: 3
               readiness: *probes
             resources:
               requests:
@@ -60,25 +67,13 @@ spec:
                 memory: 4Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-    service:
-      app:
-        annotations:
-          gatus.home-operations.com/endpoint: |
-            group: internal
-            alerts:
-              - type: pushover
-        ports:
-          http:
-            port: *port
+              readOnlyRootFilesystem: false
+    persistence:
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /home/appuser/.cache
     route:
       app:
         annotations:
@@ -95,8 +90,13 @@ spec:
         rules:
           - backendRefs:
               - identifier: app
-    persistence:
-      cache:
-        type: emptyDir
-        globalMounts:
-          - path: /home/appuser/.cache
+    service:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        ports:
+          http:
+            port: *port

@@ -10,6 +10,13 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       homebox:
         annotations:
@@ -20,44 +27,44 @@ spec:
               repository: ghcr.io/sysadminsmedia/homebox
               tag: latest@sha256:b1ad7e3c63f732a5f6daa466e8116be4f545b3b120383a64dcb62beb00a660cc
             env:
-              TZ: "${TIMEZONE}"
-              # Temp directory must be on same filesystem as /data for file uploads
-              # (rename() syscall fails across different filesystems)
-              TMPDIR: /data/.tmp
+              HBOX_DATABASE_DATABASE: *app
+              # Database driver
+              HBOX_DATABASE_DRIVER: postgres
+              HBOX_DATABASE_HOST: "{{ .Release.Namespace }}-pgbouncer.{{ .Release.Namespace }}.svc"
+              HBOX_DATABASE_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    key: password
+                    name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
+              HBOX_DATABASE_PORT: 5432
+              HBOX_DATABASE_USERNAME: *app
               # Application mode
               HBOX_LOG_LEVEL: warn
               HBOX_MODE: production
-              # Web server configuration
-              HBOX_WEB_PORT: &port 8080
-              HBOX_WEB_MAX_UPLOAD_SIZE: 50
-              # Database driver
-              HBOX_DATABASE_DRIVER: postgres
-              # Storage configuration - use mounted /data volume
-              HBOX_STORAGE_CONN_STRING: "file:///data"
-              # Disable public registration
-              HBOX_OPTIONS_ALLOW_REGISTRATION: true
-              # Trust proxy headers for HTTPS
-              HBOX_OPTIONS_TRUST_PROXY: true
-              HBOX_OPTIONS_HOSTNAME: homebox.${SECRET_DOMAIN}
+              HBOX_OIDC_AUTO_REDIRECT: false
+              HBOX_OIDC_BUTTON_TEXT: "Sign in with Authelia"
               # OIDC configuration for Authelia
               HBOX_OIDC_ENABLED: true
               HBOX_OIDC_ISSUER_URL: https://auth.${SECRET_DOMAIN}
               HBOX_OIDC_SCOPE: "openid profile email groups"
-              HBOX_OIDC_BUTTON_TEXT: "Sign in with Authelia"
-              HBOX_OIDC_AUTO_REDIRECT: false
-              HBOX_OPTIONS_ALLOW_LOCAL_LOGIN: true
               # Disable analytics
               HBOX_OPTIONS_ALLOW_ANALYTICS: false
+              HBOX_OPTIONS_ALLOW_LOCAL_LOGIN: true
+              # Disable public registration
+              HBOX_OPTIONS_ALLOW_REGISTRATION: true
               HBOX_OPTIONS_GITHUB_RELEASE_CHECK: false
-              HBOX_DATABASE_HOST: "{{ .Release.Namespace }}-pgbouncer.{{ .Release.Namespace }}.svc"
-              HBOX_DATABASE_DATABASE: *app
-              HBOX_DATABASE_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
-                    key: password
-              HBOX_DATABASE_PORT: 5432
-              HBOX_DATABASE_USERNAME: *app
+              HBOX_OPTIONS_HOSTNAME: homebox.${SECRET_DOMAIN}
+              # Trust proxy headers for HTTPS
+              HBOX_OPTIONS_TRUST_PROXY: true
+              # Storage configuration - use mounted /data volume
+              HBOX_STORAGE_CONN_STRING: "file:///data"
+              HBOX_WEB_MAX_UPLOAD_SIZE: 50
+              # Web server configuration
+              HBOX_WEB_PORT: &port 8080
+              # Temp directory must be on same filesystem as /data for file uploads
+              # (rename() syscall fails across different filesystems)
+              TMPDIR: /data/.tmp
+              TZ: "${TIMEZONE}"
             envFrom:
               - secretRef:
                   name: *app
@@ -66,13 +73,13 @@ spec:
                 enabled: true
                 custom: true
                 spec:
+                  failureThreshold: 5
                   httpGet:
                     path: /api/v1/status
                     port: *port
                   initialDelaySeconds: 30
                   periodSeconds: 10
                   timeoutSeconds: 30
-                  failureThreshold: 5
               readiness: *probes
             resources:
               requests:
@@ -83,25 +90,17 @@ spec:
                 memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-    service:
-      app:
-        annotations:
-          gatus.home-operations.com/endpoint: |
-            group: internal
-            alerts:
-              - type: pushover
-        ports:
-          http:
-            port: *port
+              readOnlyRootFilesystem: true
+    persistence:
+      data:
+        existingClaim: *app
+        globalMounts:
+          - path: /data
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /.cache
     route:
       app:
         annotations:
@@ -118,12 +117,13 @@ spec:
         rules:
           - backendRefs:
               - identifier: app
-    persistence:
-      data:
-        existingClaim: *app
-        globalMounts:
-          - path: /data
-      cache:
-        type: emptyDir
-        globalMounts:
-          - path: /.cache
+    service:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        ports:
+          http:
+            port: *port

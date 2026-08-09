@@ -10,6 +10,13 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       open-webui:
         containers:
@@ -18,29 +25,29 @@ spec:
               repository: ghcr.io/open-webui/open-webui
               tag: main@sha256:6a773e5c3a246b65cbe74ce942b294292c0e5f81c138f703d111bc162f7d7c3d
             env:
-              WEBUI_URL: https://chat.${SECRET_DOMAIN}
               CORS_ALLOW_ORIGIN: https://chat.${SECRET_DOMAIN}
-              OPENAI_API_BASE_URL: https://omniroute.${SECRET_DOMAIN}/api/v1
-              ENABLE_SIGNUP: false
-              WEBUI_NAME: "${VAULT_PREFIX} AI"
+              ENABLE_LOGIN_FORM: false
+              ENABLE_OAUTH_SIGNUP: true
               ENABLE_OLLAMA_API: false
               ENABLE_OPENAI_API: true
-              ENABLE_OAUTH_SIGNUP: true
-              ENABLE_LOGIN_FORM: false
-              ENABLE_WEB_SEARCH: true
-              ENABLE_SEARCH_QUERY_GENERATION: true
               ENABLE_PERSISTENT_CONFIG: false
-              WEBUI_SESSION_COOKIE_SAME_SITE: lax
-              WEBUI_SESSION_COOKIE_SECURE: true
+              ENABLE_SEARCH_QUERY_GENERATION: true
+              ENABLE_SIGNUP: false
+              ENABLE_WEB_SEARCH: true
+              ENABLE_WEBSOCKET_SUPPORT: "true"
               OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
-              OAUTH_UPDATE_PICTURE_ON_LOGIN: true
               OAUTH_PROVIDER_NAME: Authelia
               OAUTH_SCOPES: "openid profile email groups"
+              OAUTH_UPDATE_PICTURE_ON_LOGIN: true
+              OPENAI_API_BASE_URL: https://omniroute.${SECRET_DOMAIN}/api/v1
               OPENID_PROVIDER_URL: https://auth.${SECRET_DOMAIN}/.well-known/openid-configuration
               OPENID_REDIRECT_URI: https://chat.${SECRET_DOMAIN}/oauth/oidc/callback
-              ENABLE_WEBSOCKET_SUPPORT: "true"
-              WEBSOCKET_MANAGER: "redis"
-              WEBSOCKET_REDIS_URL: "redis://${NAMESPACE}-dragonfly:6379"
+              WEBSOCKET_MANAGER: redis
+              WEBSOCKET_REDIS_URL: redis://${NAMESPACE}-dragonfly:6379
+              WEBUI_NAME: "${VAULT_PREFIX} AI"
+              WEBUI_SESSION_COOKIE_SAME_SITE: lax
+              WEBUI_SESSION_COOKIE_SECURE: true
+              WEBUI_URL: https://chat.${SECRET_DOMAIN}
             envFrom:
               - secretRef:
                   name: *app
@@ -63,10 +70,10 @@ spec:
                 enabled: true
                 custom: true
                 spec:
+                  failureThreshold: 30
                   httpGet: *httpGet
                   initialDelaySeconds: 10
                   periodSeconds: 5
-                  failureThreshold: 30
             resources:
               requests:
                 cpu: 100m
@@ -75,42 +82,8 @@ spec:
                 memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-    service:
-      app:
-        annotations:
-          gatus.home-operations.com/endpoint: |
-            group: internal
-            alerts:
-              - type: pushover
-        controller: *app
-        ports:
-          http:
-            port: *port
-    route:
-      app:
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Development
-          gethomepage.dev/name: Open WebUI
-          gethomepage.dev/icon: https://docs.openwebui.com/img/logo-dark.png
-          gethomepage.dev/pod-selector: app.kubernetes.io/component=open-webui
-        hostnames:
-          - "chat.${SECRET_DOMAIN}"
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
+              readOnlyRootFilesystem: true
     persistence:
       data:
         existingClaim: *app
@@ -123,3 +96,30 @@ spec:
             app:
               - path: /tmp
                 subPath: tmp
+    route:
+      app:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Development
+          gethomepage.dev/icon: https://docs.openwebui.com/img/logo-dark.png
+          gethomepage.dev/name: Open WebUI
+          gethomepage.dev/pod-selector: app.kubernetes.io/component=open-webui
+        hostnames:
+          - chat.${SECRET_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+    service:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        controller: *app
+        ports:
+          http:
+            port: *port

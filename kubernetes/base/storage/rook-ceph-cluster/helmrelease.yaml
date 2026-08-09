@@ -10,6 +10,42 @@ spec:
     name: *app
   interval: 1h
   values:
+    cephBlockPools:
+      - name: ceph-blockpool
+        spec:
+          failureDomain: host
+          replicated:
+            size: 3
+        storageClass:
+          allowVolumeExpansion: true
+          enabled: true
+          isDefault: true
+          mountOptions:
+            - discard
+            - noatime # Don't update access times (better performance)
+            - nodiratime # Don't update directory access times
+          name: ceph-block
+          parameters:
+            compression_algorithm: zstd
+            compression_mode: aggressive
+            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+            csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
+            csi.storage.k8s.io/controller-publish-secret-name: rook-csi-rbd-provisioner
+            csi.storage.k8s.io/controller-publish-secret-namespace: "{{ .Release.Namespace }}"
+            csi.storage.k8s.io/fstype: ext4
+            csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+            csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
+            csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+            csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
+            imageFeatures: deep-flatten,exclusive-lock,fast-diff,layering,object-map
+            imageFormat: "2"
+          reclaimPolicy: Delete
+          volumeBindingMode: Immediate
+    cephBlockPoolsVolumeSnapshotClass:
+      deletionPolicy: Delete
+      enabled: true
+      isDefault: false
+      name: csi-ceph-blockpool
     cephClusterSpec:
       annotations:
         dashboard:
@@ -20,41 +56,41 @@ spec:
             name: rook
       cephConfig:
         global:
-          bdev_enable_discard: "true" # quote
           bdev_async_discard_threads: "1" # quote
-          osd_class_update_on_start: "false" # quote
+          bdev_enable_discard: "true" # quote
           device_failure_prediction_mode: local # requires mgr module
+          osd_class_update_on_start: "false" # quote
       cleanupPolicy:
         wipeDevicesFromOtherClusters: true
       crashCollector:
         disable: false
       csi:
         readAffinity:
-          enabled: true
           crushLocationLabels:
             - kubernetes.io/hostname
+          enabled: true
       dashboard:
         enabled: true
-        urlPrefix: /
-        ssl: false
         prometheusEndpoint: http://prometheus-operated.observability.svc.cluster.local:9090
+        ssl: false
+        urlPrefix: /
       mgr:
         modules:
-          - name: diskprediction_local # required for device_failure_prediction_mode
-            enabled: true
-          - name: insights
-            enabled: true
-          - name: pg_autoscaler
-            enabled: true
-          - name: rook
-            enabled: true
+          - enabled: true
+            name: diskprediction_local # required for device_failure_prediction_mode
+          - enabled: true
+            name: insights
+          - enabled: true
+            name: pg_autoscaler
+          - enabled: true
+            name: rook
       network:
-        provider: host
         addressRanges:
-          public: ["${LAN_CIDR}"]
           cluster: ["${CEPH_CLUSTER_CIDR}"]
+          public: ["${LAN_CIDR}"]
         connections:
           requireMsgr2: true
+        provider: host
       placement:
         mgr: &placement
           nodeAffinity:
@@ -66,39 +102,39 @@ spec:
         mon: *placement
       resources:
         mgr:
+          limits:
+            memory: 2Gi
           requests:
             cpu: 100m
             memory: 512Mi
-          limits:
-            memory: 2Gi
-        mon:
-          requests:
-            cpu: 50m
-            memory: 512Mi
-          limits:
-            memory: 1Gi
-        osd:
-          requests:
-            cpu: 500m
-            memory: 2Gi
-          limits:
-            memory: 8Gi
         mgr-sidecar:
+          limits:
+            memory: 256Mi
           requests:
             cpu: 50m
             memory: 128Mi
+        mon:
           limits:
-            memory: 256Mi
+            memory: 1Gi
+          requests:
+            cpu: 50m
+            memory: 512Mi
+        osd:
+          limits:
+            memory: 8Gi
+          requests:
+            cpu: 500m
+            memory: 2Gi
       storage:
-        useAllNodes: true
-        useAllDevices: false
         devicePathFilter: ${CEPH_DEVICE_PATH_FILTER}
+        useAllDevices: false
+        useAllNodes: true
+    cephFileSystems: []
+    cephObjectStores: []
     monitoring:
-      enabled: true
       createPrometheusRules: true
-    operatorNamespace: storage
-    toolbox:
       enabled: true
+    operatorNamespace: storage
     route:
       dashboard:
         annotations:
@@ -106,8 +142,8 @@ spec:
             name: rook
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Management
-          gethomepage.dev/name: Rook Dashboard
           gethomepage.dev/icon: rook
+          gethomepage.dev/name: Rook Dashboard
           gethomepage.dev/pod-selector: mgr_role=active
         host:
           name: "rook.${SECRET_DOMAIN}"
@@ -116,41 +152,5 @@ spec:
         parentRefs:
           - name: envoy-internal
             namespace: network
-    cephBlockPools:
-      - name: ceph-blockpool
-        spec:
-          failureDomain: host
-          replicated:
-            size: 3
-        storageClass:
-          enabled: true
-          name: ceph-block
-          allowVolumeExpansion: true
-          isDefault: true
-          mountOptions:
-            - discard
-            - noatime # Don't update access times (better performance)
-            - nodiratime # Don't update directory access times
-          parameters:
-            compression_mode: aggressive
-            compression_algorithm: zstd
-            csi.storage.k8s.io/fstype: ext4
-            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
-            csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
-            csi.storage.k8s.io/controller-publish-secret-name: rook-csi-rbd-provisioner
-            csi.storage.k8s.io/controller-publish-secret-namespace: "{{ .Release.Namespace }}"
-            csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
-            csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
-            csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
-            csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
-            imageFeatures: deep-flatten,exclusive-lock,fast-diff,layering,object-map
-            imageFormat: "2"
-          reclaimPolicy: Delete
-          volumeBindingMode: Immediate
-    cephBlockPoolsVolumeSnapshotClass:
+    toolbox:
       enabled: true
-      name: csi-ceph-blockpool
-      isDefault: false
-      deletionPolicy: Delete
-    cephFileSystems: []
-    cephObjectStores: []

@@ -10,14 +10,14 @@ spec:
     name: *app
   interval: 1h
   values:
+    extraVolumeMounts:
+      - mountPath: /repo
+        name: repo
     extraVolumes:
       - name: repo
         nfs:
-          server: ${QNAP_HOSTNAME}
           path: "/appdata/${VAULT_PREFIX}-kopia"
-    extraVolumeMounts:
-      - name: repo
-        mountPath: /repo
+          server: ${QNAP_HOSTNAME}
     monitoring:
       dashboards:
         enabled: true
@@ -30,13 +30,13 @@ spec:
       serviceMonitor:
         enabled: true
     podSecurityContext:
-      runAsNonRoot: true
-      runAsUser: 1000
-      runAsGroup: 100
       fsGroup: 100
       fsGroupChangePolicy: OnRootMismatch
+      runAsGroup: 100
+      runAsNonRoot: true
+      runAsUser: 1000
     resources:
-      requests:
-        cpu: 100m
       limits:
         memory: 2Gi
+      requests:
+        cpu: 100m

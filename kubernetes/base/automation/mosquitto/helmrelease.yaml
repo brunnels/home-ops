@@ -10,18 +10,41 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
+    configMaps:
+      config:
+        data:
+          mosquitto.conf: |
+            allow_anonymous true
+            autosave_interval 60
+            connection_messages false
+            listener 1883
+            per_listener_settings false
+            persistence true
+            persistence_location /data
     controllers:
       mosquitto:
         type: statefulset
         annotations:
           reloader.stakater.com/auto: "true"
+        statefulset:
+          volumeClaimTemplates:
+            - accessMode: ReadWriteOnce
+              name: config
+              size: 5Gi
         containers:
           app:
             image:
               repository: public.ecr.aws/docker/library/eclipse-mosquitto
               tag: 2.0.22@sha256:212f89e1eaeb2c322d6441b64396e3346026674db8fa9c27beac293405c32b3c
             env:
-              TZ: "${TIMEZONE}"
+              TZ: ${TIMEZONE}
             probes:
               liveness:
                 enabled: true
@@ -37,25 +60,22 @@ spec:
                 memory: 100Mi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-        statefulset:
-          volumeClaimTemplates:
-            - name: config
-              accessMode: ReadWriteOnce
-              size: 5Gi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
+              readOnlyRootFilesystem: true
+    persistence:
+      config-file:
+        type: configMap
+        identifier: config
+        advancedMounts:
+          mosquitto:
+            app:
+              - path: /mosquitto/config/mosquitto.conf
+                subPath: mosquitto.conf
     service:
       app:
         type: LoadBalancer
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: "mqtt.${SECRET_DOMAIN}"
+          external-dns.alpha.kubernetes.io/hostname: mqtt.${SECRET_DOMAIN}
           gatus.home-operations.com/endpoint: |-
             group: infrastructure
             alerts:
@@ -68,23 +88,3 @@ spec:
         ports:
           mqtt:
             port: 1883
-    configMaps:
-      config:
-        data:
-          mosquitto.conf: |
-            allow_anonymous true
-            autosave_interval 60
-            connection_messages false
-            listener 1883
-            per_listener_settings false
-            persistence true
-            persistence_location /data
-    persistence:
-      config-file:
-        type: configMap
-        identifier: config
-        advancedMounts:
-          mosquitto:
-            app:
-              - path: /mosquitto/config/mosquitto.conf
-                subPath: mosquitto.conf

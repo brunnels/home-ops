@@ -10,6 +10,44 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      enableServiceLinks: false
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
+    configMaps:
+      config:
+        data:
+          config.yml: |-
+            exclude:
+              platforms: []
+              roms:
+                single_file:
+                  extensions:
+                    - "xml"
+                    - "txt"
+                  names:
+                    - "info.txt"
+                    - "metadata.txt"
+                    - "systeminfo.txt"
+                    - "psy.ggjud.iso"
+                    - "psy.ggjud.nfo"
+                multi_file:
+                  names:
+                    - "roms"
+                    - "pfx"
+                    - "mlc01"
+                    - ".Trash*"
+                  parts:
+                    names: []
+                    extensions: []
+            system:
+              platforms: {}
+              versions: {}
+            filesystem: {}
     controllers:
       romm:
         annotations:
@@ -25,8 +63,8 @@ spec:
               DB_PASSWD:
                 valueFrom:
                   secretKeyRef:
-                    name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
                     key: password
+                    name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
               DB_PORT: 5432
               DB_USER: *app
               #              DISABLE_DOWNLOAD_ENDPOINT_AUTH: true
@@ -60,45 +98,8 @@ spec:
                 memory: 4Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      enableServiceLinks: false
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-    service:
-      app:
-        annotations:
-          gatus.home-operations.com/endpoint: |
-            group: internal
-            alerts:
-              - type: pushover
-        ports:
-          http:
-            port: &port 8080
-    route:
-      app:
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/description: Rom emulator
-          gethomepage.dev/group: Media
-          gethomepage.dev/icon: *app
-          gethomepage.dev/name: Romm
-          gethomepage.dev/widget.type: *app
-          gethomepage.dev/widget.url: "http://romm.{{ .Release.Namespace }}"
-        hostnames:
-          - "romm.${SECRET_DOMAIN}"
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        rules:
-          - backendRefs:
-              - name: *app
-                port: *port
+              readOnlyRootFilesystem: true
     persistence:
       config:
         type: configMap
@@ -123,39 +124,38 @@ spec:
       tmp:
         type: emptyDir
       games:
+        type: nfs
+        path: /games
+        server: ${QNAP_HOSTNAME}
         globalMounts:
           - path: /romm/library
             subPath: romm
-        path: /games
-        server: ${QNAP_HOSTNAME}
-        type: nfs
-    configMaps:
-      config:
-        data:
-          config.yml: |-
-            exclude:
-              platforms: []
-              roms:
-                single_file:
-                  extensions:
-                    - "xml"
-                    - "txt"
-                  names:
-                    - "info.txt"
-                    - "metadata.txt"
-                    - "systeminfo.txt"
-                    - "psy.ggjud.iso"
-                    - "psy.ggjud.nfo"
-                multi_file:
-                  names:
-                    - "roms"
-                    - "pfx"
-                    - "mlc01"
-                    - ".Trash*"
-                  parts:
-                    names: []
-                    extensions: []
-            system:
-              platforms: {}
-              versions: {}
-            filesystem: {}
+    service:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        ports:
+          http:
+            port: &port 8080
+    route:
+      app:
+        annotations:
+          gethomepage.dev/description: Rom emulator
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Media
+          gethomepage.dev/icon: *app
+          gethomepage.dev/name: Romm
+          gethomepage.dev/widget.type: *app
+          gethomepage.dev/widget.url: "http://romm.{{ .Release.Namespace }}"
+        hostnames:
+          - "romm.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port

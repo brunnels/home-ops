@@ -10,35 +10,32 @@ spec:
     name: *app
   interval: 1h
   values:
-    replicas: 2
-    kind: Deployment
-    deschedulerPolicyAPIVersion: descheduler/v1alpha2
     deschedulerPolicy:
       profiles:
         - name: Default
           pluginConfig:
-            - name: DefaultEvictor
-              args:
+            - args:
                 evictFailedBarePods: true
                 evictLocalStoragePods: true
                 evictSystemCriticalPods: true
-            - name: RemoveFailedPods
-              args:
+              name: DefaultEvictor
+            - args:
+                excludeOwnerKinds:
+                  - Job
+                includingInitContainers: true
+                minPodLifetimeSeconds: 1800
                 reasons:
                   - ContainerStatusUnknown
                   - NodeAffinity
                   - NodeShutdown
                   - Terminated
                   - UnexpectedAdmissionError
-                includingInitContainers: true
-                excludeOwnerKinds:
-                  - Job
-                minPodLifetimeSeconds: 1800
+              name: RemoveFailedPods
             - name: RemovePodsViolatingInterPodAntiAffinity
-            - name: RemovePodsViolatingNodeAffinity
-              args:
+            - args:
                 nodeAffinityType:
                   - requiredDuringSchedulingIgnoredDuringExecution
+              name: RemovePodsViolatingNodeAffinity
             - name: RemovePodsViolatingNodeTaints
             - name: RemovePodsViolatingTopologySpreadConstraint
           plugins:
@@ -51,9 +48,12 @@ spec:
                 - RemovePodsViolatingInterPodAntiAffinity
                 - RemovePodsViolatingNodeAffinity
                 - RemovePodsViolatingNodeTaints
+    deschedulerPolicyAPIVersion: descheduler/v1alpha2
+    kind: Deployment
+    leaderElection:
+      enabled: true
+    replicas: 2
     service:
       enabled: true
     serviceMonitor:
-      enabled: true
-    leaderElection:
       enabled: true

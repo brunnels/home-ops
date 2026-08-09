@@ -10,6 +10,13 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       sonarr:
         annotations:
@@ -20,7 +27,6 @@ spec:
               repository: ghcr.io/home-operations/sonarr
               tag: 4.0.19.2997@sha256:01db3e6a923f6e0f3a217baa94b4660cf2f9b45d4166b2fc8c20c67c5221cb78
             env:
-              TZ: "${TIMEZONE}"
               SONARR__APP__INSTANCENAME: *app
               SONARR__APP__THEME: dark
               SONARR__AUTH__METHOD: External
@@ -33,12 +39,13 @@ spec:
               SONARR__POSTGRES__PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
                     key: password
+                    name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
               SONARR__POSTGRES__PORT: 5432
               SONARR__POSTGRES__USER: *app
               SONARR__SERVER__PORT: &port 80
               SONARR__UPDATE__BRANCH: develop
+              TZ: "${TIMEZONE}"
             envFrom:
               - secretRef:
                   name: *app
@@ -47,13 +54,13 @@ spec:
                 enabled: true
                 custom: true
                 spec:
+                  failureThreshold: 5
                   httpGet:
                     path: /ping
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 3
-                  failureThreshold: 5
               readiness: *probes
             resources:
               requests:
@@ -63,15 +70,50 @@ spec:
                 memory: 2.5Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
+              readOnlyRootFilesystem: true
+    persistence:
+      config:
+        existingClaim: *app
+      downloads:
+        type: nfs
+        path: /downloads/${VAULT_PREFIX}/complete
+        server: ${QNAP_HOSTNAME}
+        advancedMounts:
+          sonarr:
+            app:
+              - path: /downloads/complete/downloaded_tv
+                subPath: sabnzbd/downloaded_tv
+              - path: /downloads/tv-sonarr
+                subPath: flood/tv-sonarr
+      tv:
+        type: nfs
+        path: /tv
+        server: ${QNAP_HOSTNAME}
+        globalMounts:
+          - path: /media/tv
+      tmp:
+        type: emptyDir
+    route:
+      app:
+        annotations:
+          gethomepage.dev/description: TV Downloads
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Downloads
+          gethomepage.dev/icon: *app
+          gethomepage.dev/name: Sonarr
+          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_SONARR_TOKEN}}` }}"
+          gethomepage.dev/widget.type: *app
+          gethomepage.dev/widget.url: "http://sonarr.{{ .Release.Namespace }}"
+        hostnames:
+          - "sonarr.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     service:
       app:
         annotations:
@@ -82,45 +124,3 @@ spec:
         ports:
           http:
             port: *port
-    route:
-      app:
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Downloads
-          gethomepage.dev/name: Sonarr
-          gethomepage.dev/icon: *app
-          gethomepage.dev/description: TV Downloads
-          gethomepage.dev/widget.type: *app
-          gethomepage.dev/widget.url: "http://sonarr.{{ .Release.Namespace }}"
-          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_SONARR_TOKEN}}` }}"
-        hostnames:
-          - "sonarr.${SECRET_DOMAIN}"
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        rules:
-          - backendRefs:
-              - name: *app
-                port: *port
-    persistence:
-      config:
-        existingClaim: *app
-      downloads:
-        advancedMounts:
-          sonarr:
-            app:
-              - path: /downloads/complete/downloaded_tv
-                subPath: sabnzbd/downloaded_tv
-              - path: /downloads/tv-sonarr
-                subPath: flood/tv-sonarr
-        path: /downloads/${VAULT_PREFIX}/complete
-        server: ${QNAP_HOSTNAME}
-        type: nfs
-      tv:
-        globalMounts:
-          - path: /media/tv
-        path: /tv
-        server: ${QNAP_HOSTNAME}
-        type: nfs
-      tmp:
-        type: emptyDir

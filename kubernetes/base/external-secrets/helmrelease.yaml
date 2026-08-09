@@ -10,24 +10,24 @@ spec:
     name: *app
   interval: 1h
   values:
-    installCRDs: true
-    leaderElect: true
     image:
       repository: &repo ghcr.io/external-secrets/external-secrets
-    webhook:
-      image:
-        repository: *repo
-      serviceMonitor:
-        enabled: true
-        interval: 1m
     certController:
       image:
         repository: *repo
       serviceMonitor:
         enabled: true
         interval: 1m
+    grafanaDashboard:
+      enabled: true
+    installCRDs: true
+    leaderElect: true
     serviceMonitor:
       enabled: true
       interval: 1m
-    grafanaDashboard:
-      enabled: true
+    webhook:
+      image:
+        repository: *repo
+      serviceMonitor:
+        enabled: true
+        interval: 1m

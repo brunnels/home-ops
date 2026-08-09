@@ -13,23 +13,73 @@ spec:
       namespace: storage
   interval: 1h
   values:
-    crds:
-      enabled: true
-    cleanPrometheusOperatorObjectNames: true
+    additionalPrometheusRulesMap:
+      dockerhub-rules:
+        groups:
+          - name: dockerhub
+            rules:
+              - alert: DockerhubRateLimitRisk
+                annotations:
+                  summary: There are {{ $value }} containers pulling from Dockerhub. This may lead
+                    to rate limiting.
+                expr: count(time() - container_last_seen{image=~"(docker.io).*",container!=""} <
+                  30) > 100
+                labels:
+                  severity: critical
+      oom-rules:
+        groups:
+          - name: oom
+            rules:
+              - alert: OomKilled
+                annotations:
+                  summary: Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{
+                    $labels.pod }} has been OOMKilled {{ $value }} times in the
+                    last 10 minutes.
+                expr: (kube_pod_container_status_restarts_total -
+                  kube_pod_container_status_restarts_total offset 10m >= 1) and
+                  ignoring (reason)
+                  min_over_time(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[10m])
+                  == 1
+                labels:
+                  severity: critical
+      zfs-rules:
+        groups:
+          - name: zfs
+            rules:
+              - alert: ZfsUnexpectedPoolState
+                annotations:
+                  summary: ZFS pool {{$labels.zpool}} on {{$labels.instance}} is in a unexpected
+                    state {{$labels.state}}
+                expr: node_zfs_zpool_state{state!="online"} > 0
+                labels:
+                  severity: critical
     alertmanager:
+      alertmanagerSpec:
+        alertmanagerConfiguration:
+          global:
+            resolveTimeout: 5m
+          name: alertmanager
+        externalUrl: "https://alertmanager.${SECRET_DOMAIN}"
+        storage:
+          volumeClaimTemplate:
+            spec:
+              resources:
+                requests:
+                  storage: 1Gi
+              storageClassName: ceph-block
       route:
         main:
-          enabled: true
           annotations:
             gatus.home-operations.com/endpoint: |
               name: alertmanager
-            gethomepage.dev/enabled: "true"
-            gethomepage.dev/icon: alertmanager
-            gethomepage.dev/name: Alert Manager
-            gethomepage.dev/group: Observability
             gethomepage.dev/app: alertmanager
             gethomepage.dev/description: Monitoring Alerting Service
+            gethomepage.dev/enabled: "true"
+            gethomepage.dev/group: Observability
+            gethomepage.dev/icon: alertmanager
+            gethomepage.dev/name: Alert Manager
             gethomepage.dev/pod-selector: app.kubernetes.io/name=alertmanager
+          enabled: true
           hostnames:
             - "alertmanager.${SECRET_DOMAIN}"
           parentRefs:
@@ -42,19 +92,19 @@ spec:
               - type: pushover
             group: internal
             name: alertmanager
-      alertmanagerSpec:
-        alertmanagerConfiguration:
-          name: alertmanager
-          global:
-            resolveTimeout: 5m
-        externalUrl: "https://alertmanager.${SECRET_DOMAIN}"
-        storage:
-          volumeClaimTemplate:
-            spec:
-              storageClassName: ceph-block
-              resources:
-                requests:
-                  storage: 1Gi
+    cleanPrometheusOperatorObjectNames: true
+    crds:
+      enabled: true
+    grafana:
+      enabled: false
+      forceDeployDashboards: true
+      operator:
+        dashboardsConfigMapRefEnabled: true
+        folder: observability
+        matchLabels:
+          dashboards: grafana
+    kube-state-metrics:
+      fullnameOverride: kube-state-metrics
     kubeEtcd:
       service:
         selector:
@@ -66,29 +116,29 @@ spec:
         externalUrl: "prometheus.${SECRET_DOMAIN}"
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
+        resources:
+          limits:
+            memory: 2000Mi
+          requests:
+            cpu: 100m
         retention: 14d
         retentionSize: 50GB
         ruleSelectorNilUsesHelmValues: false
         scrapeConfigSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
-        resources:
-          requests:
-            cpu: 100m
-          limits:
-            memory: 2000Mi
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: ceph-block
               resources:
                 requests:
                   storage: 50Gi
+              storageClassName: ceph-block
       route:
         main:
-          enabled: true
           annotations:
             gatus.home-operations.com/endpoint: |
               name: prometheus
+          enabled: true
           hostnames:
             - "prometheus.${SECRET_DOMAIN}"
           parentRefs:
@@ -108,49 +158,8 @@ spec:
           # drop useless ms-01 temperature sensors in chip="platform_nct6775_2592",
           # sensor=~"(temp1|temp3|temp4|temp5|temp6|temp8|temp9|temp10|temp11|temp12)"
           - action: drop
-            sourceLabels: [chip, sensor]
             regex: platform_nct6775_2592;(temp1|temp3|temp4|temp5|temp6|temp8|temp9|temp10|temp11|temp12)
-    kube-state-metrics:
-      fullnameOverride: kube-state-metrics
-    grafana:
-      enabled: false
-      forceDeployDashboards: true
-      operator:
-        dashboardsConfigMapRefEnabled: true
-        folder: observability
-        matchLabels:
-          dashboards: grafana
-    additionalPrometheusRulesMap:
-      dockerhub-rules:
-        groups:
-          - name: dockerhub
-            rules:
-              - alert: DockerhubRateLimitRisk
-                annotations:
-                  summary: There are {{ $value }} containers pulling from Dockerhub. This may lead to rate limiting.
-                expr: count(time() - container_last_seen{image=~"(docker.io).*",container!=""} < 30) > 100
-                labels:
-                  severity: critical
-      oom-rules:
-        groups:
-          - name: oom
-            rules:
-              - alert: OomKilled
-                annotations:
-                  summary: Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{ $labels.pod }} has been OOMKilled {{ $value }} times in the last 10 minutes.
-                expr: (kube_pod_container_status_restarts_total - kube_pod_container_status_restarts_total offset 10m >= 1) and ignoring (reason) min_over_time(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[10m]) == 1
-                labels:
-                  severity: critical
-      zfs-rules:
-        groups:
-          - name: zfs
-            rules:
-              - alert: ZfsUnexpectedPoolState
-                annotations:
-                  summary: ZFS pool {{$labels.zpool}} on {{$labels.instance}} is in a unexpected state {{$labels.state}}
-                expr: node_zfs_zpool_state{state!="online"} > 0
-                labels:
-                  severity: critical
+            sourceLabels: [chip, sensor]
   #postRenderers:
   #  - kustomize:
   #      patches:

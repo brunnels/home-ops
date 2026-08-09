@@ -13,10 +13,21 @@ spec:
     - name: rook-ceph-cluster
       namespace: storage
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
+        supplementalGroups:
+          - 44
     controllers:
       jellyfin:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          runtimeClassName: nvidia
         containers:
           app:
             image:
@@ -30,13 +41,13 @@ spec:
                 enabled: true
                 custom: true
                 spec:
+                  failureThreshold: 3
                   httpGet:
                     path: /health
                     port: &port 8096
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
-                  failureThreshold: 3
               readiness: *probes
             resources:
               requests:
@@ -47,53 +58,27 @@ spec:
                 nvidia.com/gpu: "1"
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-        pod:
-          runtimeClassName: nvidia
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 44
-    service:
-      app:
-        type: LoadBalancer
-        annotations:
-          lbipam.cilium.io/ips: *loadBalancerIP
-        externalTrafficPolicy: Local
-        ports:
-          http:
-            port: *port
-    route:
-      app:
-        hostnames:
-          - "{{ .Release.Name }}.${SECRET_DOMAIN}"
-        parentRefs:
-          - name: envoy-external
-            namespace: network
+              readOnlyRootFilesystem: true
     persistence:
       config:
         existingClaim: *app
         globalMounts:
           - path: /config
       movies:
-        globalMounts:
-          - path: /media/movies
+        type: nfs
         path: /movies
         server: ${QNAP_HOSTNAME}
-        type: nfs
-      tv:
         globalMounts:
-          - path: /media/tv
+          - path: /media/movies
+      tv:
+        type: nfs
         path: /tv
         server: ${QNAP_HOSTNAME}
-        type: nfs
+        globalMounts:
+          - path: /media/tv
       tmpfs:
+        type: emptyDir
         globalMounts:
           - path: /cache
             subPath: cache
@@ -103,4 +88,19 @@ spec:
             subPath: tmp
           - path: /transcodes
             subPath: transcodes
-        type: emptyDir
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+    service:
+      app:
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: *loadBalancerIP
+        externalTrafficPolicy: Local
+        ports:
+          http:
+            port: *port

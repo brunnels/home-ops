@@ -10,6 +10,13 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       seerr:
         annotations:
@@ -31,13 +38,13 @@ spec:
                 enabled: true
                 custom: true
                 spec:
+                  failureThreshold: 3
                   httpGet:
                     path: /api/v1/status
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 5
-                  failureThreshold: 3
               readiness: *probes
             resources:
               requests:
@@ -47,40 +54,8 @@ spec:
                 memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-    service:
-      app:
-        ports:
-          http:
-            port: *port
-    route:
-      app:
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Media
-          gethomepage.dev/name: Seerr
-          gethomepage.dev/icon: overseerr
-          gethomepage.dev/description: Media Request Management
-          gethomepage.dev/widget.type: overseerr
-          gethomepage.dev/widget.url: "http://seerr.{{ .Release.Namespace }}"
-          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_SEERR_TOKEN}}` }}"
-        hostnames:
-          - "requests.${SECRET_DOMAIN}"
-        parentRefs:
-          - name: envoy-external
-            namespace: network
-        rules:
-          - backendRefs:
-              - name: *app
-                port: *port
+              readOnlyRootFilesystem: true
     persistence:
       config:
         existingClaim: *app
@@ -92,12 +67,12 @@ spec:
           ephemeral:
             volumeClaimTemplate:
               spec:
-                storageClassName: openebs-hostpath
                 accessModes:
                   - ReadWriteOnce
                 resources:
                   requests:
                     storage: 15Gi
+                storageClassName: openebs-hostpath
         globalMounts:
           - path: /app/config/cache
       tmpfs:
@@ -109,3 +84,28 @@ spec:
                 subPath: logs
               - path: /tmp
                 subPath: tmp
+    route:
+      app:
+        annotations:
+          gethomepage.dev/description: Media Request Management
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Media
+          gethomepage.dev/icon: overseerr
+          gethomepage.dev/name: Seerr
+          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_SEERR_TOKEN}}` }}"
+          gethomepage.dev/widget.type: overseerr
+          gethomepage.dev/widget.url: "http://seerr.{{ .Release.Namespace }}"
+        hostnames:
+          - "requests.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+    service:
+      app:
+        ports:
+          http:
+            port: *port

@@ -10,11 +10,11 @@ spec:
     name: *app
   interval: 1h
   values:
+    nodePathMap:
+      - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
+        paths: ${LOCAL_PATH_PROVISIONER_NODE_PATHS}
     storageClass:
       create: true
       defaultClass: false
       name: local-path
       reclaimPolicy: Retain
-    nodePathMap:
-      - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
-        paths: ${LOCAL_PATH_PROVISIONER_NODE_PATHS}

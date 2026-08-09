@@ -15,11 +15,12 @@ spec:
   values:
     service:
       app:
-        controller: moonlight_proxy
-        type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-sharing-key: "{{ .Release.Namespace }}"
           metallb.universe.tf/allow-shared-ip: "{{ .Release.Namespace }}"
+        controller: moonlight_proxy
+        type: LoadBalancer
+
 #    controllers:
 #      direwolf_operator:
 #        containers:

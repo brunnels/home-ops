@@ -10,6 +10,13 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       prowlarr:
         annotations:
@@ -20,7 +27,6 @@ spec:
               repository: ghcr.io/home-operations/prowlarr
               tag: 2.6.1.5509@sha256:ce5d6bdd5be6529f503df77aa9d2bad20239031d7c660406e8fb1c6d621dd020
             env:
-              TZ: "${TIMEZONE}"
               PROWLARR__APP__INSTANCENAME: *app
               PROWLARR__APP__THEME: dark
               PROWLARR__AUTH__METHOD: External
@@ -33,12 +39,13 @@ spec:
               PROWLARR__POSTGRES__PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
                     key: password
+                    name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
               PROWLARR__POSTGRES__PORT: 5432
               PROWLARR__POSTGRES__USER: *app
               PROWLARR__SERVER__PORT: &port 80
               PROWLARR__UPDATE__BRANCH: develop
+              TZ: ${TIMEZONE}
             envFrom:
               - secretRef:
                   name: *app
@@ -47,13 +54,13 @@ spec:
                 enabled: true
                 custom: true
                 spec:
+                  failureThreshold: 3
                   httpGet:
                     path: /ping
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
-                  failureThreshold: 3
               readiness: *probes
             resources:
               requests:
@@ -63,36 +70,8 @@ spec:
                 memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-    service:
-      app:
-        annotations:
-          gatus.home-operations.com/endpoint: |
-            group: internal
-            alerts:
-              - type: pushover
-        ports:
-          http:
-            port: *port
-    route:
-      app:
-        hostnames:
-          - "prowlarr.${SECRET_DOMAIN}"
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        rules:
-          - backendRefs:
-              - name: *app
-                port: *port
+              readOnlyRootFilesystem: true
     persistence:
       tmpfs:
         type: emptyDir
@@ -103,3 +82,24 @@ spec:
                 subPath: config
               - path: /tmp
                 subPath: tmp
+    route:
+      app:
+        hostnames:
+          - prowlarr.${SECRET_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+    service:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
+        ports:
+          http:
+            port: *port

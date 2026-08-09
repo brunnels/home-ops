@@ -10,9 +10,9 @@ spec:
     name: *app
   interval: 1h
   values:
-    manager:
-      image:
-        repository: ghcr.io/dragonflydb/operator
     grafanaDashboard:
       enabled: true
       folder: data
+    manager:
+      image:
+        repository: ghcr.io/dragonflydb/operator

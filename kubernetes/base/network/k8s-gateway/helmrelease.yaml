@@ -10,13 +10,13 @@ spec:
     name: *app
   interval: 1h
   values:
-    fullnameOverride: *app
     domain: "${SECRET_DOMAIN}"
-    ttl: 1
+    fullnameOverride: *app
     service:
-      type: LoadBalancer
-      port: 53
       annotations:
         lbipam.cilium.io/ips: "${CLUSTER_DNS_GATEWAY_ADDR}"
       externalTrafficPolicy: Cluster
+      port: 53
+      type: LoadBalancer
+    ttl: 1
     watchedResources: ["HTTPRoute", "Service"]

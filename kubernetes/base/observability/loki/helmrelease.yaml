@@ -13,7 +13,13 @@ spec:
       namespace: storage
   interval: 1h
   values:
+    backend:
+      replicas: 0
+    chunksCache:
+      enabled: false
     deploymentMode: SingleBinary
+    gateway:
+      replicas: 0
     loki:
       analytics:
         reporting_enabled: false
@@ -21,9 +27,9 @@ spec:
       commonConfig:
         replication_factor: 1
       compactor:
-        working_directory: /var/loki/compactor/retention
         delete_request_store: filesystem
         retention_enabled: true
+        working_directory: /var/loki/compactor/retention
       ingester:
         chunk_encoding: snappy
       limits_config:
@@ -31,26 +37,21 @@ spec:
       schemaConfig:
         configs:
           - from: "2024-04-01" # quote
-            store: tsdb
+            index:
+              period: 24h
+              prefix: loki_index_
             object_store: filesystem
             schema: v13
-            index:
-              prefix: loki_index_
-              period: 24h
+            store: tsdb
       server:
-        log_level: info
         grpc_server_max_recv_msg_size: 10485760 # 10 MiB
         grpc_server_max_send_msg_size: 10485760 # 10 MiB
+        log_level: info
       storage:
-        type: filesystem
-        bucketNames: # Workaround for https://github.com/grafana/loki/issues/19655
+        bucketNames:
+          # Workaround for https://github.com/grafana/loki/issues/19655
           chunks: fnord
-    backend:
-      replicas: 0
-    chunksCache:
-      enabled: false
-    gateway:
-      replicas: 0
+        type: filesystem
     lokiCanary:
       enabled: false
     memberlist:
@@ -61,19 +62,19 @@ spec:
     resultsCache:
       enabled: false
     sidecar:
+      enableUniqueFilenames: true
       image:
         repository: ghcr.io/home-operations/k8s-sidecar
         tag: 2.10.1@sha256:9d9338eba4dbf0ae8151e772ef96d3806d56115acf5521d615e31694e046fe47
-      enableUniqueFilenames: true
       rules:
-        searchNamespace: ALL
         folder: /rules/fake
+        searchNamespace: ALL
     singleBinary:
-      replicas: 1
       persistence:
         enabled: true
-        storageClass: ceph-block
         size: 50Gi
+        storageClass: ceph-block
+      replicas: 1
     test:
       enabled: false
     write:

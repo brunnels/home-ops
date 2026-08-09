@@ -10,6 +10,13 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       sabnzbd:
         annotations:
@@ -20,15 +27,12 @@ spec:
               repository: ghcr.io/home-operations/sabnzbd
               tag: 5.0.4@sha256:457be5fad7b83c338a981f1945e1ecae2dedd0cc81cdd2992673b0dc84fc2890
             env:
-              TZ: "${TIMEZONE}"
-              SABNZBD__PORT: &port 8080
               SABNZBD__HOST_WHITELIST_ENTRIES: >-
-                sabnzbd,
-                sabnzbd.downloads,
-                sabnzbd.downloads.svc,
+                sabnzbd, sabnzbd.downloads, sabnzbd.downloads.svc,
                 sabnzbd.downloads.svc.cluster,
-                sabnzbd.downloads.svc.cluster.local,
-                sabnzbd.${SECRET_DOMAIN}
+                sabnzbd.downloads.svc.cluster.local, sabnzbd.${SECRET_DOMAIN}
+              SABNZBD__PORT: &port 8080
+              TZ: "${TIMEZONE}"
             envFrom:
               - secretRef:
                   name: *app
@@ -37,13 +41,13 @@ spec:
                 enabled: true
                 custom: true
                 spec:
+                  failureThreshold: 5
                   httpGet:
                     path: /api?mode=version
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 3
-                  failureThreshold: 5
               readiness: *probes
             resources:
               requests:
@@ -53,15 +57,65 @@ spec:
                 memory: 4Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
+              readOnlyRootFilesystem: true
+    persistence:
+      config:
+        existingClaim: *app
+      applications:
+        type: nfs
+        path: /applications
+        server: ${QNAP_HOSTNAME}
+        globalMounts:
+          - path: /media/applications
+      downloads:
+        type: nfs
+        path: /downloads/${VAULT_PREFIX}/complete
+        server: ${QNAP_HOSTNAME}
+        globalMounts:
+          - path: /downloads/complete
+            subPath: *app
+      games:
+        type: nfs
+        path: /games
+        server: ${QNAP_HOSTNAME}
+        globalMounts:
+          - path: /media/games
+      incomplete:
+        type: nfs
+        path: /downloads/${VAULT_PREFIX}/incomplete
+        server: ${QNAP_HOSTNAME}
+        globalMounts:
+          - path: /incomplete
+            subPath: *app
+      misc:
+        type: nfs
+        path: /misc
+        server: ${QNAP_HOSTNAME}
+        globalMounts:
+          - path: /media/misc
+      tmp:
+        type: emptyDir
+    route:
+      app:
+        annotations:
+          gethomepage.dev/description: NZB Download Client
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Downloads
+          gethomepage.dev/icon: *app
+          gethomepage.dev/name: SABnzbd
+          gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_SABNZBD_TOKEN}}`}}"
+          gethomepage.dev/widget.type: *app
+          gethomepage.dev/widget.url: "http://sabnzbd.{{ .Release.Namespace }}:8080"
+        hostnames:
+          - "sabnzbd.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     service:
       app:
         annotations:
@@ -72,60 +126,3 @@ spec:
         ports:
           http:
             port: *port
-    route:
-      app:
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Downloads
-          gethomepage.dev/name: SABnzbd
-          gethomepage.dev/icon: *app
-          gethomepage.dev/description: NZB Download Client
-          gethomepage.dev/widget.type: *app
-          gethomepage.dev/widget.url: "http://sabnzbd.{{ .Release.Namespace }}:8080"
-          gethomepage.dev/widget.key: "{{`{{HOMEPAGE_VAR_SABNZBD_TOKEN}}`}}"
-        hostnames:
-          - "sabnzbd.${SECRET_DOMAIN}"
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        rules:
-          - backendRefs:
-              - name: *app
-                port: *port
-    persistence:
-      config:
-        existingClaim: *app
-      applications:
-        globalMounts:
-          - path: /media/applications
-        path: /applications
-        server: ${QNAP_HOSTNAME}
-        type: nfs
-      downloads:
-        globalMounts:
-          - path: /downloads/complete
-            subPath: *app
-        path: /downloads/${VAULT_PREFIX}/complete
-        server: ${QNAP_HOSTNAME}
-        type: nfs
-      games:
-        globalMounts:
-          - path: /media/games
-        path: /games
-        server: ${QNAP_HOSTNAME}
-        type: nfs
-      incomplete:
-        globalMounts:
-          - path: /incomplete
-            subPath: *app
-        path: /downloads/${VAULT_PREFIX}/incomplete
-        server: ${QNAP_HOSTNAME}
-        type: nfs
-      misc:
-        globalMounts:
-          - path: /media/misc
-        path: /misc
-        server: ${QNAP_HOSTNAME}
-        type: nfs
-      tmp:
-        type: emptyDir

@@ -10,6 +10,13 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       theme-park:
         replicas: 2
@@ -27,15 +34,11 @@ spec:
                 memory: 64Mi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
+              readOnlyRootFilesystem: true
+    persistence:
+      tmp:
+        type: emptyDir
     service:
       app:
         ports:
@@ -44,7 +47,7 @@ spec:
     route:
       app:
         hostnames:
-          - "theme-park.${SECRET_DOMAIN}"
+          - theme-park.${SECRET_DOMAIN}
         parentRefs:
           - name: envoy-external
             namespace: network
@@ -52,9 +55,6 @@ spec:
           - backendRefs:
               - name: *app
                 port: *port
-    persistence:
-      tmp:
-        type: emptyDir
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname

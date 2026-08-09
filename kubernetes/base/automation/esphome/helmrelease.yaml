@@ -10,6 +10,13 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       esphome:
         containers:
@@ -18,11 +25,11 @@ spec:
               repository: ghcr.io/esphome/esphome
               tag: 2026.7.4@sha256:e636269c6390c2124916510d45f55febb1d9ce41365f8445c9083ee41e43c92b
             env:
-              TZ: "${TIMEZONE}"
               ESPHOME_DASHBOARD_USE_PING: true
               PLATFORMIO_CORE_DIR: /cache/platformio
               PLATFORMIO_GLOBALLIB_DIR: /cache/platformio/lib
               PLATFORMIO_SETTING_ENABLE_TELEMETRY: No
+              TZ: ${TIMEZONE}
             resources:
               requests:
                 cpu: 100m
@@ -32,15 +39,34 @@ spec:
                 memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
+              readOnlyRootFilesystem: true
+    persistence:
+      config:
+        existingClaim: *app
+        globalMounts:
+          - path: /config
+      cache:
+        type: custom
+        volumeSpec:
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 5Gi
+                storageClassName: openebs-hostpath
+      esphome-cache:
+        type: emptyDir
+        globalMounts:
+          - path: /.cache
+            subPath: .cache
+          - path: /.pioenvs
+            subPath: .pioenvs
+          - path: /tmp
+            subPath: tmp
     service:
       app:
         annotations:
@@ -55,15 +81,15 @@ spec:
     route:
       app:
         annotations:
+          gethomepage.dev/description: ESP Microcontroller Automation
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Automation
-          gethomepage.dev/name: ESPHome
           gethomepage.dev/icon: *app
-          gethomepage.dev/description: ESP Microcontroller Automation
+          gethomepage.dev/name: ESPHome
           gethomepage.dev/widget.type: *app
           gethomepage.dev/widget.url: "http://esphome.{{ .Release.Namespace }}:6052"
         hostnames:
-          - "esphome.${SECRET_DOMAIN}"
+          - esphome.${SECRET_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network
@@ -71,29 +97,3 @@ spec:
           - backendRefs:
               - name: *app
                 port: *port
-    persistence:
-      config:
-        existingClaim: *app
-        globalMounts:
-          - path: /config
-      cache:
-        type: custom
-        volumeSpec:
-          ephemeral:
-            volumeClaimTemplate:
-              spec:
-                storageClassName: openebs-hostpath
-                accessModes:
-                  - ReadWriteOnce
-                resources:
-                  requests:
-                    storage: 5Gi
-      esphome-cache:
-        type: emptyDir
-        globalMounts:
-          - path: /.cache
-            subPath: .cache
-          - path: /.pioenvs
-            subPath: .pioenvs
-          - path: /tmp
-            subPath: tmp

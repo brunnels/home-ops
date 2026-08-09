@@ -11,10 +11,10 @@ spec:
   interval: 1h
   # https://artifacthub.io/packages/helm/prometheus-community/prometheus-node-exporter?modal=values
   values:
-    fullnameOverride: *app
     extraArgs:
       - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var)($|/)
       - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs|tmpfs)$
+    fullnameOverride: *app
     hostNetwork: false
     image:
       registry: quay.io
@@ -23,6 +23,11 @@ spec:
       monitor:
         enabled: true
         jobLabel: app.kubernetes.io/instance
+        metricRelabelings:
+          # drop useless ms-01 temperature sensors in chip="platform_nct6775_2592", sensor=~"(temp1|temp3|temp4|temp5|temp6|temp8|temp9|temp10|temp11|temp12)"
+          - action: drop
+            regex: platform_nct6775_2592;(temp1|temp3|temp4|temp5|temp6|temp8|temp9|temp10|temp11|temp12)
+            sourceLabels: [chip, sensor]
         relabelings:
           - action: replace
             regex: (.*)
@@ -42,14 +47,9 @@ spec:
             sourceLabels:
               - kubernetes_node
             targetLabel: instance
-        metricRelabelings:
-          # drop useless ms-01 temperature sensors in chip="platform_nct6775_2592", sensor=~"(temp1|temp3|temp4|temp5|temp6|temp8|temp9|temp10|temp11|temp12)"
-          - action: drop
-            sourceLabels: [chip, sensor]
-            regex: platform_nct6775_2592;(temp1|temp3|temp4|temp5|temp6|temp8|temp9|temp10|temp11|temp12)
     resources:
+      limits:
+        memory: 64M
       requests:
         cpu: 23m
-        memory: 64M
-      limits:
         memory: 64M

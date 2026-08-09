@@ -10,6 +10,13 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       tautulli:
         annotations:
@@ -20,8 +27,8 @@ spec:
               repository: ghcr.io/home-operations/tautulli
               tag: 2.17.2@sha256:7592e192e2dd5297054a80c0f1e8b2593f7675af75c5020806b30c712e159406
             env:
-              TAUTULLI_HTTP_PORT: &port 80
               TAUTULLI_HTTP_BASE_URL: "https://{{ .Release.Name }}${SECRET_DOMAIN}"
+              TAUTULLI_HTTP_PORT: &port 80
               TZ: "${TIMEZONE}"
             envFrom:
               - secretRef:
@@ -31,13 +38,13 @@ spec:
                 enabled: true
                 custom: true
                 spec:
+                  failureThreshold: 3
                   httpGet:
                     path: /status
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 5
-                  failureThreshold: 3
               readiness: *probes
             resources:
               requests:
@@ -47,15 +54,53 @@ spec:
                 memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
+              readOnlyRootFilesystem: true
+    persistence:
+      config:
+        existingClaim: *app
+      cache:
+        type: custom
+        volumeSpec:
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 15Gi
+                storageClassName: openebs-hostpath
+        globalMounts:
+          - path: /config/cache
+      logs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/logs
+      tmp:
+        type: emptyDir
+      add-ons:
+        type: emptyDir
+    route:
+      app:
+        annotations:
+          gethomepage.dev/description: Plex Stream Monitoring
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Media
+          gethomepage.dev/icon: *app
+          gethomepage.dev/name: Tautulli
+          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_TAUTULLI_TOKEN}}` }}"
+          gethomepage.dev/widget.type: *app
+          gethomepage.dev/widget.url: "http://tautulli.{{ .Release.Namespace }}"
+        hostnames:
+          - "tautulli.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     service:
       app:
         annotations:
@@ -67,48 +112,3 @@ spec:
         ports:
           http:
             port: *port
-    route:
-      app:
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Media
-          gethomepage.dev/name: Tautulli
-          gethomepage.dev/icon: *app
-          gethomepage.dev/description: Plex Stream Monitoring
-          gethomepage.dev/widget.type: *app
-          gethomepage.dev/widget.url: "http://tautulli.{{ .Release.Namespace }}"
-          gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_TAUTULLI_TOKEN}}` }}"
-        hostnames:
-          - "tautulli.${SECRET_DOMAIN}"
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        rules:
-          - backendRefs:
-              - name: *app
-                port: *port
-    persistence:
-      config:
-        existingClaim: *app
-      cache:
-        type: custom
-        volumeSpec:
-          ephemeral:
-            volumeClaimTemplate:
-              spec:
-                storageClassName: openebs-hostpath
-                accessModes:
-                  - ReadWriteOnce
-                resources:
-                  requests:
-                    storage: 15Gi
-        globalMounts:
-          - path: /config/cache
-      logs:
-        type: emptyDir
-        globalMounts:
-          - path: /config/logs
-      tmp:
-        type: emptyDir
-      add-ons:
-        type: emptyDir

@@ -10,34 +10,53 @@ spec:
     name: app-template
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       flaresolverr:
-        replicas: 2
-        strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
+        replicas: 2
+        strategy: RollingUpdate
+        initContainers:
+          copy-files:
+            image:
+              repository: ghcr.io/flaresolverr/flaresolverr
+              tag: v3.5.0@sha256:139dfee1c6f89249c8d665d1333a42e8ec74ec0a86bc6bb1c8461e10d3a66a47
+            args:
+              - "-c"
+              - |
+                cp -R /app/* /appdir/ \
+                && chown 1000:100 -R /appdir/*
+            command:
+              - "/bin/sh"
         containers:
           app:
             image:
               repository: ghcr.io/flaresolverr/flaresolverr
               tag: v3.5.0@sha256:139dfee1c6f89249c8d665d1333a42e8ec74ec0a86bc6bb1c8461e10d3a66a47
             env:
-              TZ: "${TIMEZONE}"
               PORT: &port 80
               PROMETHEUS_ENABLED: true
               PROMETHEUS_PORT: &metricsPort 8080
+              TZ: ${TIMEZONE}
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
+                  failureThreshold: 3
                   httpGet:
                     path: /health
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
-                  failureThreshold: 3
               readiness: *probes
               startup:
                 enabled: false
@@ -50,27 +69,23 @@ spec:
                 memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-        initContainers:
-          copy-files:
-            image:
-              repository: ghcr.io/flaresolverr/flaresolverr
-              tag: v3.5.0@sha256:139dfee1c6f89249c8d665d1333a42e8ec74ec0a86bc6bb1c8461e10d3a66a47
-            command:
-              - "/bin/sh"
-            args:
-              - "-c"
-              - |
-                cp -R /app/* /appdir/ \
-                && chown 1000:100 -R /appdir/*
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
+              readOnlyRootFilesystem: true
+    persistence:
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          flaresolverr:
+            app:
+              - path: /app
+                subPath: app
+              - path: /tmp
+                subPath: tmp
+            copy-files:
+              - path: /appdir
+                subPath: app
+              - path: /tmp
+                subPath: tmp
     service:
       app:
         annotations:
@@ -91,18 +106,3 @@ spec:
             path: /metrics
             interval: 1m
             scrapeTimeout: 10s
-    persistence:
-      tmpfs:
-        type: emptyDir
-        advancedMounts:
-          flaresolverr:
-            copy-files:
-              - path: /appdir
-                subPath: app
-              - path: /tmp
-                subPath: tmp
-            app:
-              - path: /app
-                subPath: app
-              - path: /tmp
-                subPath: tmp

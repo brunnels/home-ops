@@ -12,10 +12,6 @@ spec:
   values:
     storageClass:
       create: true
-      name: nfs-slow
-      parameters:
-        server: ${QNAP_HOSTNAME}
-        share: "/appdata/${VAULT_PREFIX}-k8s"
       mountOptions:
         - nfsvers=4.1
         - nconnect=16
@@ -24,5 +20,9 @@ spec:
         - nodiratime
         - rsize=1048576
         - wsize=1048576
+      name: nfs-slow
+      parameters:
+        server: ${QNAP_HOSTNAME}
+        share: "/appdata/${VAULT_PREFIX}-k8s"
       reclaimPolicy: Delete
       volumeBindingMode: Immediate

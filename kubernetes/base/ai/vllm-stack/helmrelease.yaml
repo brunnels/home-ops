@@ -8,10 +8,10 @@ spec:
   chart:
     spec:
       chart: *app
-      version: 0.1.12
       sourceRef:
         kind: HelmRepository
         name: *app
+      version: 0.1.12
   interval: 1h
   upgrade:
     force: true
@@ -25,19 +25,19 @@ spec:
     routerSpec:
       route:
         main:
-          enabled: true
           annotations:
             gatus.home-operations.com/endpoint: |
               name: vllm-api
+          enabled: true
           hostnames:
-            - "vllm-api.${SECRET_DOMAIN}"
-          parentRefs:
-            - name: envoy-internal
-              namespace: network
+            - vllm-api.${SECRET_DOMAIN}
           matches:
             - path:
                 type: PathPrefix
                 value: /
+          parentRefs:
+            - name: envoy-internal
+              namespace: network
       serviceAnnotations:
         gatus.home-operations.com/endpoint: |
           alerts:
@@ -45,9 +45,6 @@ spec:
           group: internal
           name: vllm-api
     servingEngineSpec:
-      runtimeClassName: nvidia
-      strategy:
-        type: Recreate
       modelSpec:
         #- name: "distilgpt2-raycluster"
         #  repository: "lmcache/vllm-openai"
@@ -72,29 +69,27 @@ spec:
         #      requestCPU: 1
         #      requestMemory: "20Gi"
         #      requestGPU: 1
-        - name: gemma-3-1b-it
-          repository: "vllm/vllm-openai"
-          tag: "latest"
+        - hf_token:
+            secretKey: HF_TOKEN
+            secretName: *app
           modelURL: google/gemma-3-1b-it
-          replicaCount: 1
+          name: gemma-3-1b-it
           pvcStorage: 20Gi
+          replicaCount: 1
+          repository: vllm/vllm-openai
 
           # Match your system node resources
           requestCPU: 4
-          requestMemory: 12Gi
           requestGPU: 1
+          requestMemory: 12Gi
+          tag: "latest"
 
           vllmConfig:
             #gpuMemoryUtilization: 0.5
-            maxModelLen: 7777
             extraArgs:
               - "--trust-remote-code"
               - "--enforce-eager"
-
-          hf_token:
-            secretName: *app
-            secretKey: HF_TOKEN
-
+            maxModelLen: 7777
         #- name: intern-vl35-2b-hf
         #  repository: lmcache/vllm-openai
         #  tag: latest
@@ -143,19 +138,22 @@ spec:
         #  enabled: true
         #  cpuOffloadingBufferSize: "8"
 
-    #  replicaCount: 1
-    #  containerPort: 8080
-    #  servicePort: 81
-    #  serde: naive
-    #  repository: lmcache/vllm-openai
-    #  tag: latest-nightly
-    #  resources:
-    #    requests:
-    #      cpu: 2
-    #      memory: 2G
-    #    limits:
-    #      cpu: 2
-    #      memory: 10G
-    #  labels:
-    #    environment: cacheserver
-    #    release: cacheserver
+        #  replicaCount: 1
+        #  containerPort: 8080
+        #  servicePort: 81
+        #  serde: naive
+        #  repository: lmcache/vllm-openai
+        #  tag: latest-nightly
+        #  resources:
+        #    requests:
+        #      cpu: 2
+        #      memory: 2G
+        #    limits:
+        #      cpu: 2
+        #      memory: 10G
+        #  labels:
+        #    environment: cacheserver
+        #    release: cacheserver
+      runtimeClassName: nvidia
+      strategy:
+        type: Recreate
