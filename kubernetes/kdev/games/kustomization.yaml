@@ -10,5 +10,5 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
-  #- ./direwolf-apps.yaml
-  #- ./direwolf-operator.yaml
+  - ./direwolf-apps.yaml
+  - ./direwolf-operator.yaml
