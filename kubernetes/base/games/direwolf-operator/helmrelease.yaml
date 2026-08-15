@@ -216,7 +216,7 @@ spec:
     service:
       app:
         annotations:
-          #io.cilium/lb-ipam-ips: ${SVC_DIREWOLF_ADDR}
+          io.cilium/lb-ipam-ips: ${SVC_DIREWOLF_ADDR}
           io.cilium/lb-ipam-sharing-key: "{{ .Release.Namespace }}"
           lbipam.cilium.io/sharing-key: "{{ .Release.Namespace }}"
           metallb.universe.tf/allow-shared-ip: "{{ .Release.Namespace }}"
