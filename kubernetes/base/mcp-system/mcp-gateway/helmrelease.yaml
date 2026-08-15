@@ -18,12 +18,10 @@ spec:
         limits:
           memory: 256Mi
     gateway:
-      create: false
+      create: true
       namespace: ${NAMESPACE}
       publicHost: mcp.${SECRET_DOMAIN}
       gatewayClassName: envoy
     mcpGatewayExtension:
       gatewayRef:
-        name: envoy-internal
-        namespace: network
-        sectionName: https
+        namespace: ${NAMESPACE}
