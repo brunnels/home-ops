@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app mcp-gateway
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 1h
+  values:
+    controller:
+      resources:
+        requests:
+          cpu: 25m
+          memory: 128Mi
+        limits:
+          memory: 256Mi
+
+    gateway:
+      create: false
+      namespace: "{{ .Release.Namespace }}"
+      publicHost: "mcp.${SECRET_DOMAIN}"
+
+    mcpGatewayExtension:
+      gatewayRef:
+        name: envoy-internal
+        namespace: network
+        sectionName: https
