@@ -17,12 +17,10 @@ spec:
           memory: 128Mi
         limits:
           memory: 256Mi
-
     gateway:
       create: false
-      namespace: "{{ .Release.Namespace }}"
-      publicHost: "mcp.${SECRET_DOMAIN}"
-
+      namespace: ${NAMESPACE}
+      publicHost: mcp.${SECRET_DOMAIN}
     mcpGatewayExtension:
       gatewayRef:
         name: envoy-internal
