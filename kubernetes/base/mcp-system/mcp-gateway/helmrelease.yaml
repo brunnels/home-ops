@@ -21,6 +21,7 @@ spec:
       create: false
       namespace: ${NAMESPACE}
       publicHost: mcp.${SECRET_DOMAIN}
+      gatewayClassName: envoy
     mcpGatewayExtension:
       gatewayRef:
         name: envoy-internal
