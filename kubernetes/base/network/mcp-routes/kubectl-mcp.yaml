@@ -6,8 +6,7 @@
 apiVersion: aigateway.envoyproxy.io/v1beta1
 kind: MCPRoute
 metadata:
-  name: &name kubectl-mcp-test
-  namespace: network
+  name: &name kubectl-mcp
 spec:
   backendRefs:
     # waiting on https://github.com/envoyproxy/ai-gateway/issues/2385 to support RefrenceGrants
