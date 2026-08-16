@@ -1,8 +1,5 @@
 ---
 # yaml-language-server: $schema=https://github.com/games-on-whales/fenrir/raw/refs/heads/main/schemas/direwolf.games-on-whales.github.io/app_v1alpha1.json
-# Adapted from upstream examples/nvidia_devices/firefox.yaml. appAssetWebP is
-# required by the CRD; the upstream ~370KB poster is replaced with a tiny
-# generated 300x400 solid-color WebP placeholder.
 apiVersion: direwolf.games-on-whales.github.io/v1alpha1
 kind: App
 metadata:
@@ -10,30 +7,18 @@ metadata:
   annotations:
     kustomize.toolkit.fluxcd.io/substitute: disabled
 spec:
-  appAssetWebP: UklGRhwBAABXRUJQVlA4IBABAADQHACdASosAZABPm02mUmkIqKhICgAgA2JaW7hd2EbQAnsA99snIe+2Yy09snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPekAAD+/9O4f/1K366KRn9B8NO3tyIAAAAAAAAAAAAAAAAAAA==
+  appAssetWebP: UklGRhwBAABXRUJQVlA4IBABAADQHACdASosAZABPm02mUmkIqKhICgAgA2JaW7hd2EbQAnsA99snIe+2Yy09snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPekAAD+/9O4f/1K366KRn9B8NO3tyIAAAAAAAAAAAAAAAAAA
   id: 1
   isHDRSupported: true
   title: Firefox
-  # Operator defaults: RWO, 5Gi. Local openebs host-path keeps the Firefox
-  # profile on the node. The earlier "failed to create subPath directory"
-  # error on this SC was solved by making the openebs BasePath writable for
-  # kubelet (see the "host path and perms fixes" commit); ceph-block also
-  # works if this ever regresses.
-  volumeClaimTemplate:
-    spec:
-      storageClassName: openebs-hostpath
   wolfConfig:
     runtimeVariables:
-      # The NVIDIA container toolkit injects the GPU's DRM node with its
-      # host numbering: on nv-01 the dGPU is renderD129 (renderD128 doesn't
-      # exist inside the container). With the wrong node wolf can't detect
-      # the GPU vendor and silently falls back to software x264 encoding.
-      renderNode: /dev/dri/renderD129
+      renderNode: /dev/dri/renderD128
   template:
     spec:
       containers:
         - name: app
-          image: ghcr.io/games-on-whales/firefox:edge
+          image: ghcr.io/games-on-whales/firefox:edge@sha256:1ea7331934d31d346079fb67462b371586d65b5ebb792acee8c0e64e87c185b1
           resources:
             limits:
               nvidia.com/gpu: "1"
@@ -62,4 +47,15 @@ spec:
 
               export PULSE_SINK="$(pactl list sinks short | awk '$2 ~ /^virtual_sink/ {print $2; exit}')"
               export PULSE_SOURCE="${PULSE_SINK}.monitor"
+
+              # The Firefox profile lives under /home/retro, which is the
+              # wolf-data volume -- an ephemeral emptyDir (created root:root)
+              # shared with the root wolf sidecar. The GOW entrypoint drops to
+              # retro (uid 1000) but does not chown the home, so Firefox can't
+              # write its profile and dies with "Your Firefox profile cannot be
+              # loaded. It may be missing or inaccessible." This command runs as
+              # root (the entrypoint gosu's to retro afterwards), so fix the
+              # ownership first. (PUID/PGID default to 1000; substitute:disabled
+              # on this App keeps Flux from blanking the braces.)
+              chown -R "${PUID:-1000}:${PGID:-1000}" /home/retro
               exec /entrypoint.sh
