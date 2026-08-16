@@ -1,15 +1,21 @@
 apiVersion: aigateway.envoyproxy.io/v1beta1
 kind: MCPRoute
 metadata:
-  name: &app kubectl-mcp
+  name: &name kubectl-mcp
 spec:
   backendRefs:
-    - group: ""
-      kind: Service
-      name: *app
-      namespace: mcp-system
+    # waiting on https://github.com/envoyproxy/ai-gateway/issues/2385 to support RefrenceGrants
+    # for now use Backend as workaround
+    #- group: ""
+    #  kind: Service
+    #  name: *name
+    #  namespace: mcp-system
+    #  path: /mcp
+    #  port: 8000
+    - group: gateway.envoyproxy.io
+      kind: Backend
+      name: *name
       path: /mcp
-      port: 8000
       #toolSelector:
       #  include:
       #    - kubectl_get_pods
@@ -36,3 +42,13 @@ spec:
       kind: Gateway
       group: gateway.networking.k8s.io
   path: /mcp
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata:
+  name: kubectl-mcp
+spec:
+  endpoints:
+    - fqdn:
+        hostname: kubectl-mcp.mcp-system.svc.cluster.local
+        port: 8000
