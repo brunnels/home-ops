@@ -43,16 +43,17 @@ spec:
     rawResources:
       reference-grant:
         forceRename: *app
-        apiVersion: gateway.networking.k8s.io/v1beta1
-        kind: ReferenceGrant
-        spec:
-          from:
-            - group: gateway.networking.k8s.io
-              kind: HTTPRoute
-              namespace: network
-          to:
-            - group: ""
-              kind: Service
+        manifest:
+          apiVersion: gateway.networking.k8s.io/v1beta1
+          kind: ReferenceGrant
+          spec:
+            from:
+              - group: gateway.networking.k8s.io
+                kind: HTTPRoute
+                namespace: network
+            to:
+              - group: ""
+                kind: Service
     rbac:
       bindings:
         kubectl-mcp-read-all:
