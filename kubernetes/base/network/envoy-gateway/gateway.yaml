@@ -12,6 +12,8 @@ metadata:
       client:
         dns-resolver: tcp://1.1.1.1:53
       group: external
+  labels:
+    networking.envoyproxy.io/policy-group: global-traffic-policy
 spec:
   gatewayClassName: envoy
   infrastructure:
@@ -50,6 +52,8 @@ metadata:
       ui:
         hide-hostname: true
         hide-url: true
+  labels:
+    networking.envoyproxy.io/policy-group: global-traffic-policy
 spec:
   gatewayClassName: envoy
   infrastructure:
