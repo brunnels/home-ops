@@ -3,9 +3,9 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: &name envoy-ai
+  name: &name envoy-mcp
   annotations:
-    external-dns.alpha.kubernetes.io/target: &hostname ai.${SECRET_DOMAIN}
+    external-dns.alpha.kubernetes.io/target: &hostname mcp.${SECRET_DOMAIN}
     gatus.home-operations.com/endpoint: |
       alerts:
         - type: pushover
@@ -19,7 +19,7 @@ spec:
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: *hostname
-      lbipam.cilium.io/ips: ${CLUSTER_AI_GATEWAY_ADDR}
+      lbipam.cilium.io/ips: ${CLUSTER_MCP_GATEWAY_ADDR}
     parametersRef:
       group: gateway.envoyproxy.io
       kind: EnvoyProxy

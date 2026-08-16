@@ -74,7 +74,7 @@ spec:
                     - kubectl_get_node_metrics
                     - kubectl_get_pod_metrics
             parentRefs:
-              - name: envoy-ai
+              - name: envoy-mcp
                 kind: Gateway
                 group: gateway.networking.k8s.io
             path: /mcp
