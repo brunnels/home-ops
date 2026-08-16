@@ -10,5 +10,5 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
-  - ./envoy-mcp-gateway.yaml
-  - ./kubectl-mcp.yaml
+  #- ./envoy-mcp-gateway.yaml
+  #- ./kubectl-mcp.yaml
