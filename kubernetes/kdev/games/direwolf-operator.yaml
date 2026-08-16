@@ -11,7 +11,7 @@ spec:
   dependsOn:
     - name: generic-device-plugin
       namespace: kube-system
-    - name: nvidia-gpu-operator
+    - name: nvidia-device-plugin
       namespace: kube-system
   interval: 1h
   path: ./kubernetes/base/games/direwolf-operator

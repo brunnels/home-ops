@@ -20,4 +20,4 @@ resources:
   - ../../common/kube-system/spegel.yaml
   - ./generic-device-plugin.yaml
   - ./irqbalance.yaml
-  - ./nvidia-gpu-operator.yaml
+  - ./nvidia-device-plugin.yaml
