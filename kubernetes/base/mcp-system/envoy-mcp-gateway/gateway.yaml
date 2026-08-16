@@ -3,7 +3,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: &name envoy-mcp
+  name: &name envoy-mcp-gateway
   annotations:
     external-dns.alpha.kubernetes.io/target: &hostname mcp.${SECRET_DOMAIN}
     gatus.home-operations.com/endpoint: |
