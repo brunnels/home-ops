@@ -1,47 +1,22 @@
-apiVersion: aigateway.envoyproxy.io/v1beta1
-kind: MCPRoute
-metadata:
-  name: &name kubectl-mcp
-spec:
-  backendRefs:
-    # waiting on https://github.com/envoyproxy/ai-gateway/issues/2385 to support RefrenceGrants
-    # for now use Backend as workaround
-    #- group: ""
-    #  kind: Service
-    #  name: *name
-    #  namespace: mcp-system
-    #  path: /mcp
-    #  port: 8000
-    - group: gateway.envoyproxy.io
-      kind: Backend
-      name: *name
-      path: /mcp
-      #toolSelector:
-      #  include:
-      #    - kubectl_get_pods
-      #    - kubectl_get_nodes
-      #    - kubectl_get_nodes_summary
-      #    - kubectl_get_events
-      #    - kubectl_get_deployments
-      #    - kubectl_get_statefulsets
-      #    - kubectl_get_services
-      #    - kubectl_get_namespaces
-      #    - kubectl_get_pvcs
-      #    - kubectl_get_persistent_volumes
-      #    - kubectl_get_logs
-      #    - kubectl_get_pod_events
-      #    - kubectl_describe
-      #    - kubectl_health_check
-      #    - kubectl_check_pod_health
-      #    - kubectl_get_cluster_info
-      #    - kubectl_gitops_apps_list_tool
-      #    - kubectl_get_node_metrics
-      #    - kubectl_get_pod_metrics
-  parentRefs:
-    - name: envoy-ai
-      kind: Gateway
-      group: gateway.networking.k8s.io
-  path: /mcp
+# MCPRoute disabled due to ai-gateway bug: https://github.com/envoyproxy/ai-gateway/issues/1915
+# The ai-gateway controller fails to properly resolve FQDN endpoints in Backend resources.
+# Using manual HTTPRoutes as workaround instead.
+#
+# apiVersion: aigateway.envoyproxy.io/v1beta1
+# kind: MCPRoute
+# metadata:
+#   name: &name kubectl-mcp
+# spec:
+#   backendRefs:
+#     - group: gateway.envoyproxy.io
+#       kind: Backend
+#       name: *name
+#       path: /mcp
+#   parentRefs:
+#     - name: envoy-ai
+#       kind: Gateway
+#       group: gateway.networking.k8s.io
+#   path: /mcp
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: Backend
@@ -52,3 +27,57 @@ spec:
     - fqdn:
         hostname: kubectl-mcp.mcp-system.svc.cluster.local
         port: 8000
+---
+# Manual HTTPRoute workaround for MCPRoute due to ai-gateway bug #1915
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kubectl-mcp-main
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: envoy-ai
+  rules:
+    - matches:
+        - path:
+            type: Exact
+            value: /mcp
+      backendRefs:
+        - group: gateway.envoyproxy.io
+          kind: Backend
+          name: kubectl-mcp
+          port: 8000
+      filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: x-ai-eg-mcp-route
+                value: network/kubectl-mcp
+      timeouts:
+        request: 30m
+        backendRequest: 30m
+---
+# HTTPRoute for backend references (for ai-gateway extproc routing)
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kubectl-mcp-backend
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: envoy-ai
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mcp
+      backendRefs:
+        - group: gateway.envoyproxy.io
+          kind: Backend
+          name: kubectl-mcp
+          port: 8000
+      timeouts:
+        request: 30m
+        backendRequest: 30m
