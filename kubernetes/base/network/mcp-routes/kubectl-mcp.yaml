@@ -2,54 +2,53 @@
 # The ai-gateway controller fails to properly resolve FQDN endpoints in Backend resources.
 # Using manual HTTPRoutes as workaround instead.
 #
-# Keeping the MCPRoute and useless httproutes it creates because there's no other way to use toolSelectors
-apiVersion: aigateway.envoyproxy.io/v1beta1
-kind: MCPRoute
-metadata:
-  name: &name kubectl-mcp
-spec:
-  backendRefs:
-    # waiting on https://github.com/envoyproxy/ai-gateway/issues/2385 to support RefrenceGrants
-    # for now use Backend as workaround
-    #- group: ""
-    #  kind: Service
-    #  name: *name
-    #  namespace: mcp-system
-    #  path: /mcp
-    #  port: 8000
-    - group: gateway.envoyproxy.io
-      kind: Backend
-      name: *name
-      path: /mcp
-      toolSelector:
-        includeRegex:
-          - exec_in_pod
-          - cleanup_pods
-          - detect_pending_pods
-          - get_current_context
-          - health_check
-          - kubectl_explain
-          - node_logs_tool
-          - node_stats_summary_tool
-          - node_top_tool
-          - audit_rbac_permissions
-          - port_forward
-          - kubectl_describe
-          - hubble_flows_query_tool
-          - cilium_.*
-          - keda_.*
-          - policy_.*
-          - get_.*
-          - check_.*
-          - analyze_.*
-          - trace_.*
-          - diagnose_.*
-          - list_.*
-  parentRefs:
-    - name: envoy-ai
-      kind: Gateway
-      group: gateway.networking.k8s.io
-  path: /mcp
+#apiVersion: aigateway.envoyproxy.io/v1beta1
+#kind: MCPRoute
+#metadata:
+#  name: &name kubectl-mcp
+#spec:
+#  backendRefs:
+#    # waiting on https://github.com/envoyproxy/ai-gateway/issues/2385 to support RefrenceGrants
+#    # for now use Backend as workaround
+#    #- group: ""
+#    #  kind: Service
+#    #  name: *name
+#    #  namespace: mcp-system
+#    #  path: /mcp
+#    #  port: 8000
+#    - group: gateway.envoyproxy.io
+#      kind: Backend
+#      name: *name
+#      path: /mcp
+#      toolSelector:
+#        includeRegex:
+#          - exec_in_pod
+#          - cleanup_pods
+#          - detect_pending_pods
+#          - get_current_context
+#          - health_check
+#          - kubectl_explain
+#          - node_logs_tool
+#          - node_stats_summary_tool
+#          - node_top_tool
+#          - audit_rbac_permissions
+#          - port_forward
+#          - kubectl_describe
+#          - hubble_flows_query_tool
+#          - cilium_.*
+#          - keda_.*
+#          - policy_.*
+#          - get_.*
+#          - check_.*
+#          - analyze_.*
+#          - trace_.*
+#          - diagnose_.*
+#          - list_.*
+#  parentRefs:
+#    - name: envoy-ai
+#      kind: Gateway
+#      group: gateway.networking.k8s.io
+#  path: /mcp
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: Backend
