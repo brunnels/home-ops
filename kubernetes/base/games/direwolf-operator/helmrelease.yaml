@@ -62,7 +62,7 @@ spec:
               repository: docker.io/shrinedogg/operator
               tag: v0.1.0
             args:
-              - "--lb-sharing-key={{ .Release.Namespace }}"
+              - "--lb-sharing-key=${NAMESPACE}"
             env:
               # Patched fork: the agent acts as fake-udev for hotplugged
               # input devices (writes /run/udev/data entries to the shared
