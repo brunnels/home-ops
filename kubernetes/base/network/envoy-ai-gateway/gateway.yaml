@@ -4,14 +4,30 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: &name envoy-ai
+  annotations:
+    external-dns.alpha.kubernetes.io/target: &hostname ai.${SECRET_DOMAIN}
+    gatus.home-operations.com/endpoint: |
+      alerts:
+        - type: pushover
+      group: guarded
+      guarded: true
+      ui:
+        hide-hostname: true
+        hide-url: true
 spec:
   gatewayClassName: *name
-  listeners:
-    - name: http
-      protocol: HTTP
-      port: 1975
   infrastructure:
+    annotations:
+      external-dns.alpha.kubernetes.io/hostname: *hostname
+      lbipam.cilium.io/ips: ${CLUSTER_AI_GATEWAY_ADDR}
     parametersRef:
       group: gateway.envoyproxy.io
       kind: EnvoyProxy
       name: *name
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 1975
+      allowedRoutes:
+        namespaces:
+          from: Same
