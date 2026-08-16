@@ -19,7 +19,6 @@ spec:
           storage: 120Gi
   template:
     spec:
-      runtimeClassName: nvidia
       hostIPC: true
       # DLSS: restore the NVIDIA "wine" NGX bridge DLLs that the Talos
       # nonfree-kmod-nvidia extension strips. Proton looks for nvngx.dll /
