@@ -10,13 +10,6 @@ spec:
     name: app-template
   interval: 1h
   values:
-    defaultPodOptions:
-      securityContext:
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-        runAsGroup: 100
-        runAsNonRoot: true
-        runAsUser: 1000
     controllers:
       radarr:
         annotations:
@@ -72,6 +65,13 @@ spec:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 100
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
+        runAsNonRoot: true
+        runAsUser: 1000
     persistence:
       config:
         existingClaim: *app

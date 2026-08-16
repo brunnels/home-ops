@@ -10,3 +10,4 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
+  - ./kubectl-mcp.yaml
