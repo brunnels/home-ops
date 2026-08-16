@@ -23,7 +23,7 @@ spec:
       name: *name
       path: /mcp
       toolSelector:
-        include:
+        includeRegex:
           - exec_in_pod
           - cleanup_pods
           - detect_pending_pods
@@ -37,7 +37,6 @@ spec:
           - port_forward
           - kubectl_describe
           - hubble_flows_query_tool
-        includeRegex:
           - cilium_.*
           - keda_.*
           - policy_.*
