@@ -9,8 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: envoy-ai-gateway
-      namespace: network
+    - name: envoy-mcp-gateway
   interval: 1h
   path: ./kubernetes/base/mcp-system/kubectl-mcp
   prune: true
