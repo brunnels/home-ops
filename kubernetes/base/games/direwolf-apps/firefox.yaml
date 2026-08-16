@@ -29,6 +29,7 @@ spec:
       renderNode: /dev/dri/renderD129
   template:
     spec:
+      runtimeClassName: nvidia
       containers:
         - name: app
           image: ghcr.io/games-on-whales/firefox:edge
