@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app envoy-mcp
+  name: &app envoy-mcp-gateway
 spec:
   commonMetadata:
     labels:
@@ -12,7 +12,7 @@ spec:
     - name: envoy-ai-gateway
       namespace: network
   interval: 1h
-  path: ./kubernetes/base/mcp-system/envoy-mcp
+  path: ./kubernetes/base/mcp-system/envoy-mcp-gateway
   prune: true
   sourceRef:
     kind: GitRepository
