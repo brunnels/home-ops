@@ -10,8 +10,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: direwolf-operator
-    - name: nvidia-gpu-operator
-      namespace: kube-system
     - name: openebs-hostpath
       namespace: storage
     - name: rook-ceph-cluster
