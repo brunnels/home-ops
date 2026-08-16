@@ -7,6 +7,7 @@ spec:
     - group: ""
       kind: Service
       name: *app
+      namespace: mcp-system
       path: /mcp
       port: 8000
       #toolSelector:
