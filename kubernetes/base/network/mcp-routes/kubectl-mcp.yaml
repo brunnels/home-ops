@@ -1,0 +1,37 @@
+apiVersion: aigateway.envoyproxy.io/v1beta1
+kind: MCPRoute
+metadata:
+  name: &app kubectl-mcp
+spec:
+  backendRefs:
+    - group: ""
+      kind: Service
+      name: *app
+      path: /mcp
+      port: 8000
+      #toolSelector:
+      #  include:
+      #    - kubectl_get_pods
+      #    - kubectl_get_nodes
+      #    - kubectl_get_nodes_summary
+      #    - kubectl_get_events
+      #    - kubectl_get_deployments
+      #    - kubectl_get_statefulsets
+      #    - kubectl_get_services
+      #    - kubectl_get_namespaces
+      #    - kubectl_get_pvcs
+      #    - kubectl_get_persistent_volumes
+      #    - kubectl_get_logs
+      #    - kubectl_get_pod_events
+      #    - kubectl_describe
+      #    - kubectl_health_check
+      #    - kubectl_check_pod_health
+      #    - kubectl_get_cluster_info
+      #    - kubectl_gitops_apps_list_tool
+      #    - kubectl_get_node_metrics
+      #    - kubectl_get_pod_metrics
+  parentRefs:
+    - name: envoy-ai
+      kind: Gateway
+      group: gateway.networking.k8s.io
+  path: /mcp

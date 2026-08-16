@@ -10,6 +10,7 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
+  - ./mcp-routes.yaml
   - ../../common/network/cloudflare-dns.yaml
   - ../../common/network/cloudflare-tunnel.yaml
   - ../../common/network/echo.yaml
