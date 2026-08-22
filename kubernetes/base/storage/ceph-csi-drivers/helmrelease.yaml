@@ -12,7 +12,16 @@ spec:
   values:
     drivers:
       cephfs:
-        enabled: false
+        enabled: true
+        kernelMountOptions:
+          ms_mode: prefer-crc
+        name: rook-ceph.cephfs.csi.ceph.com
+        nodePlugin:
+          tolerations: &pluginTolerations
+            - key: llm-workload
+              operator: Exists
+              effect: NoSchedule
+        snapshotPolicy: volumeSnapshot
       nfs:
         enabled: false
       nvmeof:
@@ -20,4 +29,6 @@ spec:
       rbd:
         enabled: true
         name: storage.rbd.csi.ceph.com
+        nodePlugin:
+          tolerations: *pluginTolerations
         snapshotPolicy: volumeSnapshot
