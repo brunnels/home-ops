@@ -1,0 +1,19 @@
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: ModelRouter
+metadata:
+  name: agent-gateway
+  namespace: llmkube-inference
+spec:
+  modelName: agent-core-model
+  backends:
+    - name: local-rtx3050-pool
+      type: InferenceService
+      inferenceServiceRef:
+        name: llama-nvidia-qwen3-8b-q4
+      weight: 100
+  rules:
+    - name: default-agent-routing
+      match:
+        - path: /v1/chat/completions
+      backendRef: local-rtx3050-pool
+      timeout: 15m
