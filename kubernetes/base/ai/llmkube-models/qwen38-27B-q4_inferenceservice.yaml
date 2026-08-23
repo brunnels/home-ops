@@ -72,7 +72,10 @@ spec:
     - "6"
     - --threads-batch
     - "12"
-    - --mmap
+    - --load-mode
+    - mmap
+    - --n-gpu-layers
+    - "8"
     - --chat-template-kwargs
     - '{"reasoning_effort":"medium"}'
     - --n-predict
