@@ -36,7 +36,7 @@ spec:
     memory: 8Gi
   extraArgs:
     - --alias
-    - llama-nvidia-qwen3-8b-q4
+    - Qwen3-8B-GGUF
     - --no-mmproj-offload
     - --image-min-tokens
     - "1024"
