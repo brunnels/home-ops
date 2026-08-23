@@ -1,8 +1,9 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.m00nlit.dev/inference.llmkube.dev/modelrouter_v1alpha1.json
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: ModelRouter
 metadata:
   name: agent-gateway
-  namespace: llmkube-inference
 spec:
   modelName: agent-core-model
   backends:
