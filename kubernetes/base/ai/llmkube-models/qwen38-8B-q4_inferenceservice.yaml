@@ -40,7 +40,6 @@ spec:
     - --image-min-tokens
     - "1024"
     - --cont-batching
-    - --ignore-control-token-type
     - --cache-prompt
     - --cache-ram
     - "40960"
