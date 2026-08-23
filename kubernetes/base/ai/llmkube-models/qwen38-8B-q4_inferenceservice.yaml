@@ -34,6 +34,8 @@ spec:
     cpu: 500m
     memory: 16Gi
   extraArgs:
+    - --port
+    - "9931"
     - --alias
     - llama-nvidia-qwen3-8b-q4
     - --no-mmproj-offload
@@ -67,26 +69,26 @@ spec:
     - --n-predict
     - "40960"
   endpoint:
-    port: 8080
+    port: &port 9931
     type: ClusterIP
   probeOverrides:
     startup:
       httpGet:
         path: /health
-        port: 8080
+        port: *port
       periodSeconds: 10
       failureThreshold: 360
     liveness:
       httpGet:
         path: /health
-        port: 8080
+        port: *port
       initialDelaySeconds: 30
       periodSeconds: 30
       failureThreshold: 6
     readiness:
       httpGet:
         path: /health
-        port: 8080
+        port: *port
       initialDelaySeconds: 20
       periodSeconds: 10
       failureThreshold: 6
