@@ -3,11 +3,11 @@
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: InferenceService
 metadata:
-  name: llama-nvidia-qwen38-27b-q4
+  name: llama-nvidia-qwen3-8b-q4
   labels:
     krr/ignore: "true"
 spec:
-  modelRef: llama-nvidia-qwen38-27b-q4
+  modelRef: llama-nvidia-qwen3-8b-q4
   runtime: llamacpp
   image: ghcr.io/ggml-org/llama.cpp:server-cuda@sha256:45047ae940975851c3b195997c91f6bb4add4b941880d94287e5f21ff5a6369a
   rolloutPolicy:
@@ -31,7 +31,7 @@ spec:
   reasoningBudgetMessage: "Stop reasoning and produce the implementation, tool call, or final answer."
   resources:
     gpu: 1
-    cpu: "500m"
+    cpu: 500m
     memory: 16Gi
   extraArgs:
     - --alias
@@ -74,8 +74,6 @@ spec:
     - "12"
     - --load-mode
     - mmap
-    - --n-gpu-layers
-    - "8"
     - --chat-template-kwargs
     - '{"reasoning_effort":"medium"}'
     - --n-predict

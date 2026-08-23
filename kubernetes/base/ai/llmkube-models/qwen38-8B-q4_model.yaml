@@ -3,13 +3,11 @@
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: Model
 metadata:
-  name: llama-nvidia-qwen38-27b-q4
+  name: llama-nvidia-qwen3-8b-q4
 spec:
-  source: hf://unsloth/Qwen3.8-27B-GGUF
+  source: hf://unsloth/Qwen3-8B-GGUF
   files:
-    - Qwen3.8-27B-UD-Q4_K_XL.gguf
-    - mmproj-F16.gguf
-  mmproj: mmproj-F16.gguf
+    - Qwen3-8B-UD-Q4_K_XL.gguf
   format: gguf
   quantization: UD-Q4_K_XL
   hardware:
