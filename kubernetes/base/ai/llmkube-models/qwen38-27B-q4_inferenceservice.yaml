@@ -3,29 +3,44 @@
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: InferenceService
 metadata:
-  name: qwen36-27b-q4
+  name: llama-nvidia-qwen38-27b-q4
+  labels:
+    krr/ignore: "true"
 spec:
-  modelRef: qwen36-27b-q4
+  modelRef: llama-nvidia
   runtime: llamacpp
-  image: ghcr.io/ggml-org/llama.cpp:server-cuda
+  image: ghcr.io/ggml-org/llama.cpp:server-cuda@sha256:45047ae940975851c3b195997c91f6bb4add4b941880d94287e5f21ff5a6369a
+  rolloutPolicy:
+    waitForIdle: false
+    idleTimeoutSeconds: 86400
   replicas: 1
+  priorityClassName: gpu-preemptible
   runtimeClassName: nvidia
-  contextSize: 131072
+  nodeSelector:
+    topology.kubernetes.io: egpu
+  env:
+    - name: NVIDIA_DRIVER_CAPABILITIES
+      value: compute,utility
+  contextSize: 140000
   flashAttention: true
   jinja: true
   parallelSlots: 1
   batchSize: 4096
-  uBatchSize: 1024
+  uBatchSize: 512
   cacheTypeK: q8_0
   cacheTypeV: q8_0
-  reasoningBudget: 16384
+  reasoningBudget: 32768
   reasoningBudgetMessage: "Stop reasoning and produce the implementation, tool call, or final answer."
   resources:
+    gpu: 1
     cpu: "500m"
     memory: 16Gi
   extraArgs:
     - --alias
-    - qwen36-27b-q4
+    - llama-nvidia
+    - --no-mmproj-offload
+    - --image-min-tokens
+    - "1024"
     - --cont-batching
     - --spec-type
     - draft-mtp
@@ -41,10 +56,10 @@ spec:
     - "0.75"
     - --cache-prompt
     - --cache-ram
-    - "16384"
+    - "40960"
     - --kv-unified
     - --temp
-    - "0.6"
+    - "1"
     - --top-p
     - "0.95"
     - --top-k
@@ -52,16 +67,18 @@ spec:
     - --min-p
     - "0"
     - --presence-penalty
-    - "0.5"
+    - "0"
     - --repeat-penalty
-    - "1.03"
+    - "1"
     - --threads
     - "6"
     - --threads-batch
     - "12"
     - --mmap
     - --chat-template-kwargs
-    - '{"preserve_thinking":true}'
+    - '{"reasoning_effort":"medium"}'
+    - --n-predict
+    - "40960"
   endpoint:
     port: 8080
     type: ClusterIP

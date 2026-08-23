@@ -3,9 +3,13 @@
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: Model
 metadata:
-  name: qwen36-27b-q4
+  name: llama-nvidia-qwen38-27b-q4
 spec:
-  source: https://huggingface.co/unsloth/Qwen3.6-27B-MTP-GGUF/resolve/main/Qwen3.6-27B-UD-Q4_K_XL.gguf
+  source: hf://unsloth/Qwen3.8-27B-GGUF
+  files:
+    - Qwen3.8-27B-UD-Q4_K_XL.gguf
+    - mmproj-F16.gguf
+  mmproj: mmproj-F16.gguf
   format: gguf
   quantization: UD-Q4_K_XL
   hardware:
@@ -13,8 +17,5 @@ spec:
     gpu:
       enabled: true
       vendor: nvidia
-      count: 0
-      layers: -1
-      resourceClaims:
-        - name: gpu
-          resourceClaimName: gpu-claim
+      count: 1
+      layers: 99
