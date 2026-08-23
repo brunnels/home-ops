@@ -14,5 +14,7 @@ resources:
   - ./ai-pgo-cluster.yaml
   - ./homebox.yaml
   - ./homebox-companion.yaml
+  - ./llmkube.yaml
+  - ./llmkube-models.yaml
   - ./omniroute.yaml
   - ./open-webui.yaml
