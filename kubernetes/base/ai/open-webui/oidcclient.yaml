@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: authelia.milas.dev/v1alpha2
 kind: OIDCClient
 metadata:
@@ -12,16 +13,16 @@ spec:
     - https://chat.${SECRET_DOMAIN}/oauth/oidc/callback
   response_types:
     - code
-  secret_ref:
-    name: *name
-    fields:
-      client_id: OAUTH_CLIENT_ID
-      client_secret: OAUTH_CLIENT_SECRET
   scopes:
     - email
     - openid
     - profile
     - groups
+  secret_ref:
+    fields:
+      client_id: OAUTH_CLIENT_ID
+      client_secret: OAUTH_CLIENT_SECRET
+    name: *name
   # default should not be needed, but it is required for the operator to work issue: #6
   token_endpoint:
     auth_method: client_secret_basic
