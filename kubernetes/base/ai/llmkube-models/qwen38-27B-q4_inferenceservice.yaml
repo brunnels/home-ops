@@ -7,7 +7,7 @@ metadata:
   labels:
     krr/ignore: "true"
 spec:
-  modelRef: llama-nvidia
+  modelRef: llama-nvidia-qwen38-27b-q4
   runtime: llamacpp
   image: ghcr.io/ggml-org/llama.cpp:server-cuda@sha256:45047ae940975851c3b195997c91f6bb4add4b941880d94287e5f21ff5a6369a
   rolloutPolicy:
