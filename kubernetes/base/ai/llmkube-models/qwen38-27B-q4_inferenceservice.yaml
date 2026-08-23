@@ -16,8 +16,6 @@ spec:
   replicas: 1
   priorityClassName: gpu-preemptible
   runtimeClassName: nvidia
-  nodeSelector:
-    topology.kubernetes.io: egpu
   env:
     - name: NVIDIA_DRIVER_CAPABILITIES
       value: compute,utility
