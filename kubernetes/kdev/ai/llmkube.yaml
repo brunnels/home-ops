@@ -9,6 +9,10 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: intel-gpu-resource-driver
+      namespace: kube-system
+    - name: nvidia-device-plugin
+      namespace: kube-system
     - name: csi-driver-nfs
       namespace: storage
   interval: 1h
