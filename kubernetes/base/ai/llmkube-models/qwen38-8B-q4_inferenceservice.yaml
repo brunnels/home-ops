@@ -19,7 +19,7 @@ spec:
   env:
     - name: NVIDIA_DRIVER_CAPABILITIES
       value: compute,utility
-  contextSize: 140000
+  contextSize: 40960
   flashAttention: true
   jinja: true
   parallelSlots: 1
@@ -35,11 +35,12 @@ spec:
     memory: 16Gi
   extraArgs:
     - --alias
-    - llama-nvidia
+    - llama-nvidia-qwen3-8b-q4
     - --no-mmproj-offload
     - --image-min-tokens
     - "1024"
     - --cont-batching
+    - --ignore-control-token-type
     - --cache-prompt
     - --cache-ram
     - "40960"
