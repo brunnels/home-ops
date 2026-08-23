@@ -33,7 +33,7 @@ spec:
   resources:
     gpu: 1
     cpu: 500m
-    memory: 16Gi
+    memory: 8Gi
   extraArgs:
     - --alias
     - llama-nvidia-qwen3-8b-q4
