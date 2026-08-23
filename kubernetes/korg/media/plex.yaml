@@ -9,8 +9,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../../components/intel-gpu
-    - ../../../../../components/igpu-spread
+    - ../../../components/intel-gpu
+    - ../../../components/igpu-spread
     - ../../../components/kopiur/backup
   dependsOn:
     - name: kopiur-repository
