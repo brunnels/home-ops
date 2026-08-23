@@ -13,7 +13,7 @@ spec:
   rolloutPolicy:
     waitForIdle: false
     idleTimeoutSeconds: 86400
-  replicas: 1
+  replicas: 3
   priorityClassName: gpu-preemptible
   runtimeClassName: nvidia
   env:
