@@ -13,8 +13,8 @@ resources:
   - ./namespace.yaml
   # namespace first
   - ./ai-pgo-cluster.yaml
-  #- ./foreman-agents.yaml
-  #- ./foreman.yaml
+  - ./foreman-agents.yaml
+  - ./foreman.yaml
   - ./homebox-companion.yaml
   - ./homebox.yaml
   #- ./litellm.yaml
