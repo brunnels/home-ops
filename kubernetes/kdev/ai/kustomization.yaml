@@ -21,4 +21,4 @@ resources:
   #- ./llmkube-models.yaml
   #- ./llmkube.yaml
   - ./omniroute.yaml
-  - ./open-webui.yaml
+  #- ./open-webui.yaml
