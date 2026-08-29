@@ -2,7 +2,10 @@
 machine:
   kubelet:
     extraConfig:
+      maxPods: 150
       serializeImagePulls: false
+      imageGCHighThresholdPercent: 70
+      imageGCLowThresholdPercent: 65
     extraMounts:
       - destination: /var/mnt/lpp-0
         type: bind
