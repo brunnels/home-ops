@@ -32,7 +32,7 @@ spec:
     # Defaults every entry in `agents` merges over (LLMKube#994).
     agent:
       mode: native
-      taskNamespace: llm
+      taskNamespace: ai
       image:
         repository: ghcr.io/misospace/llmkube-coder
         tag: 0.9.23@sha256:63d0705e7658d4fddeb9b3b47588d5cdae8d89f5123c7c0a84bb1a5a2894d999

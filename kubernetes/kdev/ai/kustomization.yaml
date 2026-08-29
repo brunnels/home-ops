@@ -19,6 +19,6 @@ resources:
   - ./homebox.yaml
   #- ./litellm.yaml
   #- ./llmkube-models.yaml
-  #- ./llmkube.yaml
+  - ./llmkube.yaml
   - ./omniroute.yaml
   #- ./open-webui.yaml
