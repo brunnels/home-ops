@@ -11,10 +11,14 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
+  # namespace first
   - ./ai-pgo-cluster.yaml
-  - ./homebox.yaml
+  - ./foreman-agents.yaml
+  - ./foreman.yaml
   - ./homebox-companion.yaml
-  - ./llmkube.yaml
-  - ./llmkube-models.yaml
+  - ./homebox.yaml
+  #- ./litellm.yaml
+  #- ./llmkube-models.yaml
+  #- ./llmkube.yaml
   - ./omniroute.yaml
   - ./open-webui.yaml
