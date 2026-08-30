@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name dispatch
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *name
+  interval: 1h
+  values:
+    controllers:
+      main:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          main:
+            env:
+              DISPATCH_AUTH_MODE: oidc
+              DISPATCH_EXCLUDED_LABELS: renovate
+              DISPATCH_GROOMER_DRY_RUN: false
+              DISPATCH_GROOMER_MODEL: auto/coding:free
+              DISPATCH_GROOMER_REPO_CONTEXT_ENABLED: true
+              DISPATCH_HOSTED_GROOMER_ENABLED: true
+              DISPATCH_LANE_CONFIG_JSON: |-
+                {
+                  "lanes": [{
+                    "id": "free",
+                    "title": "Free",
+                    "claimable": true,
+                    "role": "default",
+                    "description": "auto/coding:free model lane — the default: all groomed, ready work starts here.",
+                    "color": "#3b82f6"
+                  },{
+                    "id": "frontier",
+                    "title": "Frontier",
+                    "claimable": true,
+                    "role": "escalation",
+                    "description": "Escalation lane (MiniMax-M3 via omniroute) — fed by the bridge when auto/coding:free attempts are exhausted, not by grooming.",
+                    "color": "#f97316"
+                  },{
+                    "id": "backlog",
+                    "title": "Backlog",
+                    "claimable": false,
+                    "description": "Needs grooming before work can start. Not directly claimable.",
+                    "color": "#6b7280"
+                  }],
+                  "laneAliases": {
+                    "normal": "free",
+                    "escalated": "frontier",
+                    "cloud": "free"
+                  }
+                }
+              DISPATCH_LLM_BASE_URL: http://omniroute:20128/v1
+              DISPATCH_OIDC_ISSUER: https://auth.${SECRET_DOMAIN}
+              DISPATCH_SCHEDULER_ENABLED: true
+              NEXTAUTH_URL: https://dispatch.${SECRET_DOMAIN}
+              PR_FOLLOWUP_BOT_IDENTITIES: kraven-ai[bot]
+              DATABASE_URL: &dburl
+                valueFrom:
+                  secretKeyRef:
+                    name: ai-pguser-dispatch
+                    key: uri
+            envFrom:
+              - secretRef:
+                  name: *name
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+    route:
+      main:
+        hostnames:
+          - dispatch.${SECRET_DOMAIN}
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: main
+                port: 3000
+    migrations:
+      env:
+        DATABASE_URL: *dburl

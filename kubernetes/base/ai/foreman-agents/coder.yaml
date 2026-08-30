@@ -8,7 +8,7 @@ spec:
   provider: cloud-proxy
   providerConfig:
     baseURL: http://omniroute:20128/v1
-    model: auto/coding:free
+    model: auto/coding
     apiKeySecretRef:
       name: foreman-agent
       key: OMNIROUTE_API_KEY
