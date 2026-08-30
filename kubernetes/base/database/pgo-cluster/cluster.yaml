@@ -23,6 +23,8 @@ spec:
         synchronous_commit: "on"
         parameters:
           max_connections: 500
+        pg_hba:
+          - host all all ${CLUSTER_CIDR} md5
   instances:
     - name: pgo-cluster
       metadata:
