@@ -2,26 +2,25 @@
 apiVersion: authelia.milas.dev/v1alpha2
 kind: OIDCClient
 metadata:
-  name: &name open-webui
+  name: &name dispatch
   annotations:
     authelia.milas.dev/oidc-provider: security/default
 spec:
-  description: Open Web-UI
+  description: Dispatch
   preconfigured_consent_duration: 1y
   redirect_uris:
-    - https://chat.${SECRET_DOMAIN}/oauth/oidc/callback
+    - https://dispatch.${SECRET_DOMAIN}/api/auth/callback/oidc
   response_types:
     - code
   scopes:
     - email
     - openid
     - profile
-    - groups
   secret_ref:
-    fields:
-      client_id: OAUTH_CLIENT_ID
-      client_secret: OAUTH_CLIENT_SECRET
     name: *name
+    fields:
+      client_id: DISPATCH_OIDC_CLIENT_ID
+      client_secret: DISPATCH_OIDC_CLIENT_SECRET
   # default should not be needed, but it is required for the operator to work issue: #6
   token_endpoint:
     auth_method: client_secret_basic
