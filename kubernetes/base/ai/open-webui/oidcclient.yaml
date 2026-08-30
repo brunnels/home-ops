@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://brunnels.github.io/authelia-oidc-operator/authelia.milas.dev/oidcclient_v1alpha2.json
 apiVersion: authelia.milas.dev/v1alpha2
 kind: OIDCClient
 metadata:
