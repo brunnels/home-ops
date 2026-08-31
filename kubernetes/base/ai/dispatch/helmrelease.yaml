@@ -3,11 +3,11 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name dispatch
+  name: &app dispatch
 spec:
   chartRef:
     kind: OCIRepository
-    name: *name
+    name: *app
   interval: 1h
   values:
     controllers:
@@ -59,7 +59,7 @@ spec:
               PR_FOLLOWUP_BOT_IDENTITIES: kraven-ai[bot]
             envFrom:
               - secretRef:
-                  name: *name
+                  name: *app
             resources:
               requests:
                 cpu: 50m
@@ -79,4 +79,8 @@ spec:
                 port: 3000
     migrations:
       env:
-        DATABASE_URL: *dburl
+        DATABASE_URL:
+          valueFrom:
+            secretKeyRef:
+              name: *app
+              key: DATABASE_URL
