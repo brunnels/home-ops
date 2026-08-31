@@ -57,11 +57,6 @@ spec:
               DISPATCH_SCHEDULER_ENABLED: true
               NEXTAUTH_URL: https://dispatch.${SECRET_DOMAIN}
               PR_FOLLOWUP_BOT_IDENTITIES: kraven-ai[bot]
-              DATABASE_URL: &dburl
-                valueFrom:
-                  secretKeyRef:
-                    name: ai-pguser-dispatch
-                    key: uri
             envFrom:
               - secretRef:
                   name: *name

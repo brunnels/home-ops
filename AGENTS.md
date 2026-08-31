@@ -42,6 +42,17 @@ flux reconcile kustomization -n flux-system flux-system  # Force Flux sync
 - `talos/kdev/talconfig.yaml` - Node config (IPs, disk, extensions, kernel args)
 - `bootstrap/helmfile/apps.yaml` - Bootstrap chart releases (applies before Flux)
 
+**Before committing changes, always render and validate:**
+
+```bash
+# Render what will be deployed to verify substitutions are correct
+flate -p ./kubernetes/clusters/korg/flux build all > /tmp/korg-rendered.yaml
+
+# Validate syntax and check for unresolved placeholders
+grep -i placeholder /tmp/korg-rendered.yaml || echo "✓ All placeholders resolved"
+kubectl apply -f /tmp/korg-rendered.yaml --dry-run=client
+```
+
 ## Configuration Patterns
 
 **Secret Management (Akeyless vault integration):**
@@ -56,7 +67,7 @@ flux reconcile kustomization -n flux-system flux-system  # Force Flux sync
 - Cluster-specific kustomizations (e.g., `kdev/default/kustomization.yaml`) use components:
     - `../../clusters/kdev` (Component with cluster-settings ConfigMap)
     - `../../components/common` (shared repos, cluster-secrets resources)
-    - `replacements` patch to apply settings substitution
+    - `replacements` patch to apply settings substitution (targetNamespace, retryInterval, timeout, etc.)
 - Parent Kustomization (flux/ks.yaml) injects `cluster-settings` ConfigMap and `cluster-secrets` Secret into all children via patches
 
 **App deployment pattern (HelmRelease defaults):**
@@ -73,6 +84,7 @@ flux reconcile kustomization -n flux-system flux-system  # Force Flux sync
 - **No plain Pods/Deployments**: Everything uses HelmRelease (via Helm charts or local charts in `charts/`)
 - **All resources server-side applied** (`--server-side`) to handle large manifests
 - **Age encryption**: SOPS encrypts `*.sops.yaml` files; key at `age.key`
+- **Tool versions pinned in `.mise.toml`**: Use `mise install` to get exact versions; tools include `flate` (Flux renderer), `talhelper`, `flux2`, `helm`, `helmfile`, `kustomize`, etc.
 
 ## Making Changes
 
@@ -95,6 +107,10 @@ flux reconcile kustomization -n flux-system flux-system  # Force Flux sync
     - `kubectl -n flux-system logs -f deployment/helm-controller`
     - Check Kustomization status: `kubectl describe ks -n flux-system`
 
+5. **Fetching external resources from GitHub**:
+    - `just yoink <GITHUB_URL>` - Downloads files/directories from GitHub repos (uses `fetcher.py`)
+    - Example: `just yoink https://github.com/owner/repo/tree/main/path/to/dir`
+
 ## Integration Points
 
 - **Akeyless**: Injected as ExternalSecret operator; ClusterSecretStore at `kubernetes/base/external-secrets-stores/akeyless/`
@@ -102,6 +118,7 @@ flux reconcile kustomization -n flux-system flux-system  # Force Flux sync
 - **Cilium CNI**: Deployed via helmfile, networks defined in `kubernetes/base/kube-system/cilium/networks.yaml`
 - **Weave GitOps**: Web UI for Flux, deployed to `flux-system` namespace with OIDC auth
 - **cert-manager**: Manages TLS certs, integrates with Cloudflare for DNS validation
+- **flate**: Tool for rendering complete Kustomize manifests without applying; essential for validation before commits
 
 ## File Structure Quick Reference
 
@@ -111,10 +128,26 @@ kubernetes/
   base/            # Shared resources (kustomization bases per namespace)
   common/          # Common components (cluster-secrets, repos)
   components/      # Kustomize components for reuse
+    common/        # Shared across all clusters (alerts, cluster-secrets, HelmChart repos)
+    replacements/  # Kustomization replacements (injects namespace, retryInterval, timeout, etc.)
+    intel-gpu/     # Intel GPU device plugin and ResourceClaim template
+    igpu-spread/   # Pod spreading rules for integrated GPU workloads
+    envoy-gateway-oidc/  # OIDC configuration for Envoy Gateway
+    pgo-db-init/   # PostgreSQL Operator database initialization
+    dragonfly-cluster/   # Dragonfly (Redis alternative) multi-node cluster setup
+    theme-park/    # Theme Park Envoy extension for unified app theming
+    volsync/       # VolSync replication sources/destinations
+    kopiur/        # Backup/restore component (snapshots, S3 integration)
+    zeroscaler/    # Zeroscaler for resource optimization
   clusters/        # Cluster-specific components + Kustomization chains
-  kdev/, korg/     # Cluster apps by namespace
+    kdev/
+      flux/        # Master Kustomization defining cluster-settings, cluster-secrets, cluster-apps chain
+      cluster-settings/  # ConfigMap with cluster-specific values
+    korg/          # Same structure for production cluster
+  kdev/, korg/     # Cluster apps by namespace (default, network, database, etc.)
 talos/kdev|korg/   # Talos config per cluster
-scripts/           # Operational scripts (akeyless.sh, cert renewal, etc.)
+scripts/           # Operational scripts (akeyless.sh, cert renewal, fetcher.py, etc.)
+.agents/           # AI agent configurations and instructions
 ```
 
 ## Validation & Debugging Tools
@@ -166,3 +199,5 @@ scripts/           # Operational scripts (akeyless.sh, cert renewal, etc.)
 - `just talos generate-config CLUSTER` - Regenerate Talos manifests from talconfig
 - `just talos reset-node IP CLUSTER` - Reset single node to maintenance mode (DESTRUCTIVE)
 - `flate -p ./kubernetes/clusters/CLUSTER/flux build all` - Render complete deployment for validation
+- `just yoink URL [DEST]` - Fetch files/directories from GitHub repository URL (uses fetcher.py)
+- `just set-cluster CLUSTER` - Switch kubectl context to specified cluster
