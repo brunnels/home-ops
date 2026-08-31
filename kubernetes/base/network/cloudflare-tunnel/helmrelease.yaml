@@ -40,7 +40,7 @@ spec:
                   name: *app
             image:
               repository: docker.io/cloudflare/cloudflared
-              tag: 2026.8.2
+              tag: 2026.8.3
             probes:
               liveness: &probes
                 custom: true
