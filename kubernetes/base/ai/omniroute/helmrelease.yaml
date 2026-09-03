@@ -23,7 +23,7 @@ spec:
           copy-tmpfs:
             image:
               repository: ghcr.io/diegosouzapw/omniroute
-              tag: main-web@sha256:72342f00486c05e617d24877affbf1200e19f4b78d6c195ba0850ceaaad45611
+              tag: main-web@sha256:6db75921dcad50cf81085a4733b492603ed8fdefcc8843e455a4f5f5b84327cf
             command:
               - sh
               - -c
@@ -37,7 +37,7 @@ spec:
           app:
             image:
               repository: ghcr.io/diegosouzapw/omniroute
-              tag: main-web@sha256:72342f00486c05e617d24877affbf1200e19f4b78d6c195ba0850ceaaad45611
+              tag: main-web@sha256:6db75921dcad50cf81085a4733b492603ed8fdefcc8843e455a4f5f5b84327cf
             env:
               NEXT_PUBLIC_BASE_URL: &hostname https://omniroute.${SECRET_DOMAIN}
               LIVE_WS_ALLOWED_ORIGINS: *hostname
