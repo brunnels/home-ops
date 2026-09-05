@@ -35,7 +35,7 @@ spec:
           app:
             image:
               repository: ghcr.io/authelia/authelia
-              tag: 4.39.20
+              tag: 4.39.22
             env:
               AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE: /app/secrets/AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD
               AUTHELIA_CERTIFICATES_DIRECTORY: /trusted_certs
