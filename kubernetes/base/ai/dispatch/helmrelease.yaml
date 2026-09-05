@@ -23,35 +23,6 @@ spec:
               DISPATCH_GROOMER_MODEL: auto/coding:free
               DISPATCH_GROOMER_REPO_CONTEXT_ENABLED: true
               DISPATCH_HOSTED_GROOMER_ENABLED: true
-              DISPATCH_LANE_CONFIG_JSON: |-
-                {
-                  "lanes": [{
-                    "id": "free",
-                    "title": "Free",
-                    "claimable": true,
-                    "role": "default",
-                    "description": "auto/coding:free model lane — the default: all groomed, ready work starts here.",
-                    "color": "#3b82f6"
-                  },{
-                    "id": "frontier",
-                    "title": "Frontier",
-                    "claimable": true,
-                    "role": "escalation",
-                    "description": "Escalation lane (MiniMax-M3 via omniroute) — fed by the bridge when auto/coding:free attempts are exhausted, not by grooming.",
-                    "color": "#f97316"
-                  },{
-                    "id": "backlog",
-                    "title": "Backlog",
-                    "claimable": false,
-                    "description": "Needs grooming before work can start. Not directly claimable.",
-                    "color": "#6b7280"
-                  }],
-                  "laneAliases": {
-                    "normal": "free",
-                    "escalated": "frontier",
-                    "cloud": "free"
-                  }
-                }
               DISPATCH_LLM_BASE_URL: http://omniroute:20128/v1
               DISPATCH_OIDC_ISSUER: https://auth.${SECRET_DOMAIN}
               DISPATCH_SCHEDULER_ENABLED: true
@@ -59,6 +30,8 @@ spec:
               PR_FOLLOWUP_BOT_IDENTITIES: kraven-ai[bot]
             envFrom:
               - secretRef:
+                  name: *app
+              - configMapRef:
                   name: *app
             resources:
               requests:

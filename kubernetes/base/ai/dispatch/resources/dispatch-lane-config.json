@@ -1,0 +1,32 @@
+{
+  "lanes": [
+    {
+      "id": "free",
+      "title": "Free",
+      "claimable": true,
+      "role": "default",
+      "description": "auto/coding:free model lane — the default: all groomed, ready work starts here.",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "frontier",
+      "title": "Frontier",
+      "claimable": true,
+      "role": "escalation",
+      "description": "Escalation lane (MiniMax-M3 via omniroute) — fed by the bridge when auto/coding:free attempts are exhausted, not by grooming.",
+      "color": "#f97316"
+    },
+    {
+      "id": "backlog",
+      "title": "Backlog",
+      "claimable": false,
+      "description": "Needs grooming before work can start. Not directly claimable.",
+      "color": "#6b7280"
+    }
+  ],
+  "laneAliases": {
+    "normal": "free",
+    "escalated": "frontier",
+    "cloud": "free"
+  }
+}
