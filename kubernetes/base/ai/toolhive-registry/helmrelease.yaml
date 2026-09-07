@@ -24,6 +24,19 @@ spec:
           secretKeyRef:
             name: ai-pguser-postgres
             key: password
+      - name: PGSSLROOTCERT
+        value: /etc/ssl/certs/postgres/root.crt
+    extraVolumes:
+      - name: &rootCert pgo-root-cacert
+        secret:
+          secretName: *rootCert
+          items:
+            - key: root.crt
+              path: root.crt
+    extraVolumeMounts:
+      - name: *rootCert
+        mountPath: /etc/ssl/certs/postgres
+        readOnly: true
     resources:
       limits:
         cpu: 1000m
@@ -58,7 +71,7 @@ spec:
         user: toolhive
         migrationUser: postgres
         database: toolhive
-        sslMode: require
+        sslMode: verify-ca
         maxOpenConns: 10
         maxIdleConns: 5
         connMaxLifetime: 30m
