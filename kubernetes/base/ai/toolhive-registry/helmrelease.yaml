@@ -17,7 +17,7 @@ spec:
       - name: THV_REGISTRY_DATABASE_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: ai-pguser-toolhive
+            name: ai-pguser-toolhive-registry
             key: password
       - name: THV_REGISTRY_DATABASE_MIGRATIONPASSWORD
         valueFrom:
@@ -68,9 +68,9 @@ spec:
       database:
         host: ai-primary.${NAMESPACE}.svc
         port: 5432
-        user: toolhive
+        user: *app
         migrationUser: postgres
-        database: toolhive
+        database: *app
         sslMode: verify-ca
         maxOpenConns: 10
         maxIdleConns: 5

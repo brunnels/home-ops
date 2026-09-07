@@ -53,7 +53,7 @@ spec:
           {"name": "open-webui", "databases": ["open-webui"], "password": {"type": "AlphaNumeric"}},
           {"name": "homebox", "databases": ["homebox"], "password": {"type": "AlphaNumeric"}},
           {"name": "dispatch", "databases": ["dispatch"], "password": {"type": "AlphaNumeric"}},
-          {"name": "toolhive", "databases": ["toolhive"], "password": {"type": "AlphaNumeric"}}
+          {"name": "toolhive-registry", "databases": ["toolhive-registry"], "password": {"type": "AlphaNumeric"}}
         ]
   prune: true
   sourceRef:
