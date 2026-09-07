@@ -23,3 +23,5 @@ resources:
   - ./llmkube.yaml
   - ./omniroute.yaml
   #- ./open-webui.yaml
+  - ./toolhive.yaml
+  - ./toolhive-crds.yaml
