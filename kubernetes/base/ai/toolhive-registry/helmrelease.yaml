@@ -61,8 +61,10 @@ spec:
           syncPolicy:
             interval: 5m
       registries:
-        - name: default
-          sources: ["toolhive", "cluster"]
+        - name: external
+          sources: ["toolhive"]
+        - name: internal
+          sources: ["cluster"]
       auth:
         mode: anonymous
       database:
