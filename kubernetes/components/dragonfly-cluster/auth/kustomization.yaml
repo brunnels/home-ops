@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+patches:
+  - target:
+      group: dragonflydb.io
+      version: v1alpha1
+      kind: Dragonfly
+    patch: |-
+      - op: add
+        path: /spec/authentication
+        value:
+          passwordFromSecret:
+            key: password
+            name: ${NAMESPACE}-dragonfly
+resources:
+  - ./externalsecret.yaml
