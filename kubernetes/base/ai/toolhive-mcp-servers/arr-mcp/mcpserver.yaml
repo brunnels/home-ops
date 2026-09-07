@@ -5,10 +5,6 @@ kind: MCPServer
 metadata:
   name: arr
 spec:
-  image: docker.io/node:24-alpine
-  transport: stdio
-  proxyMode: streamable-http
-  proxyPort: 8080
   env:
     - name: HOME
       value: /tmp
@@ -20,37 +16,41 @@ spec:
       value: https://radarr.kraven.org
     - name: PROWLARR_URL
       value: https://prowlarr.kraven.org
-  secrets:
-    - name: toolhive-sonarr
-      key: SONARR_API_KEY
-      targetEnvName: SONARR_API_KEY
-    - name: toolhive-radarr
-      key: RADARR_API_KEY
-      targetEnvName: RADARR_API_KEY
-    - name: toolhive-prowlarr
-      key: PROWLARR_API_KEY
-      targetEnvName: PROWLARR_API_KEY
-  resources:
-    requests:
-      cpu: 50m
-      memory: 128Mi
-    limits:
-      memory: 256Mi
+  groupRef:
+    name: mcp-tools
+  image: docker.io/node:24-alpine
   podTemplateSpec:
     spec:
       containers:
-        - name: mcp
-          image: docker.io/node:24-alpine
-          command:
-            - npx
-          args:
+        - args:
             - -y
             - mcp-arr-server@1.5.4
+          command:
+            - npx
+          image: docker.io/node:24-alpine
+          name: mcp
           volumeMounts:
             - name: tmp
               mountPath: /tmp
       volumes:
         - name: tmp
           emptyDir: {}
-  groupRef:
-    name: mcp-tools
+  proxyPort: 8080
+  proxyMode: streamable-http
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+  secrets:
+    - key: SONARR_API_KEY
+      name: toolhive-sonarr
+      targetEnvName: SONARR_API_KEY
+    - key: RADARR_API_KEY
+      name: toolhive-radarr
+      targetEnvName: RADARR_API_KEY
+    - key: PROWLARR_API_KEY
+      name: toolhive-prowlarr
+      targetEnvName: PROWLARR_API_KEY
+  transport: stdio
