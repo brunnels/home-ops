@@ -19,6 +19,9 @@ spec:
     - code
   scopes:
     - offline_access
+    - email
+    - openid
+    - profile
   secret_ref:
     name: *name
     fields:
