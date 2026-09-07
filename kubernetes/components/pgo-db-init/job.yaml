@@ -32,12 +32,12 @@ spec:
             - name: DB_USER
               value: "${DB_USER:-${APP}}"
             - name: EXTRA_DB_INIT_SQL
-              value: "${EXTRA_DB_INIT_SQL:-'\\dn'} &&"
+              value: "${EXTRA_DB_INIT_SQL:-'\\dn'}"
           command:
             - /bin/bash
             - -c
           args:
-            - psql "$${DB_URI%/postgres}/$DB" -c "$EXTRA_DB_INIT_SQL"
+            - psql "$${DB_URI%/postgres}/$DB" -c "$EXTRA_DB_INIT_SQL" &&
             - |
               for DB in $DB_NAMES; do
                 psql "$${DB_URI%/postgres}/$DB" -c "GRANT ALL ON SCHEMA public TO \"$DB_USER\";"
