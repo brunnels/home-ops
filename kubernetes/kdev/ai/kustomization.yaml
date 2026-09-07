@@ -25,5 +25,5 @@ resources:
   #- ./open-webui.yaml
   - ./toolhive.yaml
   - ./toolhive-crds.yaml
-  #- ./toolhive-registry.yaml
-  #- ./toolhive-ui.yaml
+  - ./toolhive-registry.yaml
+  - ./toolhive-ui.yaml
