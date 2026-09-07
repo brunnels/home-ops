@@ -27,3 +27,5 @@ spec:
     fields:
       client_id: OIDC_CLIENT_ID
       client_secret: OIDC_CLIENT_SECRET
+  token_endpoint:
+    auth_method: client_secret_post
