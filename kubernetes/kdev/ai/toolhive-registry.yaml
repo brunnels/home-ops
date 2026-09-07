@@ -15,6 +15,9 @@ spec:
     - name: toolhive-crds
   interval: 1h
   path: ./kubernetes/base/ai/toolhive-registry
+  postBuild:
+    substitute:
+      APP: *app
   prune: true
   sourceRef:
     kind: GitRepository
