@@ -35,6 +35,7 @@ spec:
             - /bin/bash
             - -c
           args:
+            - ${EXTRA_DB_INIT_SQL:-"echo &&"}
             - |
               for DB in $DB_NAMES; do
                 psql "$${DB_URI%/postgres}/$DB" -c "GRANT ALL ON SCHEMA public TO \"$DB_USER\";"
