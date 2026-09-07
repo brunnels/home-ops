@@ -24,6 +24,7 @@ resources:
   - ./omniroute.yaml
   #- ./open-webui.yaml
   - ./toolhive.yaml
+  - ./toolhive-config.yaml
   - ./toolhive-crds.yaml
   - ./toolhive-registry.yaml
   - ./toolhive-ui.yaml
