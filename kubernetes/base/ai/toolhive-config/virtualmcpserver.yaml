@@ -31,7 +31,7 @@ spec:
             limits:
               memory: 2Gi
   sessionStorage:
-    address: redis://${NAMESPACE}-dragonfly:6379
+    address: ${NAMESPACE}-dragonfly:6379
     db: 0
     keyPrefix: "toolhive:vmcp:"
     provider: redis
