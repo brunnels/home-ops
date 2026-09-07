@@ -10,10 +10,8 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
-  - ./mcp-routes.yaml
   - ../../common/network/cloudflare-dns.yaml
   - ../../common/network/cloudflare-tunnel.yaml
   - ../../common/network/echo.yaml
   - ../../common/network/envoy-gateway.yaml
-  - ./envoy-ai-gateway.yaml
   - ../../common/network/k8s-gateway.yaml
