@@ -31,11 +31,13 @@ spec:
                   name: "${NAMESPACE}-pguser-postgres"
             - name: DB_USER
               value: "${DB_USER:-${APP}}"
+            - name: EXTRA_DB_INIT_SQL
+              value: "${EXTRA_DB_INIT_SQL:-'echo'} &&"
           command:
             - /bin/bash
             - -c
           args:
-            - ${EXTRA_DB_INIT_SQL:-"echo &&"}
+            - $EXTRA_DB_INIT_SQL
             - |
               for DB in $DB_NAMES; do
                 psql "$${DB_URI%/postgres}/$DB" -c "GRANT ALL ON SCHEMA public TO \"$DB_USER\";"
