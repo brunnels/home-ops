@@ -8,7 +8,11 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../components/dragonfly-cluster
   dependsOn:
+    - name: dragonfly-operator
+      namespace: database
     - name: llmkube
     - name: toolhive
   interval: 1h
