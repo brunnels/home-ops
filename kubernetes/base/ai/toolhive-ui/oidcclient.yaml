@@ -18,9 +18,7 @@ spec:
   response_types:
     - code
   scopes:
-    - email
-    - openid
-    - profile
+    - offline_access
   secret_ref:
     name: *name
     fields:
