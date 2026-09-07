@@ -8,8 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  #components:
-  #  - ../../../components/pgo-db-init
+  components:
+    - ../../../components/pgo-db-init
   dependsOn:
     - name: ai-pgo-cluster
     - name: toolhive-crds
@@ -19,6 +19,7 @@ spec:
     substitute:
       APP: *app
       DB_NAMES: toolhive
+      DB_USER: toolhive
   prune: true
   sourceRef:
     kind: GitRepository
