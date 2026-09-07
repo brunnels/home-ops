@@ -18,6 +18,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      DB_NAMES: toolhive
   prune: true
   sourceRef:
     kind: GitRepository
