@@ -1,14 +1,9 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1alpha1.json
-apiVersion: toolhive.stacklok.dev/v1alpha1
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1beta1.json
+apiVersion: toolhive.stacklok.dev/v1beta1
 kind: MCPServer
 metadata:
   name: flux
-  annotations:
-    toolhive.stacklok.dev/registry-export: "true"
-    toolhive.stacklok.dev/registry-title: "Flux Operator"
-    toolhive.stacklok.dev/registry-description: |
-      Production MCP server for flux operator
 spec:
   groupRef:
     name: mcp-tools
