@@ -58,7 +58,7 @@ spec:
         user: toolhive
         migrationUser: postgres
         database: toolhive
-        sslMode: no-verify
+        sslMode: require
         maxOpenConns: 10
         maxIdleConns: 5
         connMaxLifetime: 30m
