@@ -41,6 +41,7 @@ spec:
               psql "$${DB_URI%/postgres}/$DB" -c "$EXTRA_DB_INIT_SQL"
               for DB in $DB_NAMES; do
                 psql "$${DB_URI%/postgres}/$DB" -c "GRANT ALL ON SCHEMA public TO \"$DB_USER\";"
+                psql "$${DB_URI%/postgres}/$DB" -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \"$DB_USER\";"
               done
           resources:
             limits:
