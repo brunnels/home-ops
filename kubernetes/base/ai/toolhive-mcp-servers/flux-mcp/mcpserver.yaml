@@ -4,6 +4,11 @@ apiVersion: toolhive.stacklok.dev/v1alpha1
 kind: MCPServer
 metadata:
   name: flux
+  annotations:
+    toolhive.stacklok.dev/registry-export: "true"
+    toolhive.stacklok.dev/registry-title: "Flux Operator"
+    toolhive.stacklok.dev/registry-description: |
+      Production MCP server for flux operator
 spec:
   groupRef:
     name: mcp-tools

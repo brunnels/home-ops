@@ -26,8 +26,6 @@ spec:
           secretKeyRef:
             name: ai-pguser-toolhive-registry
             key: password
-      - name: THV_REGISTRY_WATCH_NAMESPACE
-        value: ${NAMESPACE}
     extraVolumes:
       - name: &rootCert pgo-root-cacert
         secret:
@@ -48,23 +46,23 @@ spec:
         memory: 128Mi
     config:
       sources:
-        #- name: toolhive
-        #  git:
-        #    repository: https://github.com/stacklok/toolhive-catalog.git
-        #    branch: main
-        #    path: pkg/catalog/toolhive/data/registry-upstream.json
-        #  syncPolicy:
-        #    interval: 360m
+        - name: toolhive
+          git:
+            repository: https://github.com/stacklok/toolhive-catalog.git
+            branch: main
+            path: pkg/catalog/toolhive/data/registry-upstream.json
+          syncPolicy:
+            interval: 360m
         # Discover MCPServer CRs running in-cluster (e.g. ha-mcp) via the
         # operator. RBAC is cluster-scoped, so it can watch the mcp namespace.
         - name: cluster
-          kubernetes: {}
-          #  namespaces: ["${NAMESPACE}"]
+          kubernetes:
+            namespaces: ["${NAMESPACE}"]
           #syncPolicy:
           #  interval: 5m
       registries:
-        #- name: external
-        #  sources: ["toolhive"]
+        - name: external
+          sources: ["toolhive"]
         - name: internal
           sources: ["cluster"]
       auth:
