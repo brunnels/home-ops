@@ -114,8 +114,7 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - name: *app
-                port: *port
+              - identifier: app
     service:
       app:
         annotations:
