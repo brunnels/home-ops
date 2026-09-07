@@ -44,6 +44,7 @@ spec:
               SONARR__POSTGRES__PORT: 5432
               SONARR__POSTGRES__USER: *app
               SONARR__SERVER__PORT: &port 80
+              SONARR__SERVER__TRUSTEDNETWORKS: ${CLUSTER_CIDR}
               SONARR__UPDATE__BRANCH: develop
               TZ: "${TIMEZONE}"
             envFrom:
