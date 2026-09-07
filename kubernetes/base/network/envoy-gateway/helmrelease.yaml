@@ -14,7 +14,6 @@ spec:
       envoyGateway:
         extensionApis:
           enableEnvoyPatchPolicy: true
-          enableBackend: true
         provider:
           kubernetes:
             deploy:
