@@ -18,7 +18,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      EXTRA_DB_INIT_SQL: 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \"toolhive-registry\";'
+      EXTRA_DB_INIT_SQL: 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO "toolhive-registry";'
   prune: true
   sourceRef:
     kind: GitRepository
