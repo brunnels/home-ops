@@ -32,7 +32,7 @@ spec:
             - name: DB_USER
               value: "${DB_USER:-${APP}}"
             - name: EXTRA_DB_INIT_SQL
-              value: "${EXTRA_DB_INIT_SQL}"
+              value: "${EXTRA_DB_INIT_SQL:-''}"
           command:
             - /bin/bash
             - -c
