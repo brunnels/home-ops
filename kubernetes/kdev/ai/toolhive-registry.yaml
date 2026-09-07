@@ -20,6 +20,7 @@ spec:
       APP: *app
       DB_NAMES: toolhive
       DB_USER: toolhive
+      EXTRA_DB_INIT_SQL: "GRANT ALL ON SCHEMA toolhive TO toolhive;"
   prune: true
   sourceRef:
     kind: GitRepository
