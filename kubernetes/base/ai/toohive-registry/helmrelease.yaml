@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app toolhive-registry
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 1h
+  values:
+    fullnameOverride: *app
+    podAnnotations:
+      reloader.stakater.com/auto: "true"
+    extraEnv:
+      - name: THV_REGISTRY_DATABASE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: ai-pguser-toolhive
+            key: password
+      - name: THV_REGISTRY_DATABASE_MIGRATIONPASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: ai-pguser-postgres
+            key: password
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    config:
+      sources:
+        - name: toolhive
+          git:
+            repository: https://github.com/stacklok/toolhive-catalog.git
+            branch: main
+            path: pkg/catalog/toolhive/data/registry-upstream.json
+          syncPolicy:
+            interval: 360m
+        # Discover MCPServer CRs running in-cluster (e.g. ha-mcp) via the
+        # operator. RBAC is cluster-scoped, so it can watch the mcp namespace.
+        - name: cluster
+          kubernetes:
+            namespaces: ["${NAMESPACE}"]
+          syncPolicy:
+            interval: 360m
+      registries:
+        - name: default
+          sources: ["toolhive", "cluster"]
+      auth:
+        mode: anonymous
+      database:
+        host: ai-primary.${NAMESPACE}.svc
+        port: 5432
+        user: toolhive
+        migrationUser: postgres
+        database: toolhive
+        sslMode: no-verify
+        maxOpenConns: 10
+        maxIdleConns: 5
+        connMaxLifetime: 30m

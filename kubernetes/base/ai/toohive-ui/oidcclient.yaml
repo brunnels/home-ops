@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://brunnels.github.io/authelia-oidc-operator/authelia.milas.dev/oidcclient_v1alpha2.json
+apiVersion: authelia.milas.dev/v1alpha2
+kind: OIDCClient
+metadata:
+  name: &name toolhive
+  annotations:
+    authelia.milas.dev/oidc-provider: security/default
+spec:
+  description: Toolhive
+  grant_types:
+    - authorization_code
+  pkce_challenge_method: S256
+  preconfigured_consent_duration: 1y
+  redirect_uris:
+    - https://toolhive.${SECRET_DOMAIN}/api/auth/callback/oidc
+  require_pkce: true
+  response_types:
+    - code
+  scopes:
+    - email
+    - openid
+    - profile
+  secret_ref:
+    name: *name
+    fields:
+      client_id: TOOLHIVE_OIDC_CLIENT_ID
+      client_secret: TOOLHIVE_OIDC_CLIENT_SECRET

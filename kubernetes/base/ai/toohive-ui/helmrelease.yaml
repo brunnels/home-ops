@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app toolhive-ui
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 1h
+  values:
+    fullnameOverride: toolhive-ui
+    podAnnotations:
+      reloader.stakater.com/auto: "true"
+    env:
+      - name: OIDC_ISSUER_URL
+        value: https://auth.${SECRET_DOMAIN}
+      - name: BETTER_AUTH_URL
+        value: https://toolhive.${SECRET_DOMAIN}
+      - name: API_BASE_URL
+        value: http://toolhive-registry:8080
+    envFrom:
+      - secretRef:
+          name: *app

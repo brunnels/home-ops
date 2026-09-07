@@ -3,20 +3,16 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app dispatch
+  name: &app toolhive-registry
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: ai-pgo-cluster
-    - name: authelia-oidc-operator
-      namespace: security
+    - name: toolhive-crds
   interval: 1h
-  path: ./kubernetes/base/ai/dispatch
-  postBuild:
-    substitute:
-      APP: *app
+  path: ./kubernetes/base/ai/toolhive-registry
   prune: true
   sourceRef:
     kind: GitRepository
