@@ -43,7 +43,7 @@ spec:
                     name: "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
               SONARR__POSTGRES__PORT: 5432
               SONARR__POSTGRES__USER: *app
-              SONARR__SERVER__ALLOWEDHOSTS: sonarr.${SECRET_DOMAN},sonarr.downloads.svc.cluster.local,sonar.downloads,sonar
+              SONARR__SERVER__ALLOWEDHOSTS: sonarr.${SECRET_DOMAIN},sonarr.downloads.svc.cluster.local,sonar.downloads,sonar
               SONARR__SERVER__PORT: &port 80
               SONARR__SERVER__TRUSTEDNETWORKS: ${CLUSTER_CIDR}
               SONARR__UPDATE__BRANCH: develop
