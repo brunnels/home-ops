@@ -11,6 +11,8 @@ spec:
   dependsOn:
     - name: authelia-oidc-operator
       namespace: security
+    - name: external-secrets-stores
+      namespace: external-secrets
     - name: toolhive-crds
     - name: toolhive-registry
   interval: 1h
