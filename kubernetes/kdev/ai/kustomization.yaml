@@ -26,5 +26,6 @@ resources:
   - ./toolhive.yaml
   - ./toolhive-config.yaml
   - ./toolhive-crds.yaml
+  - ./toolhive-mcp-servers.yaml
   - ./toolhive-registry.yaml
   - ./toolhive-ui.yaml
