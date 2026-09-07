@@ -14,18 +14,20 @@ spec:
     podAnnotations:
       reloader.stakater.com/auto: "true"
     extraEnv:
-      - name: THV_REGISTRY_DATABASE_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: ai-pguser-toolhive-registry
-            key: password
+      - name: PGSSLROOTCERT
+        value: /etc/ssl/certs/postgres/root.crt
       - name: THV_REGISTRY_DATABASE_MIGRATIONPASSWORD
         valueFrom:
           secretKeyRef:
             name: ai-pguser-postgres
             key: password
-      - name: PGSSLROOTCERT
-        value: /etc/ssl/certs/postgres/root.crt
+      - name: THV_REGISTRY_DATABASE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: ai-pguser-toolhive-registry
+            key: password
+      - name: THV_REGISTRY_WATCH_NAMESPACE
+        value: ${NAMESPACE}
     extraVolumes:
       - name: &rootCert pgo-root-cacert
         secret:
