@@ -13,7 +13,7 @@ spec:
   pkce_challenge_method: S256
   preconfigured_consent_duration: 1y
   redirect_uris:
-    - https://toolhive.${SECRET_DOMAIN}/api/auth/callback/oidc
+    - https://toolhive.${SECRET_DOMAIN}/api/auth/oauth2/callback/oidc
   require_pkce: true
   response_types:
     - code
