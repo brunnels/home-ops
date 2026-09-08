@@ -12,7 +12,7 @@ spec:
     - ../../../components/envoy-gateway-oidc
     - ../../../components/kopiur/backup
     - ../../../components/pgo-db-init
-    - ../../../components/theme-park
+    #- ../../../components/theme-park
   dependsOn:
     - name: downloads-pgo-cluster
     - name: kopiur-repository
