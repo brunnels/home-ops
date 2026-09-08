@@ -14,11 +14,19 @@ spec:
       envoyGateway:
         extensionApis:
           enableEnvoyPatchPolicy: true
-          enableEnvoyExtensionPolicy: true
+          enableLua: true
         provider:
           kubernetes:
             deploy:
               type: GatewayNamespace
           type: Kubernetes
+    deployment:
+      envoyGateway:
+        resources:
+          limits:
+            memory: 1024Mi
+          requests:
+            cpu: 100m
+            memory: 768Mi
     global:
       imageRegistry: mirror.gcr.io
