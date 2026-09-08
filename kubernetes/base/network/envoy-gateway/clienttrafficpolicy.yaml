@@ -15,8 +15,6 @@ spec:
   targetSelectors:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      matchLabels:
-        networking.envoyproxy.io/policy-group: global-traffic-policy
   tcpKeepalive: {}
   tls:
     minVersion: "1.2"
