@@ -1,0 +1,133 @@
+---
+clusterName: kdev
+clusterEndpoint: https://10.0.150.200:6443
+
+# renovate: datasource=github-releases depName=siderolabs/talos
+talosVersion: v1.14.0
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+kubernetesVersion: v1.36.4
+
+secretsPath: ../kdev/talsecret.sops.yaml
+
+data:
+  vlanId: 150
+  networkPrefix: "24"
+  gateway: 10.0.150.1
+  vip: 10.0.150.200
+  bondName: bond0
+  bondMode: 802.3ad
+
+nodes:
+  - host: "kdev-n1"
+    ip: "10.0.150.254"
+    role: control-plane
+    schematicId: ""
+    data:
+      installDisk: "/dev/disk/by-id/nvme-SK_hynix_BC511_HFM256GDJTNI-82A0A_NJ02N76261100320B"
+      installDiskSerial: ""
+      macAddr: ""
+      mtu: 9000
+      encryptDisk: false
+      kernelModules:
+        [
+          joydev,
+          nbd,
+          nvidia,
+          nvidia_drm,
+          nvidia_modeset,
+          nvidia_uvm,
+          thunderbolt,
+          thunderbolt_net,
+          uinput,
+          uhid,
+          uio_pci_generic,
+          vfio_iommu_type1,
+          vfio_pci,
+        ]
+      bondInterfaces: [eth2, eth3]
+      tb_next:
+        busPath: "1-1.0"
+        addr: 169.254.255.101/32
+        route: 169.254.255.103/32
+        metric: 2048
+      tb_prev:
+        busPath: "0-1.0"
+        addr: 169.254.255.101/32
+        route: 169.254.255.102/32
+        metric: 2048
+
+  - host: "kdev-n2"
+    ip: "10.0.150.253"
+    role: control-plane
+    schematicId: ""
+    data:
+      installDisk: "/dev/disk/by-id/nvme-BPX_8B71077C060891075911"
+      installDiskSerial: ""
+      macAddr: ""
+      mtu: 9000
+      encryptDisk: false
+      kernelModules:
+        [
+          joydev,
+          nbd,
+          nvidia,
+          nvidia_drm,
+          nvidia_modeset,
+          nvidia_uvm,
+          thunderbolt,
+          thunderbolt_net,
+          uinput,
+          uhid,
+          uio_pci_generic,
+          vfio_iommu_type1,
+          vfio_pci,
+        ]
+      bondInterfaces: [eth2, eth3]
+      tb_next:
+        busPath: "1-1.0"
+        addr: 169.254.255.102/32
+        route: 169.254.255.101/32
+        metric: 2048
+      tb_prev:
+        busPath: "0-1.0"
+        addr: 169.254.255.102/32
+        route: 169.254.255.103/32
+        metric: 2048
+
+  - host: "kdev-n3"
+    ip: "10.0.150.252"
+    role: control-plane
+    schematicId: ""
+    data:
+      installDisk: "/dev/disk/by-id/nvme-Samsung_SSD_950_PRO_256GB_S2GLNCAGB26901M"
+      installDiskSerial: ""
+      macAddr: ""
+      mtu: 9000
+      encryptDisk: false
+      kernelModules:
+        [
+          joydev,
+          nbd,
+          nvidia,
+          nvidia_drm,
+          nvidia_modeset,
+          nvidia_uvm,
+          thunderbolt,
+          thunderbolt_net,
+          uinput,
+          uhid,
+          uio_pci_generic,
+          vfio_iommu_type1,
+          vfio_pci,
+        ]
+      bondInterfaces: [eth2, eth3]
+      tb_next:
+        busPath: "1-1.0"
+        addr: 169.254.255.103/32
+        route: 169.254.255.101/32
+        metric: 2048
+      tb_prev:
+        busPath: "0-1.0"
+        addr: 169.254.255.103/32
+        route: 169.254.255.102/32
+        metric: 2048

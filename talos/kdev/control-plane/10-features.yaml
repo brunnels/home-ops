@@ -1,0 +1,10 @@
+machine:
+  features:
+    kubernetesTalosAPIAccess:
+      allowedKubernetesNamespaces:
+        - system-upgrade
+        - mcp-system
+      allowedRoles:
+        - os:admin
+        - os:reader
+      enabled: true

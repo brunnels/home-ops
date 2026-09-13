@@ -1,0 +1,10 @@
+machine:
+  certSANs:
+    - "127.0.0.1"
+    - "10.0.150.100"
+    - "korg.lan.kraven.org"
+---
+apiVersion: v1alpha1
+kind: KubeNetworkConfig
+podSubnets: ["10.69.0.0/16"]
+serviceSubnets: ["10.96.0.0/16"]

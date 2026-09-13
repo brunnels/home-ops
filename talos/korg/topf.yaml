@@ -1,0 +1,67 @@
+---
+clusterName: korg
+clusterEndpoint: https://10.0.150.100:6443
+
+# renovate: datasource=github-releases depName=siderolabs/talos
+talosVersion: v1.14.0
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+kubernetesVersion: v1.36.4
+
+secretsPath: ../korg/talsecret.sops.yaml
+
+data:
+  vlanId: 150
+  vlanParent: eth0
+  networkPrefix: "24"
+  gateway: 10.0.150.1
+  vip: 10.0.150.100
+
+nodes:
+  - host: "korg-n1"
+    ip: "10.0.150.99"
+    role: control-plane
+    schematicId: ""
+    data:
+      installDisk: "/dev/disk/by-id/ata-SATA_SSD_DA09079110EC06342341"
+      installDiskSerial: ""
+      macAddr: ""
+      mtu: 9000
+      encryptDisk: false
+      kernelModules: [nbd, uio_pci_generic, vfio_iommu_type1, vfio_pci]
+
+  - host: "korg-n2"
+    ip: "10.0.150.98"
+    role: control-plane
+    schematicId: ""
+    secureboot: true
+    data:
+      installDisk: "/dev/disk/by-id/ata-SATA_SSD_DC4E079110EC06342361"
+      installDiskSerial: ""
+      macAddr: ""
+      mtu: 9000
+      encryptDisk: true
+      kernelModules: [nbd, uio_pci_generic, vfio_iommu_type1, vfio_pci]
+
+  - host: "korg-n3"
+    ip: "10.0.150.97"
+    role: control-plane
+    schematicId: ""
+    data:
+      installDisk: "/dev/disk/by-id/ata-SATA_SSD_DC4E079110EC06341678"
+      installDiskSerial: ""
+      macAddr: ""
+      mtu: 9000
+      encryptDisk: false
+      kernelModules: [nbd, uio_pci_generic, vfio_iommu_type1, vfio_pci]
+
+  - host: "korg-n4"
+    ip: "10.0.150.96"
+    role: worker
+    schematicId: ""
+    data:
+      installDisk: "/dev/disk/by-id/ata-SATA_SSD_B7A307871B5300035278"
+      installDiskSerial: ""
+      macAddr: ""
+      mtu: 9000
+      encryptDisk: false
+      kernelModules: [nbd, uio_pci_generic, vfio_iommu_type1, vfio_pci]
