@@ -26,9 +26,6 @@ spec:
           env:
             - name: GRAFANA_URL
               value: http://grafana-service.observability:3000
-          envFrom:
-            - secretRef:
-                name: &app
           name: mcp
           securityContext:
             allowPrivilegeEscalation: false
@@ -45,4 +42,11 @@ spec:
     requests:
       cpu: 50m
       memory: 128Mi
+  secrets:
+    - key: GRAFANA_USERNAME
+      name: *app
+      targetEnvName: GRAFANA_USERNAME
+    - key: GRAFANA_PASSWORD
+      name: *app
+      targetEnvName: GRAFANA_PASSWORD
   transport: sse
