@@ -12,9 +12,10 @@ replacements:
 resources:
   - ./namespace.yaml
   - ../../common/storage/ceph-csi-drivers.yaml
+  - ../../common/storage/csi-driver-nfs.yaml
   - ../../common/storage/kopia.yaml
-  - ../../common/storage/kopiur.yaml
   - ../../common/storage/kopiur-repository.yaml
+  - ../../common/storage/kopiur.yaml
   - ../../common/storage/openebs-hostpath.yaml
   - ../../common/storage/rook-ceph-cluster.yaml
   - ../../common/storage/rook-ceph-operator.yaml
