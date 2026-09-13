@@ -24,7 +24,8 @@ spec:
             - -t
             - sse
           env:
-            GRAFANA_URL: "http://grafana-service.observability:3000"
+            - name: GRAFANA_URL
+              value: http://grafana-service.observability:3000
           envFrom:
             - secretRef:
                 name: &app
