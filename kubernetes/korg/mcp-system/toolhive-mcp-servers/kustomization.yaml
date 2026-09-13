@@ -5,4 +5,7 @@ kind: Kustomization
 resources:
   - ../../../base/mcp-system/toolhive-mcp-servers/arr-mcp
   - ../../../base/mcp-system/toolhive-mcp-servers/flux-mcp
+  - ../../../base/mcp-system/toolhive-mcp-servers/grafana-mcp
   - ../../../base/mcp-system/toolhive-mcp-servers/kubectl-mcp
+  - ../../../base/mcp-system/toolhive-mcp-servers/seerr-mcp
+  - ../../../base/mcp-system/toolhive-mcp-servers/talos-mcp
