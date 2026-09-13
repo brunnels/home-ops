@@ -32,7 +32,7 @@ spec:
       enabled: true
       mode: shared
       size: 200Gi
-      storageClass: nfs-slow
+      storageClass: nfs-model-cache
     prometheus:
       inferencePodMonitor:
         enabled: true

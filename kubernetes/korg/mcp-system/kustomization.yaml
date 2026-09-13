@@ -2,18 +2,16 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization.json
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: ai
+namespace: mcp-system
 components:
-  - ../../clusters/kdev
+  - ../../clusters/korg
   - ../../components/common
-  - ../../components/kopiur/secret
 replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
   # namespace first
-  - ./ai-pgo-cluster.yaml
-  - ./homebox-companion.yaml
-  - ./homebox.yaml
-  - ../../common/ai/llmkube.yaml
-  - ./omniroute.yaml
+  - ../../common/ai/toolhive.yaml
+  - ../../common/ai/toolhive-config.yaml
+  - ../../common/ai/toolhive-crds.yaml
+  - ./toolhive-mcp-servers.yaml

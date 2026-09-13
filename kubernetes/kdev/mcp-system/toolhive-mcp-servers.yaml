@@ -3,23 +3,19 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app llmkube
+  name: &app toolhive-mcp-servers
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: intel-gpu-resource-driver
-      namespace: kube-system
-    - name: nvidia-device-plugin
-      namespace: kube-system
-    - name: csi-driver-nfs
-      namespace: storage
+    - name: external-secrets-stores
+      namespace: external-secrets
+    - name: toolhive-config
   interval: 1h
-  path: ./kubernetes/base/ai/llmkube
+  path: ./kubernetes/kdev/mcp-system/toolhive-mcp-servers
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: true

@@ -11,7 +11,7 @@ spec:
   dependsOn:
     - name: toolhive-crds
   interval: 1h
-  path: ./kubernetes/base/ai/toolhive
+  path: ./kubernetes/base/mcp-system/toolhive
   prune: true
   sourceRef:
     kind: GitRepository

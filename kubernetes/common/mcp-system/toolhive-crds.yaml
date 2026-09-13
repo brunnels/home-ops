@@ -3,23 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app toolhive-config
+  name: &app toolhive-crds
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  components:
-    - ../../../components/dragonfly-cluster
-    - ../../../components/dragonfly-cluster/auth
-  dependsOn:
-    - name: dragonfly-operator
-      namespace: database
-    - name: external-secrets-stores
-      namespace: external-secrets
-    - name: llmkube
-    - name: toolhive
   interval: 1h
-  path: ./kubernetes/base/ai/toolhive-config
+  path: ./kubernetes/base/mcp-system/toolhive-crds
   prune: true
   sourceRef:
     kind: GitRepository
