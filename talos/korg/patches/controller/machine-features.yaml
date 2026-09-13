@@ -4,6 +4,8 @@ machine:
     kubernetesTalosAPIAccess:
       allowedKubernetesNamespaces:
         - system-upgrade # or the namespace the controller will be installed to
+        - mcp-system
       allowedRoles:
         - os:admin
+        - os:reader
       enabled: true
