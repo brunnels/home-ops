@@ -11,4 +11,4 @@ replacements:
 resources:
   - ./namespace.yaml
   # namespace first
-  #- ../../common/ai/llmkube.yaml
+  - ../../common/ai/llmkube.yaml
