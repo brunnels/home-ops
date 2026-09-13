@@ -46,9 +46,9 @@ spec:
     - "0"
     - --kv-unified
     - --threads
-    - "6"
+    - "4"
     - --threads-batch
-    - "12"
+    - "8"
     - --load-mode
     - mmap
   endpoint:
