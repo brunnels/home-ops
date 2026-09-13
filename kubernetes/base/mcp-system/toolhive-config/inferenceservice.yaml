@@ -42,12 +42,15 @@ spec:
     - --alias
     - toolhive-embed
     - --cont-batching
+    - --cache-ram
+    - "0"
     - --kv-unified
     - --threads
     - "6"
     - --threads-batch
     - "12"
-    - --mmap
+    - --load-mode
+    - mmap
   endpoint:
     port: 8080
     type: ClusterIP
