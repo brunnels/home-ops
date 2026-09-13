@@ -13,7 +13,7 @@ mountOptions:
   - wsize=1048576
 parameters:
   server: ${QNAP_HOSTNAME}
-  share: /appdata/${VAULT_PREFIX}-k8s
+  share: /appdata/shared-k8s
   subDir: model-cache
 provisioner: nfs.csi.k8s.io
 reclaimPolicy: Retain

@@ -310,9 +310,9 @@ Prowlarr API key for torrent/usenet indexer management.
 
 **Reference:** `kubernetes/base/downloads/prowlarr/externalsecret.yaml`
 
-### CLUSTER/igdb (IGDB - Video Game Database)
+### igdb (IGDB - Video Game Database)
 
-**Path:** `CLUSTER/igdb` (e.g., `kdev/igdb`, `korg/igdb`)
+**Path:** `igdb`
 
 IGDB API credentials for game metadata in ROMM.
 
@@ -340,9 +340,9 @@ ROMM application configuration and authentication.
 
 **Reference:** `kubernetes/base/downloads/romm/externalsecret.yaml`
 
-### CLUSTER/steamgriddb (SteamGridDB - Game Artwork)
+### steamgriddb (SteamGridDB - Game Artwork)
 
-**Path:** `CLUSTER/steamgriddb` (e.g., `kdev/steamgriddb`, `korg/steamgriddb`)
+**Path:** `steamgriddb`
 
 SteamGridDB API for game artwork in ROMM.
 
