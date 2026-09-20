@@ -5,35 +5,37 @@ kind: MCPServer
 metadata:
   name: kubectl-mcp
 spec:
+  args:
+    - --port=8080
+    - --read-only
+    - --stateless
   groupRef:
     name: mcp-tools
-  image: docker.io/rohitghumare64/kubectl-mcp-server:1.24.0@sha256:17134e36a3e1d3a5e457c12d61e8c7f7c52a7927c6ae4250131dfd95a74a2331
+  image: ghcr.io/containers/kubernetes-mcp-server:latest
   mcpPort: 8000
   podTemplateSpec:
     spec:
       containers:
-        - args:
-            - --transport
-            - streamable-http
-            - --host
-            - 0.0.0.0
-            - --port
-            - "8000"
-            - --read-only
-          env:
-            - name: MCP_K8S_PROVIDER
-              value: in-cluster
-            - name: PYTHONUNBUFFERED
-              value: "1"
-          name: mcp
-  proxyMode: streamable-http
-  proxyPort: 8080
+        - name: mcp
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmpfs
+      securityContext:
+        runAsGroup: 0
+        runAsNonRoot: true
+        runAsUser: 0
+      volumes:
+        - name: tmpfs
+          emptyDir:
+            medium: Memory
   resources:
     limits:
-      cpu: 500m
       memory: 512Mi
     requests:
-      cpu: 100m
+      cpu: 50m
       memory: 128Mi
   serviceAccount: kubectl-mcp-readonly
   transport: streamable-http
