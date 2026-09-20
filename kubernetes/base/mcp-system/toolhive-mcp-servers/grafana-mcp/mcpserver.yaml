@@ -43,9 +43,9 @@ spec:
       cpu: 50m
       memory: 128Mi
   secrets:
-    #- key: GRAFANA_USERNAME
-    #  name: *app
-    #  targetEnvName: GRAFANA_USERNAME
+    - key: GRAFANA_USERNAME
+      name: *app
+      targetEnvName: GRAFANA_USERNAME
     - key: GRAFANA_PASSWORD
       name: *app
       targetEnvName: GRAFANA_PASSWORD
