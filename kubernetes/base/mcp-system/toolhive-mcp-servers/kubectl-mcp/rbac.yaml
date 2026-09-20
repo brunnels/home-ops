@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: kubectl-mcp-readonly
+  name: kubectl-mcp
 ---
 # Broad read-only access for kubectl MCP, split across two ClusterRoles. Kubernetes
 # Secrets (core v1) are excluded from both.
@@ -164,7 +164,7 @@ roleRef:
   name: kubectl-mcp-readonly
 subjects:
   - kind: ServiceAccount
-    name: kubectl-mcp-readonly
+    name: kubectl-mcp
     namespace: ${NAMESPACE}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -177,5 +177,5 @@ roleRef:
   name: kubectl-mcp-readonly-explicit
 subjects:
   - kind: ServiceAccount
-    name: kubectl-mcp-readonly
+    name: kubectl-mcp
     namespace: ${NAMESPACE}

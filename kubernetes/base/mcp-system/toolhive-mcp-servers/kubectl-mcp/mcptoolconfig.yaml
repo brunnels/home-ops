@@ -1,0 +1,94 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcptoolconfig_v1beta1.json
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPToolConfig
+metadata:
+  name: kubectl-only-config
+  namespace: toolhive-system
+spec:
+  toolsFilter:
+    # Pods & Workloads
+    - get_pods
+    - describe_pod
+    - create_pod
+    - delete_pod
+    - get_pod_logs
+    - exec_command
+    - port_forward
+    - restart_pod
+    - get_pod_events
+    - get_pod_metrics
+    - get_deployments
+    - describe_deployment
+    - create_deployment
+    - delete_deployment
+    - scale_deployment
+    - restart_deployment
+    - kubectl_rollout
+    - get_statefulsets
+    - describe_statefulset
+    - scale_statefulset
+    - get_daemonsets
+    - describe_daemonset
+    - get_jobs
+    - describe_job
+    - get_cronjobs
+    - describe_cronjob
+
+    # Services & Networking
+    - get_services
+    - describe_service
+    - create_service
+    - delete_service
+    - get_ingresses
+    - describe_ingress
+    - create_ingress
+    - delete_ingress
+    - get_endpoints
+    - get_network_policies
+
+    # Config & Storage
+    - get_configmaps
+    - describe_configmap
+    - create_configmap
+    - delete_configmap
+    - get_secrets
+    - describe_secret
+    - create_secret
+    - delete_secret
+    - get_pvcs
+    - describe_pvc
+    - get_pvs
+    - describe_pv
+    - get_storageclasses
+
+    # Cluster & Nodes (Excluding Context Switching)
+    - get_nodes
+    - describe_node
+    - get_namespaces
+    - create_namespace
+    - delete_namespace
+    - get_cluster_info
+    - get_cluster_version
+    - health_check
+    - get_node_metrics
+    - multi_cluster_query
+    - multi_cluster_health
+    - multi_cluster_pod_count
+
+    # RBAC & Security (Excluding External Policy Engines)
+    - get_rbac_roles
+    - get_cluster_roles
+    - get_role_bindings
+    - get_cluster_role_bindings
+    - get_service_accounts
+    - audit_security
+
+    # Troubleshooting, Observability & Cost
+    - diagnose_pod_crash
+    - analyze_cluster_health
+    - get_cluster_events
+    - check_resource_usage
+    - analyze_cost
+    - find_idle_resources
+    - recommend_resource_limits

@@ -3,7 +3,7 @@
 apiVersion: toolhive.stacklok.dev/v1beta1
 kind: MCPServer
 metadata:
-  name: kubectl-mcp
+  name: &app kubectl-mcp
 spec:
   args:
     - --transport
@@ -47,5 +47,7 @@ spec:
     requests:
       cpu: 100m
       memory: 128Mi
-  serviceAccount: kubectl-mcp-readonly
+  serviceAccount: *app
+  toolConfigRef:
+    name: *app
   transport: streamable-http
