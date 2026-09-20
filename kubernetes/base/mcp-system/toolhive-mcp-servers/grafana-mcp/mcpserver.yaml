@@ -10,6 +10,12 @@ spec:
     - streamable-http
     - --address
     - 0.0.0.0:8000
+  env:
+    - name: GRAFANA_URL
+      value: http://grafana-service.observability:3000
+  envFrom:
+    - secretRef:
+        name: *app
   groupRef:
     name: mcp-tools
   image: mcp/grafana:latest
@@ -17,16 +23,10 @@ spec:
   podTemplateSpec:
     spec:
       containers:
-        env:
-          - name: GRAFANA_URL
-            value: http://grafana-service.observability:3000
-        envFrom:
-          - secretRef:
-              name: *app
-        name: mcp
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities: { drop: ["ALL"] }
+        - name: mcp
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
       securityContext:
         runAsGroup: 0
         runAsNonRoot: true
