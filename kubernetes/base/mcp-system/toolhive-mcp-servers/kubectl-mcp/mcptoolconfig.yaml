@@ -3,8 +3,7 @@
 apiVersion: toolhive.stacklok.dev/v1beta1
 kind: MCPToolConfig
 metadata:
-  name: kubectl-only-config
-  namespace: toolhive-system
+  name: kubectl-mcp
 spec:
   toolsFilter:
     # Pods & Workloads
