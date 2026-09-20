@@ -31,10 +31,13 @@ spec:
         runAsGroup: 0
         runAsNonRoot: true
         runAsUser: 0
+  proxyMode: streamable-http
   resources:
     limits:
-      memory: 256Mi
+      cpu: 500m
+      memory: 512Mi
     requests:
-      cpu: 50m
+      cpu: 100m
       memory: 128Mi
+  serviceAccount: *app
   transport: streamable-http
