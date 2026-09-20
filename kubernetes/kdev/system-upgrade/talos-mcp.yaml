@@ -14,7 +14,7 @@ spec:
     - name: toolhive-config
       namespace: mcp-system
   interval: 1h
-  path: ./kubernetes/kdev/mcp-system/toolhive-mcp-servers/talos-mcp
+  path: ./kubernetes/base/mcp-system/toolhive-mcp-servers/talos-mcp
   prune: true
   sourceRef:
     kind: GitRepository
