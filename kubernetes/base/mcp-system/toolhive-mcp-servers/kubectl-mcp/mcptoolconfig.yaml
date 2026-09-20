@@ -71,9 +71,6 @@ spec:
     - get_cluster_version
     - health_check
     - get_node_metrics
-    - multi_cluster_query
-    - multi_cluster_health
-    - multi_cluster_pod_count
 
     # RBAC & Security (Excluding External Policy Engines)
     - get_rbac_roles
