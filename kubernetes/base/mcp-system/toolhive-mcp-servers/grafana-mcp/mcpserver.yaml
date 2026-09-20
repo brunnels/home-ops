@@ -13,9 +13,6 @@ spec:
   env:
     - name: GRAFANA_URL
       value: http://grafana-service.observability:3000
-  envFrom:
-    - secretRef:
-        name: *app
   groupRef:
     name: mcp-tools
   image: mcp/grafana:latest
@@ -23,7 +20,10 @@ spec:
   podTemplateSpec:
     spec:
       containers:
-        - name: mcp
+        - envFrom:
+            - secretRef:
+                name: *app
+          name: mcp
           securityContext:
             allowPrivilegeEscalation: false
             capabilities: { drop: ["ALL"] }
