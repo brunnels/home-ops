@@ -6,17 +6,26 @@ metadata:
   name: kubectl-mcp
 spec:
   args:
-    - --port=8080
+    - --transport
+    - streamable-http
+    - --host
+    - 0.0.0.0
+    - --port
+    - "8000"
     - --read-only
-    - --stateless
   groupRef:
     name: mcp-tools
-  image: ghcr.io/containers/kubernetes-mcp-server:latest
+  image: ghcr.io/rohitg00/kubectl-mcp-server:1.24.0@sha256:17134e36a3e1d3a5e457c12d61e8c7f7c52a7927c6ae4250131dfd95a74a2331
   mcpPort: 8000
   podTemplateSpec:
     spec:
       containers:
-        - name: mcp
+        - env:
+            - name: MCP_K8S_PROVIDER
+              value: in-cluster
+            - name: PYTHONUNBUFFERED
+              value: "1"
+          name: mcp
           securityContext:
             allowPrivilegeEscalation: false
             capabilities: { drop: ["ALL"] }
@@ -33,9 +42,10 @@ spec:
             medium: Memory
   resources:
     limits:
+      cpu: 500m
       memory: 512Mi
     requests:
-      cpu: 50m
+      cpu: 100m
       memory: 128Mi
   serviceAccount: kubectl-mcp-readonly
   transport: streamable-http
