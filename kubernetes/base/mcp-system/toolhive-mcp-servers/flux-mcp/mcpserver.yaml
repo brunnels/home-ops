@@ -9,12 +9,6 @@ spec:
     - serve
     - --transport=http
     - --port=8000
-  env:
-    # In-cluster mode: no KUBECONFIG; uses the pod service account.
-    - name: RUNTIME_NAMESPACE
-      valueFrom:
-        fieldRef:
-          fieldPath: metadata.namespace
   groupRef:
     name: mcp-tools
   image: ghcr.io/controlplaneio-fluxcd/flux-operator-mcp:v0.60.0@sha256:9940c2c46c1bff5af3827cb76f28a1ff347ea8141ed1af42e66ffbd79e8c4bdb
@@ -22,7 +16,12 @@ spec:
   podTemplateSpec:
     spec:
       containers:
-        - name: mcp
+        - env:
+            - name: RUNTIME_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          name: mcp
           securityContext:
             allowPrivilegeEscalation: false
             capabilities: { drop: ["ALL"] }
