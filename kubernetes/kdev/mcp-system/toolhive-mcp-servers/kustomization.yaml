@@ -6,4 +6,3 @@ resources:
   - ../../../base/mcp-system/toolhive-mcp-servers/flux-mcp
   - ../../../base/mcp-system/toolhive-mcp-servers/grafana-mcp
   - ../../../base/mcp-system/toolhive-mcp-servers/kubectl-mcp
-  - ../../../base/mcp-system/toolhive-mcp-servers/talos-mcp

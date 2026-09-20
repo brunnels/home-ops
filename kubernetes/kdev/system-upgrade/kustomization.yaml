@@ -12,3 +12,4 @@ resources:
   - ./namespace.yaml
   - ../../common/system-upgrade/tuppr.yaml
   - ../../common/system-upgrade/tuppr-upgrades.yaml
+  - ../../../base/mcp-system/toolhive-mcp-servers/talos-mcp
