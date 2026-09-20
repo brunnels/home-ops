@@ -7,22 +7,16 @@ metadata:
 spec:
   groupRef:
     name: mcp-tools
-  image: docker.io/controlplaneio-fluxcd/mcp/grafana:latest
+  image: mcp/grafana:latest
   mcpPort: 8000
   podTemplateSpec:
     spec:
       containers:
         - args:
-            - run
-            - --rm
-            - -i
-            - -e
-            - GRAFANA_URL
-            - -e
-            - GRAFANA_AUTH
-            - mcp/grafana
             - -t
-            - sse
+            - streamable-http
+            - --address
+            - 0.0.0.0:8000
           env:
             - name: GRAFANA_URL
               value: http://grafana-service.observability:3000
@@ -37,19 +31,10 @@ spec:
         runAsGroup: 0
         runAsNonRoot: true
         runAsUser: 0
-  proxyMode: sse
-  proxyPort: 8000
   resources:
     limits:
       memory: 256Mi
     requests:
       cpu: 50m
       memory: 128Mi
-  #secrets:
-  #  - key: GRAFANA_USERNAME
-  #    name: *app
-  #    targetEnvName: GRAFANA_USERNAME
-  #  - key: GRAFANA_PASSWORD
-  #    name: *app
-  #    targetEnvName: GRAFANA_PASSWORD
-  transport: sse
+  transport: streamable-http
