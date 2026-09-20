@@ -12,7 +12,6 @@ spec:
     - 0.0.0.0
     - --port
     - "8000"
-    - --read-only
   groupRef:
     name: mcp-tools
   image: ghcr.io/rohitg00/kubectl-mcp-server:1.24.0@sha256:17134e36a3e1d3a5e457c12d61e8c7f7c52a7927c6ae4250131dfd95a74a2331
