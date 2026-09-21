@@ -25,7 +25,7 @@ spec:
           app:
             image:
               repository: ghcr.io/duelion/homebox-companion
-              tag: 3.1.0@sha256:a255a940edc94db3442587b9f0304d31034d8ef265da6be0d5e8cdf7cf3a8464
+              tag: 3.1.1@sha256:0e89a0e0a7482e29d646ac3154e1122290c5b7137f110bb0a737120e5a8b6c7b
             env:
               HBC_DISABLE_UPDATE_CHECK: true
               HBC_HOMEBOX_URL: http://homebox:8080
