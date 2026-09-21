@@ -35,7 +35,7 @@ spec:
       taskNamespace: ${NAMESPACE}
       image:
         repository: ghcr.io/misospace/llmkube-coder
-        tag: 0.9.25@sha256:63a72021c626f15d76a1c605c7617f1337f87181dc674513480fc670a664a03e
+        tag: 0.9.29@sha256:1e22c2df1fe5fd25700ed91bb988e155062c77774c5dc2e58f4975a769d54fd4
       gateCache:
         storageClass: nfs-model-cache
         accessModes: ["ReadWriteMany"]
