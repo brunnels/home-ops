@@ -1,0 +1,17 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  packageRules: [
+    {
+      description: "Override Helmfile Dependency Name",
+      matchDatasources: ["docker"],
+      matchManagers: ["helmfile"],
+      overrideDepName: "{{packageName}}",
+    },
+    {
+      description: "Override Renovate Operator source",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["ghcr.io/mogenius/helm-charts/renovate-operator"],
+      sourceUrl: "https://github.com/mogenius/renovate-operator",
+    },
+  ],
+}

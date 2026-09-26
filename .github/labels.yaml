@@ -1,4 +1,9 @@
 ---
+# Clusters
+- name: cluster/kdev
+  color: "ffc300"
+- name: cluster/korg
+  color: "ffc300"
 # Areas
 - name: area/bootstrap
   color: "0e8a16"
