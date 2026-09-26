@@ -8,6 +8,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+      components.dragonfly/cluster-mode: non-cluster
   components:
     - ../../../components/dragonfly-cluster
     - ../../../components/dragonfly-cluster/auth
