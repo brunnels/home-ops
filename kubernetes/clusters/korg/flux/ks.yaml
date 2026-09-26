@@ -128,6 +128,9 @@ spec:
                 - op: add
                   path: /spec/args/-
                   value: --default_lua_flags=allow-undeclared-keys
+      target:
+        kind: Kustomization
+        labelSelector: "components.dragonfly/cluster-mode=non-cluster"
   path: ./kubernetes/korg
   postBuild:
     substituteFrom:
