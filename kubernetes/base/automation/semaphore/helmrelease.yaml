@@ -49,10 +49,11 @@ spec:
           display_name: Login with Authelia
           provider_url: https://auth.${SECRET_DOMAIN}
           redirect_url: https://semaphore.${SECRET_DOMAIN}/api/auth/oidc/authelia/redirect
-          endpoint:
-            auth: https://auth.${SECRET_DOMAIN}/api/oidc/authorization
-            token: https://auth.${SECRET_DOMAIN}/api/oidc/token
-            userinfo: https://auth.${SECRET_DOMAIN}/api/oidc/userinfo
+          #"endpoint": {
+          #  "auth": "https://auth.${SECRET_DOMAIN}/api/oidc/authorization",
+          #  "token": "https://auth.${SECRET_DOMAIN}/api/oidc/token",
+          #  "userinfo": "https://auth.${SECRET_DOMAIN}/api/oidc/userinfo"
+          #}
           username_claim: preferred_username
           name_claim: name
           email_claim: email
