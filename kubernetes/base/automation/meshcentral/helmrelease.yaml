@@ -60,14 +60,6 @@ spec:
               limits:
                 memory: 2Gi
     persistence:
-      config:
-        type: configMap
-        identifier: config
-        advancedMounts:
-          meshcentral:
-            app:
-              - path: /opt/meshcentral/meshcentral-data/config.json
-                subPath: config.json
       data:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
@@ -79,6 +71,14 @@ spec:
             subPath: userfiles
           - path: /opt/meshcentral/meshcentral-backups
             subPath: backups
+      meshcentral-config:
+        type: configMap
+        identifier: config
+        advancedMounts:
+          meshcentral:
+            app:
+              - path: /opt/meshcentral/meshcentral-data/config.json
+                subPath: config.json
     route:
       app:
         hostnames: [*host]
