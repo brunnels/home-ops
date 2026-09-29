@@ -13,4 +13,5 @@ resources:
   - ./namespace.yaml
   - ./esphome.yaml
   - ./home-assistant.yaml
+  - ./meshcentral.yaml
   - ./mosquitto.yaml
