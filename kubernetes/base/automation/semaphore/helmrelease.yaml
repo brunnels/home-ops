@@ -38,7 +38,7 @@ spec:
       usernameFromSecret: true
       usernameKey: user
       passwordKey: password
-      existingSecret: &pguserSecret "{{ .Release.Namespace }}-pguser-{{ .Release.Name }}"
+      existingSecret: &pguserSecret ${NAMESPACE}-pguser-semaphore
     persistence:
       enabled: true
       existingClaim: *app
