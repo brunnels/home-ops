@@ -19,7 +19,6 @@ spec:
     extraEnvVariables:
       SEMAPHORE_SCHEDULE_TIMEZONE: ${TIMEZONE}
       ANSIBLE_HOST_KEY_CHECKING: false
-      SEMAPHORE_PORT: &port 3000
     general:
       host: &host https://semaphore.${SECRET_DOMAIN}
       tmp_path: /tmp/semaphore/
@@ -76,7 +75,7 @@ spec:
       enable: false
     service:
       type: ClusterIP
-      port: *port
+      port: &port 3000
       internalPort: *port
     ingress:
       enabled: false
