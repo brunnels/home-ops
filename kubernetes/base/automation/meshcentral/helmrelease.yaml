@@ -21,7 +21,7 @@ spec:
       config:
         forceRename: "{{ .Release.Name }}"
         data:
-          config.yml: |-
+          config.json: |-
             {
               "settings": {
                 "port": 8080,
