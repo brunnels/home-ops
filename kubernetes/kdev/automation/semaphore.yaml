@@ -9,13 +9,12 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../components/envoy-gateway-oidc
     - ../../../components/kopiur/backup
+    - ../../../components/pgo-db-init
   dependsOn:
     - name: authelia-oidc-operator
       namespace: security
-    - name: external-secrets-stores
-      namespace: external-secrets
+    - name: automation-pgo-cluster
     - name: kopiur-repository
       namespace: storage
   interval: 1h
