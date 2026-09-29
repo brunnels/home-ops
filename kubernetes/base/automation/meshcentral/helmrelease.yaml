@@ -50,6 +50,7 @@ spec:
               NODE_ENV: production
               HOSTNAME: &host mesh.${SECRET_DOMAIN}
               ALLOW_NEW_ACCOUNTS: "false"
+              CONFIG_FILE: /opt/meshcentral/config.json
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -77,7 +78,7 @@ spec:
         advancedMounts:
           meshcentral:
             app:
-              - path: /opt/meshcentral/meshcentral-data/config.json
+              - path: /opt/meshcentral/config.json
                 subPath: config.json
     route:
       app:
