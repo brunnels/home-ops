@@ -17,6 +17,6 @@ resources:
   - ../../common/storage/kopiur-repository.yaml
   - ../../common/storage/kopiur.yaml
   - ../../common/storage/openebs-hostpath.yaml
-  #- ../../common/storage/rook-ceph-cluster.yaml
+  - ../../common/storage/rook-ceph-cluster.yaml
   - ../../common/storage/rook-ceph-operator.yaml
   - ../../common/storage/snapshot-controller.yaml
