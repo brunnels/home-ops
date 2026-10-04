@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app crd-wizard
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 1h
+  values:
+    httpRoute:
+      annotations:
+        gethomepage.dev/description: CRD Wizard
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/group: Observability
+        gethomepage.dev/icon: *app
+        gethomepage.dev/name: CRD Wizard
+        gethomepage.dev/widget.type: *app
+        gethomepage.dev/widget.url: "http://crds.{{ .Release.Namespace }}"
+      enabled: true
+      hostnames:
+        - "crds.${SECRET_DOMAIN}"
+      parentRefs:
+        - name: envoy-internal
+          namespace: network

@@ -5,5 +5,5 @@ kind: HelmRepository
 metadata:
   name: angelnu-charts
 spec:
-  interval: 1h
+  interval: 15m
   url: https://angelnu.github.io/helm-charts

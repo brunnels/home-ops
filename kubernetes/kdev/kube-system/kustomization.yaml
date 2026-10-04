@@ -18,6 +18,4 @@ resources:
   - ../../common/kube-system/metrics-server.yaml
   - ../../common/kube-system/reloader.yaml
   - ../../common/kube-system/spegel.yaml
-  - ./generic-device-plugin.yaml
   - ./irqbalance.yaml
-  - ./nvidia-device-plugin.yaml
