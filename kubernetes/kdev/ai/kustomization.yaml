@@ -12,8 +12,8 @@ replacements:
 resources:
   - ./namespace.yaml
   # namespace first
-  - ./ai-pgo-cluster.yaml
-  - ./homebox-companion.yaml
+  #- ./ai-pgo-cluster.yaml
+  #- ./homebox-companion.yaml
   #- ./homebox.yaml
-  - ../../common/ai/llmkube.yaml
+  #- ../../common/ai/llmkube.yaml
   #- ./omniroute.yaml

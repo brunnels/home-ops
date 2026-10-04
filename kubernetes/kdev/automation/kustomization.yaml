@@ -11,5 +11,5 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
-  - ./automation-pgo-cluster.yaml
+  #- ./automation-pgo-cluster.yaml
   #- ./semaphore.yaml

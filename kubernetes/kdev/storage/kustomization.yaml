@@ -15,6 +15,5 @@ resources:
   - ../../common/storage/kopia.yaml
   - ../../common/storage/kopiur-repository.yaml
   - ../../common/storage/kopiur.yaml
-  - ../../common/storage/openebs-hostpath.yaml
   - ../../common/storage/snapshot-controller.yaml
   - ./miroir.yaml
