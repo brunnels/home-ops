@@ -3,7 +3,7 @@
 apiVersion: miroir.home-operations.com/v1alpha1
 kind: MiroirNode
 metadata:
-  name: node-a
+  name: kdev-n1
 spec:
   pools:
     - name: miroir-local
@@ -17,7 +17,7 @@ spec:
 apiVersion: miroir.home-operations.com/v1alpha1
 kind: MiroirNode
 metadata:
-  name: node-b
+  name: kdev-n2
 spec:
   pools:
     - name: miroir-local
@@ -31,7 +31,7 @@ spec:
 apiVersion: miroir.home-operations.com/v1alpha1
 kind: MiroirNode
 metadata:
-  name: node-c
+  name: kdev-n3
 spec:
   pools:
     - name: miroir-local
