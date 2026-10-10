@@ -15,7 +15,7 @@ spec:
       reloader.stakater.com/auto: "true"
     image:
       repository: docker.io/semaphoreui/semaphore
-      tag: v2.19.14
+      tag: v2.19.16
     extraEnvVariables:
       SEMAPHORE_SCHEDULE_TIMEZONE: ${TIMEZONE}
       ANSIBLE_HOST_KEY_CHECKING: false
