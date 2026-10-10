@@ -162,7 +162,7 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - identifier: *app
+              - identifier: app
                 port: anubis
     service:
       app:
