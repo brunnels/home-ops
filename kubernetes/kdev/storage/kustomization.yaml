@@ -11,10 +11,10 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
-  #- ../../common/storage/csi-driver-nfs.yaml
-  #- ../../common/storage/kopia.yaml
-  #- ../../common/storage/kopiur-repository.yaml
-  #- ../../common/storage/kopiur.yaml
-  #- ../../common/storage/snapshot-controller.yaml
-  #- ./miroir.yaml
-  #- ./miroir-config.yaml
+  - ../../common/storage/csi-driver-nfs.yaml
+  - ../../common/storage/kopia.yaml
+  - ../../common/storage/kopiur-repository.yaml
+  - ../../common/storage/kopiur.yaml
+  - ../../common/storage/snapshot-controller.yaml
+  - ./miroir.yaml
+  - ./miroir-config.yaml
