@@ -26,16 +26,13 @@ data:
   CLUSTER_BGP_ASN: "65531"
   L2_NET_DEVICE: "bond+"
 
-  CEPH_DEVICE_PATH_FILTER: "/dev/disk/by-path/pci-0000:02:00.0-nvme-*"
-  CEPH_CLUSTER_CIDR: "169.254.255.0/24"
-
   THEME_PARK_THEME: "space-gray"
-  OPENEBS_HOSTPATH: "/var/mnt/lpp-0"
 
   GIT_REPO: "github.com/brunnels/home-ops"
   GIT_REPO_REF: "refs/heads/main"
 
-  KOPIUR_SNAPSHOTCLASS: "csi-ceph-blockpool"
-  KOPIUR_STORAGECLASS: "ceph-block"
+  KOPIUR_SNAPSHOTCLASS: "miroir-snap"
+  KOPIUR_STORAGECLASS: "miroir"
+  LOCAL_STORAGECLASS: "miroir-local"
 
   SVC_DIREWOLF_ADDR: "10.0.150.135"
