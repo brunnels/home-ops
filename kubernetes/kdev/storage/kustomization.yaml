@@ -17,3 +17,4 @@ resources:
   - ../../common/storage/kopiur.yaml
   - ../../common/storage/snapshot-controller.yaml
   - ./miroir.yaml
+  - ./miroir-config.yaml
