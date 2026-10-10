@@ -26,13 +26,13 @@ spec:
     cache:
       capacity: 1Mi
       mode: Ephemeral
-      storageClassName: openebs-hostpath
+      storageClassName: ${LOCAL_STORAGECLASS:=openebs-hostpath}
     podSecurityContext:
       fsGroup: 100
       fsGroupChangePolicy: OnRootMismatch
     scratch:
       capacity: 1Mi
-      storageClassName: openebs-hostpath
+      storageClassName: ${LOCAL_STORAGECLASS:=openebs-hostpath}
     securityContext:
       runAsUser: 1000
       runAsGroup: 100
