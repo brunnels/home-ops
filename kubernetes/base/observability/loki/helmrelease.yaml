@@ -73,7 +73,7 @@ spec:
       persistence:
         enabled: true
         size: 50Gi
-        storageClass: ceph-block
+        storageClass: ${KOPIUR_STORAGECLASS:=ceph-block}
       replicas: 1
     test:
       enabled: false

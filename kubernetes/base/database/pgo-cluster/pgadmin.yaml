@@ -6,7 +6,7 @@ metadata:
   name: ${NAMESPACE}-pgadmin
 spec:
   dataVolumeClaimSpec:
-    storageClassName: ceph-block
+    storageClassName: ${KOPIUR_STORAGECLASS:=ceph-block}
     accessModes:
       - "ReadWriteOnce"
     resources:
@@ -14,7 +14,7 @@ spec:
         storage: 500Mi
   serverGroups:
     - name: PGO Clusters
-      postgresClusterSelector: {}
+      postgresClusterSelector: { }
   serviceName: ${NAMESPACE}-pgadmin
   config:
     oauthConfigurations:

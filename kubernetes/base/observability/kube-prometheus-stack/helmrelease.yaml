@@ -66,7 +66,7 @@ spec:
               resources:
                 requests:
                   storage: 1Gi
-              storageClassName: ceph-block
+              storageClassName: ${KOPIUR_STORAGECLASS:=ceph-block}
       route:
         main:
           annotations:
@@ -132,7 +132,7 @@ spec:
               resources:
                 requests:
                   storage: 50Gi
-              storageClassName: ceph-block
+              storageClassName: ${KOPIUR_STORAGECLASS:=ceph-block}
       route:
         main:
           annotations:
@@ -159,7 +159,7 @@ spec:
           # sensor=~"(temp1|temp3|temp4|temp5|temp6|temp8|temp9|temp10|temp11|temp12)"
           - action: drop
             regex: platform_nct6775_2592;(temp1|temp3|temp4|temp5|temp6|temp8|temp9|temp10|temp11|temp12)
-            sourceLabels: [chip, sensor]
+            sourceLabels: [ chip, sensor ]
   #postRenderers:
   #  - kustomize:
   #      patches:

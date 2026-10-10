@@ -15,7 +15,7 @@ spec:
   # sessions; without it the operator uses an ephemeral emptyDir.
   volumeClaimTemplate:
     spec:
-      storageClassName: ceph-block
+      storageClassName: ${KOPIUR_STORAGECLASS:=ceph-block}
       resources:
         requests:
           storage: 120Gi
@@ -99,7 +99,7 @@ spec:
             # that do not exist at container start.
             privileged: true
             capabilities:
-              add: ["SYS_ADMIN", "SYS_NICE", "SYS_PTRACE", "NET_RAW", "MKNOD", "NET_ADMIN"]
+              add: [ "SYS_ADMIN", "SYS_NICE", "SYS_PTRACE", "NET_RAW", "MKNOD", "NET_ADMIN" ]
             seccompProfile:
               type: Unconfined
             appArmorProfile:
