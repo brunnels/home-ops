@@ -13,7 +13,7 @@ spec:
   title: Firefox
   volumeClaimTemplate:
     spec:
-      storageClassName: openebs-hostpath
+      storageClassName: ${LOCAL_STORAGECLASS}
   wolfConfig:
     runtimeVariables:
       renderNode: /dev/dri/renderD129

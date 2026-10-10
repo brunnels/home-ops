@@ -18,7 +18,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: nvngx-cache
 spec:
-  storageClassName: openebs-hostpath
+  storageClassName: ${LOCAL_STORAGECLASS}
   accessModes:
     - ReadWriteOnce
   resources:
