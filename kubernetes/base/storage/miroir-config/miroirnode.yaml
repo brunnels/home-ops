@@ -5,7 +5,6 @@ kind: MiroirNode
 metadata:
   name: node-a
 spec:
-  address: 169.254.255.101
   pools:
     - name: miroir-local
       lvmthin:
@@ -20,7 +19,6 @@ kind: MiroirNode
 metadata:
   name: node-b
 spec:
-  address: 169.254.255.102
   pools:
     - name: miroir-local
       lvmthin:
@@ -35,7 +33,6 @@ kind: MiroirNode
 metadata:
   name: node-c
 spec:
-  address: 169.254.255.103
   pools:
     - name: miroir-local
       lvmthin:
