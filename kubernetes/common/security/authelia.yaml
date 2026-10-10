@@ -10,6 +10,7 @@ spec:
       app.kubernetes.io/name: *app
   components:
     - ../../../components/dragonfly-cluster
+    - ../../../components/dragonfly-cluster/auth
     - ../../../components/pgo-db-init
   dependsOn:
     - name: dragonfly-operator
