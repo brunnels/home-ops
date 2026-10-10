@@ -9,7 +9,7 @@ metadata:
 spec:
   modelRef: toolhive-embed
   runtime: llamacpp
-  image: ghcr.io/ggml-org/llama.cpp:server@sha256:559ac229adefe0f7e2d4e32f5222f26927b6bb8ba44b9db08e2544afebf41984
+  image: ghcr.io/ggml-org/llama.cpp:server@sha256:bf3da52e92c083472b3d1c9f9da081f423ab9def95a87ec4bba51940382d75fd
   rolloutPolicy:
     waitForIdle: true
     idleTimeoutSeconds: 86400
