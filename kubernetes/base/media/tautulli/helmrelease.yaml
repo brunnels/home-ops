@@ -70,7 +70,7 @@ spec:
                 resources:
                   requests:
                     storage: 15Gi
-                storageClassName: openebs-hostpath
+                storageClassName: ${LOCAL_STORAGECLASS}
         globalMounts:
           - path: /config/cache
       logs:

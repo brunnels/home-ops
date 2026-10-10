@@ -93,7 +93,7 @@ spec:
                 resources:
                   requests:
                     storage: 50Gi
-                storageClassName: openebs-hostpath
+                storageClassName: ${LOCAL_STORAGECLASS}
         globalMounts:
           - path: /config/Library/Application Support/Plex Media Server/Cache
       logs:
@@ -150,7 +150,7 @@ spec:
                 resources:
                   requests:
                     storage: 500Gi
-                storageClassName: openebs-hostpath
+                storageClassName: ${LOCAL_STORAGECLASS}
     route:
       app:
         annotations:

@@ -94,7 +94,7 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
-                storageClassName: openebs-hostpath
+                storageClassName: ${LOCAL_STORAGECLASS}
         globalMounts:
           - path: /config/.venv
       secrets:

@@ -72,7 +72,7 @@ spec:
                 resources:
                   requests:
                     storage: 15Gi
-                storageClassName: openebs-hostpath
+                storageClassName: ${LOCAL_STORAGECLASS}
         globalMounts:
           - path: /app/config/cache
       tmpfs:
