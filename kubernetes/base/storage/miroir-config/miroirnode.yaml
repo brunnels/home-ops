@@ -1,0 +1,45 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/miroir.home-operations.com/miroirnode_v1alpha1.json
+apiVersion: miroir.home-operations.com/v1alpha1
+kind: MiroirNode
+metadata:
+  name: node-a
+spec:
+  addr: 169.254.255.101
+  pools:
+    - name: miroir-local
+      lvmthin:
+        device: /dev/disk/by-id/nvme-SK_hynix_BC501_HFM512GDJTNG-8310A_FJ9BN79361140BS0W
+    - name: miroir
+      lvmthin:
+        device: /dev/disk/by-id/nvme-FIKWOT_FX991_1TB_AA251140625
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/miroir.home-operations.com/miroirnode_v1alpha1.json
+apiVersion: miroir.home-operations.com/v1alpha1
+kind: MiroirNode
+metadata:
+  name: node-b
+spec:
+  addr: 169.254.255.102
+  pools:
+    - name: miroir-local
+      lvmthin:
+        device: /dev/disk/by-id/nvme-SK_hynix_BC501_HFM512GDJTNG-8310A_FJ9BN79361140BS1I
+    - name: miroir
+      lvmthin:
+        device: /dev/disk/by-id/nvme-FIKWOT_FX991_1TB_AA251130643
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/miroir.home-operations.com/miroirnode_v1alpha1.json
+apiVersion: miroir.home-operations.com/v1alpha1
+kind: MiroirNode
+metadata:
+  name: node-c
+spec:
+  addr: 169.254.255.103
+  pools:
+    - name: miroir-local
+      lvmthin:
+        device: /dev/disk/by-id/nvme-SK_hynix_BC501_HFM512GDJTNG-8310A_FJ9BN79361140BS0L
+    - name: miroir
+      lvmthin:
+        device: /dev/disk/by-id/nvme-FIKWOT_FX991_1TB_AA251140630
