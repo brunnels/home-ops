@@ -11,7 +11,7 @@ spec:
   template:
     pools:
       - name: miroir-local
-        loopfile:
+        lvmthin:
           baseDir: /var/mnt/miroir-local
       - name: miroir
         lvmthin:
