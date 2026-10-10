@@ -13,8 +13,6 @@ spec:
   dependsOn:
     - name: crunchy-postgres-operator
       namespace: database
-    - name: openebs-hostpath
-      namespace: storage
   healthCheckExprs:
     - apiVersion: external-secrets.io/v1
       kind: ExternalSecret
