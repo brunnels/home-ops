@@ -19,7 +19,7 @@ spec:
     - --cluster_mode=emulated
     - --lock_on_hashtags # https://github.com/dragonflydb/dragonfly/issues/782
     - --default_lua_flags=allow-undeclared-keys
-    - --no_version_check
+    - --noversion_check
   resources:
     requests:
       cpu: 50m
