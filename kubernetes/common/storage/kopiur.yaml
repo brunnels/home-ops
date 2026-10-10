@@ -9,7 +9,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: openebs-hostpath
     - name: snapshot-controller
   interval: 1h
   path: ./kubernetes/base/storage/kopiur
