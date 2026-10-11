@@ -16,3 +16,29 @@ spec:
     manager:
       image:
         repository: ghcr.io/dragonflydb/operator
+      resources:
+        limits:
+          memory: 128Mi
+        requests:
+          cpu: 10m
+      securityContext:
+        readOnlyRootFilesystem: true
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: *app
+    serviceMonitor:
+      enabled: true
+  postRenderers:
+    - kustomize:
+        patches:
+          - patch: |-
+              apiVersion: monitoring.coreos.com/v1
+              kind: ServiceMonitor
+              metadata:
+                name: dragonfly-operator-controller-manager-metrics
+              spec:
+                fallbackScrapeProtocol: PrometheusText1.0.0
