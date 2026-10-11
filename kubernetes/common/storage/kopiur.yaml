@@ -14,6 +14,9 @@ spec:
     - name: snapshot-controller
   interval: 1h
   path: ./kubernetes/base/storage/kopiur
+  postBuild:
+    substitute:
+      APP: *app
   prune: true
   sourceRef:
     kind: GitRepository
