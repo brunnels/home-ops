@@ -47,3 +47,5 @@ spec:
       enabled: true
       auth:
         acknowledgeNoProxySecret: true
+        anonymous:
+          enabled: true
