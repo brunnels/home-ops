@@ -9,7 +9,11 @@ metadata:
 spec:
   claims:
     policy:
-      id_token: [ 'groups', 'email', 'preferred_username', 'name' ]
+      id_token:
+        - email
+        - groups
+        - name
+        - preferred_username
   description: ${OIDC_DESCRIPTION:-${APP}}
   grant_types:
     - authorization_code
