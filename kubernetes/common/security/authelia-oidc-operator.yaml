@@ -8,6 +8,9 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../components/dragonfly-cluster
+    - ../../../components/dragonfly-cluster/auth
   interval: 1h
   path: ./kubernetes/base/security/authelia-oidc-operator
   prune: true
