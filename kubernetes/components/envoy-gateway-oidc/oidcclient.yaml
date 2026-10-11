@@ -22,8 +22,9 @@ spec:
       client_id: client-id
       client_secret: client-secret
   scopes:
-    - openid
+  scopes:
+    - email
+    - groups
     - offline_access
-  # default should not be needed, but it is required for the operator to work issue: #6
-  token_endpoint:
-    auth_method: client_secret_basic
+    - openid
+    - profile

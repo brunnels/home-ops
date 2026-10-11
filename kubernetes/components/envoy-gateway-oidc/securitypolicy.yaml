@@ -9,19 +9,21 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       name: ${OIDC_ROUTE_NAME:-${APP}}
-  #jwt:
-  #  providers:
-  #    - name: my-oidc-provider
-  #      issuer: https://auth.${SECRET_DOMAIN}
-  #      remoteJWKS:
-  #        uri: https://auth.${SECRET_DOMAIN}/jwks.json
-  #      claimToHeaders:
-  #        - header: "x-user-id"
-  #          claim: "sub"
-  #        - header: "x-user-email"
-  #          claim: "email"
-  #        - header: "x-user-groups"
-  #          claim: "groups"
+        #jwt:
+        #  providers:
+        #    - name: authelia
+        #      extractFrom:
+        #        cookies:
+        #      issuer: https://auth.${SECRET_DOMAIN}
+        #      remoteJWKS:
+        #        uri: https://auth.${SECRET_DOMAIN}/jwks.json
+        #      claimToHeaders:
+        #        - header: "x-user-id"
+        #          claim: "sub"
+        #        - header: "x-user-email"
+        #          claim: "email"
+        #        - header: "x-user-groups"
+      #          claim: "groups"
   oidc:
     provider:
       issuer: https://auth.${SECRET_DOMAIN}
@@ -32,3 +34,9 @@ spec:
     clientSecret:
       name: ${APP_SUBDOMAIN:-${APP}}-oidc
     redirectURL: https://${APP_SUBDOMAIN:-${APP}}.${SECRET_DOMAIN}/oauth2/callback
+    scopes:
+      - email
+      - groups
+      - offline_access
+      - openid
+      - profile
