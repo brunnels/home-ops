@@ -9,7 +9,7 @@ metadata:
 spec:
   claims:
     policy:
-      id_token: [ 'rat', 'groups', 'email', 'email_verified', 'alt_emails', 'preferred_username', 'name' ]
+      id_token: [ 'groups', 'email', 'preferred_username', 'name' ]
   description: ${OIDC_DESCRIPTION:-${APP}}
   grant_types:
     - authorization_code
@@ -27,6 +27,5 @@ spec:
   scopes:
     - email
     - groups
-    - offline_access
     - openid
     - profile

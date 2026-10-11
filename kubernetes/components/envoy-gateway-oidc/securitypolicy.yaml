@@ -22,24 +22,25 @@ spec:
             header: x-user-groups
         extractFrom:
           cookies:
-            - IdToken-f3aa228c
+            - &idTokenName IdToken-${APP_SUBDOMAIN:-${APP}}-oidc
         issuer: https://auth.${SECRET_DOMAIN}
         name: authelia
         remoteJWKS:
           uri: https://auth.${SECRET_DOMAIN}/jwks.json
   oidc:
-    provider:
-      issuer: https://auth.${SECRET_DOMAIN}
-      authorizationEndpoint: https://auth.${SECRET_DOMAIN}/api/oidc/authorization
-      tokenEndpoint: https://auth.${SECRET_DOMAIN}/api/oidc/token
     clientIDRef:
       name: ${APP_SUBDOMAIN:-${APP}}-oidc
     clientSecret:
       name: ${APP_SUBDOMAIN:-${APP}}-oidc
+    cookieNames:
+      idToken: *idTokenName
+    provider:
+      issuer: https://auth.${SECRET_DOMAIN}
+      authorizationEndpoint: https://auth.${SECRET_DOMAIN}/api/oidc/authorization
+      tokenEndpoint: https://auth.${SECRET_DOMAIN}/api/oidc/token
     redirectURL: https://${APP_SUBDOMAIN:-${APP}}.${SECRET_DOMAIN}/oauth2/callback
     scopes:
       - email
       - groups
-      - offline_access
       - openid
       - profile
