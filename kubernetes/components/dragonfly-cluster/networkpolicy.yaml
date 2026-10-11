@@ -55,10 +55,13 @@ spec:
           podSelector:
             matchLabels:
               app.kubernetes.io/name: dragonfly-operator
+        - podSelector:
+            matchLabels:
+              app: ${NAMESPACE}-dragonfly
+              app.kubernetes.io/name: dragonfly
+              app.kubernetes.io/part-of: dragonfly
       ports:
         - port: 9999
-          protocol: TCP
-        - port: 6379
           protocol: TCP
   podSelector:
     matchLabels:
