@@ -9,24 +9,24 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       name: ${OIDC_ROUTE_NAME:-${APP}}
-      jwt:
-        providers:
-          - claimToHeaders:
-              - claim: name
-                header: x-user-fullname
-              - claim: preferred_username
-                header: x-user-username
-              - claim: email
-                header: x-user-email
-              - claim: groups
-                header: x-user-groups
-            extractFrom:
-              cookies:
-                - IdToken
-            issuer: https://auth.${SECRET_DOMAIN}
-            name: authelia
-            remoteJWKS:
-              uri: https://auth.${SECRET_DOMAIN}/jwks.json
+  jwt:
+    providers:
+      - claimToHeaders:
+          - claim: name
+            header: x-user-fullname
+          - claim: preferred_username
+            header: x-user-username
+          - claim: email
+            header: x-user-email
+          - claim: groups
+            header: x-user-groups
+        extractFrom:
+          cookies:
+            - IdToken
+        issuer: https://auth.${SECRET_DOMAIN}
+        name: authelia
+        remoteJWKS:
+          uri: https://auth.${SECRET_DOMAIN}/jwks.json
   oidc:
     provider:
       issuer: https://auth.${SECRET_DOMAIN}
