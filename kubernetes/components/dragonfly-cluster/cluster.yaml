@@ -5,8 +5,8 @@ kind: Dragonfly
 metadata:
   name: ${NAMESPACE}-dragonfly
 spec:
-  image: ghcr.io/dragonflydb/dragonfly:v2.0.0
-  replicas: 2
+  image: ghcr.io/dragonflydb/dragonfly:v2.0.2@sha256:061f00b201b58e12f974e4e96c761a881ee1c05e9d8ee967466a604b7299753b
+  replicas: ${DRAGONFLY_REPLICAS:-2}
   env:
     - name: MAX_MEMORY
       valueFrom:
@@ -14,15 +14,15 @@ spec:
           resource: limits.memory
           divisor: 1Mi
   args:
-    - --maxmemory=$(MAX_MEMORY)Mi
-    - --proactor_threads=2
     - --cluster_mode=emulated
-    - --lock_on_hashtags # https://github.com/dragonflydb/dragonfly/issues/782
     - --default_lua_flags=allow-undeclared-keys
+    - --lock_on_hashtags
+    - --maxmemory=$(MAX_MEMORY)Mi
     - --noversion_check
+    - --proactor_threads=2
   resources:
     requests:
-      cpu: 50m
+      cpu: 100m
       memory: 128Mi
     limits:
       memory: 512Mi
@@ -30,7 +30,6 @@ spec:
     - maxSkew: 1
       topologyKey: "kubernetes.io/hostname"
       whenUnsatisfiable: "DoNotSchedule"
-      nodeTaintsPolicy: Honor
       labelSelector:
         matchLabels:
           app.kubernetes.io/part-of: dragonfly

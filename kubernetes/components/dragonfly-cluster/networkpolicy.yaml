@@ -2,15 +2,8 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: ${NAMESPACE}-dragonfly-prometheus-metrics
+  name: ${NAMESPACE}-dragonfly-allow-prometheus
 spec:
-  podSelector:
-    matchLabels:
-      app: ${NAMESPACE}-dragonfly
-      app.kubernetes.io/name: dragonfly
-      app.kubernetes.io/part-of: dragonfly
-  policyTypes:
-    - Ingress
   ingress:
     - from:
         - namespaceSelector:
@@ -20,5 +13,57 @@ spec:
             matchLabels:
               app.kubernetes.io/name: prometheus
       ports:
-        - protocol: TCP
-          port: 9999
+        - port: 9999
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app: ${NAMESPACE}-dragonfly
+      app.kubernetes.io/name: dragonfly
+      app.kubernetes.io/part-of: dragonfly
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ${NAMESPACE}-dragonfly-allow-namespace
+spec:
+  ingress:
+    - from:
+        - podSelector: { }
+      ports:
+        - port: 6379
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app: ${NAMESPACE}-dragonfly
+      app.kubernetes.io/name: dragonfly
+      app.kubernetes.io/part-of: dragonfly
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ${NAMESPACE}-dragonfly-allow-operator
+spec:
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: database
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: dragonfly-operator
+      ports:
+        - port: 9999
+          protocol: TCP
+        - port: 6379
+          protocol: TCP
+  podSelector:
+    matchLabels:
+      app: ${NAMESPACE}-dragonfly
+      app.kubernetes.io/name: dragonfly
+      app.kubernetes.io/part-of: dragonfly
+  policyTypes:
+    - Ingress
