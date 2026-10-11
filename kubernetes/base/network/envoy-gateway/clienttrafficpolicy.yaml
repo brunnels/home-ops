@@ -8,7 +8,7 @@ spec:
   clientIPDetection:
     xForwardedFor:
       trustedCIDRs:
-        - ${CLUSTER_CIDR}
+        - "${CLUSTER_CIDR}"
   headers:
     earlyRequestHeaders:
       set:
@@ -22,7 +22,7 @@ spec:
       kind: Gateway
   tcpKeepalive: { }
   tls:
-    minVersion: 1.2
+    minVersion: "1.2"
     alpnProtocols:
       - h2
       - http/1.1
