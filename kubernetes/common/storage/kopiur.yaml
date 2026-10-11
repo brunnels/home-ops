@@ -17,7 +17,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      APP_SUBDOMAIN: kopiur-ui
+      OIDC_ROUTE_NAME: kopiur-ui
   prune: true
   sourceRef:
     kind: GitRepository
