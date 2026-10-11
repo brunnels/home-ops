@@ -11,6 +11,7 @@ spec:
   components:
     - ../../../components/envoy-gateway-oidc
   dependsOn:
+    - name: ${LOCAL_STORAGE_PROVIDER:=openebs-hostpath}
     - name: snapshot-controller
   interval: 1h
   path: ./kubernetes/base/storage/kopiur

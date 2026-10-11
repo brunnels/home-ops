@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: rook-ceph-cluster
+    - name: ${KOPIUR_STORAGECLASS:=rook-ceph-cluster}
       namespace: storage
   interval: 1h
   path: ./kubernetes/base/observability/loki

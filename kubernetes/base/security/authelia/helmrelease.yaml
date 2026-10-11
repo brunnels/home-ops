@@ -21,6 +21,7 @@ spec:
       authelia:
         annotations:
           reloader.stakater.com/auto: "true"
+          kubectl.kubernetes.io/default-container: "app"
         pod:
           topologySpreadConstraints:
             - labelSelector:
@@ -52,7 +53,7 @@ spec:
               AUTHELIA_TELEMETRY_METRICS_ADDRESS: tcp://0.0.0.0:8080
               AUTHELIA_TELEMETRY_METRICS_ENABLED: "true"
               AUTHELIA_THEME: dark
-              TZ: "${TIMEZONE}"
+              TZ: ${TIMEZONE}
               X_AUTHELIA_CONFIG: /config/configuration.yaml,/config/authelia.oidc.yaml
               X_AUTHELIA_CONFIG_FILTERS: template
 
@@ -92,7 +93,7 @@ spec:
                   secretKeyRef:
                     name: authelia-anubis
                     key: ANUBIUS_PRIVATE_KEY_HEX
-              TZ: "${TIMEZONE}"
+              TZ: ${TIMEZONE}
               BIND: ":8923"
               DIFFICULTY: "4"
               SERVE_ROBOTS_TXT: "true"
@@ -155,7 +156,7 @@ spec:
     route:
       app:
         hostnames:
-          - "auth.${SECRET_DOMAIN}"
+          - auth.${SECRET_DOMAIN}
         parentRefs:
           - name: envoy-external
             namespace: network

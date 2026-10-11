@@ -9,7 +9,7 @@ spec:
     kind: OCIRepository
     name: *app
   dependsOn:
-    - name: rook-ceph-cluster
+    - name: ${KOPIUR_STORAGECLASS:=rook-ceph-cluster}
       namespace: storage
   interval: 1h
   values:
@@ -59,7 +59,7 @@ spec:
           global:
             resolveTimeout: 5m
           name: alertmanager
-        externalUrl: "https://alertmanager.${SECRET_DOMAIN}"
+        externalUrl: &hostname https://alertmanager.${SECRET_DOMAIN}
         storage:
           volumeClaimTemplate:
             spec:
@@ -81,7 +81,7 @@ spec:
             gethomepage.dev/pod-selector: app.kubernetes.io/name=alertmanager
           enabled: true
           hostnames:
-            - "alertmanager.${SECRET_DOMAIN}"
+            - *hostname
           parentRefs:
             - name: envoy-internal
               namespace: network
@@ -113,7 +113,7 @@ spec:
       enabled: false
     prometheus:
       prometheusSpec:
-        externalUrl: "prometheus.${SECRET_DOMAIN}"
+        externalUrl: &hostname prometheus.${SECRET_DOMAIN}
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
         resources:
@@ -140,7 +140,7 @@ spec:
               name: prometheus
           enabled: true
           hostnames:
-            - "prometheus.${SECRET_DOMAIN}"
+            - *hostname
           parentRefs:
             - name: envoy-internal
               namespace: network

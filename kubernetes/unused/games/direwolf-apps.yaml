@@ -10,7 +10,9 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: direwolf-operator
-    - name: rook-ceph-cluster
+    - name: ${LOCAL_STORAGE_PROVIDER:=openebs-hostpath}
+      namespace: storage
+    - name: ${KOPIUR_STORAGECLASS:=rook-ceph-cluster}
       namespace: storage
   interval: 1h
   path: ./kubernetes/base/games/direwolf-apps

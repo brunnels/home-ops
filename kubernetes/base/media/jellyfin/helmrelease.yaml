@@ -10,7 +10,7 @@ spec:
     name: app-template
   interval: 1h
   dependsOn:
-    - name: rook-ceph-cluster
+    - name: ${KOPIUR_STORAGECLASS:=rook-ceph-cluster}
       namespace: storage
   values:
     defaultPodOptions:
@@ -58,7 +58,7 @@ spec:
                 nvidia.com/gpu: "1"
             securityContext:
               allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
+              capabilities: { drop: [ "ALL" ] }
               readOnlyRootFilesystem: true
     persistence:
       config:

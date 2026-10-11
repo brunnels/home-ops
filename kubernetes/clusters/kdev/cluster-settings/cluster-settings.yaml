@@ -34,5 +34,6 @@ data:
   KOPIUR_SNAPSHOTCLASS: "miroir-snap"
   KOPIUR_STORAGECLASS: "miroir"
   LOCAL_STORAGECLASS: "miroir-local"
+  LOCAL_STORAGE_PROVIDER: "miroir"
 
   SVC_DIREWOLF_ADDR: "10.0.150.135"

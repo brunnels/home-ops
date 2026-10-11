@@ -10,7 +10,7 @@ spec:
     name: app-template
   interval: 1h
   dependsOn:
-    - name: rook-ceph-cluster
+    - name: ${KOPIUR_STORAGECLASS:=rook-ceph-cluster}
       namespace: storage
   values:
     defaultPodOptions:
@@ -75,7 +75,7 @@ spec:
                 memory: 4Gi
             securityContext:
               allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
+              capabilities: { drop: [ "ALL" ] }
               readOnlyRootFilesystem: true
     persistence:
       config:
@@ -93,7 +93,7 @@ spec:
                 resources:
                   requests:
                     storage: 50Gi
-                storageClassName: ${LOCAL_STORAGECLASS}
+                storageClassName: ${LOCAL_STORAGECLASS:=openebs-hostpath}
         globalMounts:
           - path: /config/Library/Application Support/Plex Media Server/Cache
       logs:
@@ -150,7 +150,7 @@ spec:
                 resources:
                   requests:
                     storage: 500Gi
-                storageClassName: ${LOCAL_STORAGECLASS}
+                storageClassName: ${LOCAL_STORAGECLASS:=openebs-hostpath}
     route:
       app:
         annotations:
@@ -162,13 +162,13 @@ spec:
           gethomepage.dev/description: Media Player
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Media
-          gethomepage.dev/href: "https://plex.${SECRET_DOMAIN}"
+          gethomepage.dev/href: https://plex.${SECRET_DOMAIN}
           gethomepage.dev/icon: *app
           gethomepage.dev/name: Plex
           gethomepage.dev/pod-selector: app.kubernetes.io/name=plex
           gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_PLEX_TOKEN}}` }}"
           gethomepage.dev/widget.type: *app
-          gethomepage.dev/widget.url: "http://${SVC_PLEX_ADDR}:32400"
+          gethomepage.dev/widget.url: http://${SVC_PLEX_ADDR}:32400
         hostnames:
           - "plex.${SECRET_DOMAIN}"
         parentRefs:

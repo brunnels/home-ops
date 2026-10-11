@@ -39,7 +39,7 @@ spec:
                 memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
+              capabilities: { drop: [ "ALL" ] }
               readOnlyRootFilesystem: true
     persistence:
       config:
@@ -57,7 +57,7 @@ spec:
                 resources:
                   requests:
                     storage: 5Gi
-                storageClassName: ${LOCAL_STORAGECLASS}
+                storageClassName: ${LOCAL_STORAGECLASS:=openebs-hostpath}
       esphome-cache:
         type: emptyDir
         globalMounts:

@@ -13,7 +13,7 @@ spec:
       volume:
         nfs:
           server: ${QNAP_HOSTNAME}
-          path: "/appdata/${VAULT_PREFIX}-kopia"
+          path: /appdata/${VAULT_PREFIX}-kopia
   create:
     enabled: true
   encryption:

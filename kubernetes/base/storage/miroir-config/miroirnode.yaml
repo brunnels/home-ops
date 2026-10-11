@@ -13,7 +13,6 @@ spec:
       lvmthin:
         device: /dev/disk/by-id/nvme-FIKWOT_FX991_1TB_AA251140625
 ---
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/miroir.home-operations.com/miroirnode_v1alpha1.json
 apiVersion: miroir.home-operations.com/v1alpha1
 kind: MiroirNode
 metadata:
@@ -27,7 +26,6 @@ spec:
       lvmthin:
         device: /dev/disk/by-id/nvme-FIKWOT_FX991_1TB_AA251130643
 ---
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/miroir.home-operations.com/miroirnode_v1alpha1.json
 apiVersion: miroir.home-operations.com/v1alpha1
 kind: MiroirNode
 metadata:

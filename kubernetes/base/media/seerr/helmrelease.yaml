@@ -54,7 +54,7 @@ spec:
                 memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
+              capabilities: { drop: [ "ALL" ] }
               readOnlyRootFilesystem: true
     persistence:
       config:
@@ -72,7 +72,7 @@ spec:
                 resources:
                   requests:
                     storage: 15Gi
-                storageClassName: ${LOCAL_STORAGECLASS}
+                storageClassName: ${LOCAL_STORAGECLASS:=openebs-hostpath}
         globalMounts:
           - path: /app/config/cache
       tmpfs:
@@ -94,9 +94,9 @@ spec:
           gethomepage.dev/name: Seerr
           gethomepage.dev/widget.key: "{{ `{{HOMEPAGE_VAR_SEERR_TOKEN}}` }}"
           gethomepage.dev/widget.type: overseerr
-          gethomepage.dev/widget.url: "http://seerr.{{ .Release.Namespace }}"
+          gethomepage.dev/widget.url: http://seerr.{{ .Release.Namespace }}
         hostnames:
-          - "requests.${SECRET_DOMAIN}"
+          - requests.${SECRET_DOMAIN}
         parentRefs:
           - name: envoy-external
             namespace: network

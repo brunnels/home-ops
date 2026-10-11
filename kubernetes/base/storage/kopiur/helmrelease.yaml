@@ -16,14 +16,14 @@ spec:
     extraVolumes:
       - name: repo
         nfs:
-          path: "/appdata/${VAULT_PREFIX}-kopia"
+          path: /appdata/${VAULT_PREFIX}-kopia
           server: ${QNAP_HOSTNAME}
     features:
       kopiaUi:
         enabled: true
     monitoring:
       dashboards:
-        enabled: false
+        enabled: true
         grafanaOperator:
           enabled: true
           matchLabels:

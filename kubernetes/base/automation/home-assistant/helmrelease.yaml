@@ -38,7 +38,7 @@ spec:
                 memory: 2Gi
             securityContext: &securityContext
               allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
+              capabilities: { drop: [ "ALL" ] }
               readOnlyRootFilesystem: true
           code-server:
             image:
@@ -94,7 +94,7 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
-                storageClassName: ${LOCAL_STORAGECLASS}
+                storageClassName: ${LOCAL_STORAGECLASS:=openebs=hostpath}
         globalMounts:
           - path: /config/.venv
       secrets:
