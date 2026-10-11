@@ -47,6 +47,8 @@ spec:
       enabled: true
       auth:
         acknowledgeNoProxySecret: true
-        anonymous:
-          enabled: true
-          user: kopiur
+        userHeader: x-user-fullname
+        groupsHeader: x-user-groups
+        emailHeader: x-user-email
+        allowedGroups:
+          - Admins
