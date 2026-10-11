@@ -18,6 +18,9 @@ spec:
         nfs:
           path: "/appdata/${VAULT_PREFIX}-kopia"
           server: ${QNAP_HOSTNAME}
+    features:
+      kopiaUi:
+        enabled: true
     monitoring:
       dashboards:
         enabled: true
@@ -40,3 +43,7 @@ spec:
         memory: 2Gi
       requests:
         cpu: 100m
+    ui:
+      enabled: true
+      auth:
+        acknowledgeNoProxySecret: true
