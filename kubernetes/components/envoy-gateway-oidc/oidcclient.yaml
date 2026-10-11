@@ -22,7 +22,6 @@ spec:
       client_id: client-id
       client_secret: client-secret
   scopes:
-  scopes:
     - email
     - groups
     - offline_access
