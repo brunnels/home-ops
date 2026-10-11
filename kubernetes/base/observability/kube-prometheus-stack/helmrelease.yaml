@@ -59,7 +59,7 @@ spec:
           global:
             resolveTimeout: 5m
           name: alertmanager
-        externalUrl: &hostname https://alertmanager.${SECRET_DOMAIN}
+        externalUrl: https://alertmanager.${SECRET_DOMAIN}
         storage:
           volumeClaimTemplate:
             spec:
@@ -81,7 +81,7 @@ spec:
             gethomepage.dev/pod-selector: app.kubernetes.io/name=alertmanager
           enabled: true
           hostnames:
-            - *hostname
+            - alertmanager.${SECRET_DOMAIN}
           parentRefs:
             - name: envoy-internal
               namespace: network
@@ -113,7 +113,7 @@ spec:
       enabled: false
     prometheus:
       prometheusSpec:
-        externalUrl: &hostname prometheus.${SECRET_DOMAIN}
+        externalUrl: prometheus.${SECRET_DOMAIN}
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
         resources:
@@ -140,7 +140,7 @@ spec:
               name: prometheus
           enabled: true
           hostnames:
-            - *hostname
+            - prometheus.${SECRET_DOMAIN}
           parentRefs:
             - name: envoy-internal
               namespace: network
