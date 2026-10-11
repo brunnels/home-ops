@@ -1,24 +1,39 @@
 ---
 apiVersion: v1alpha1
-kind: VLANConfig
-name: {{ .Data.vlanParent }}.{{ .Data.vlanId }}
-parent: {{ .Data.vlanParent }}
-vlanID: {{ .Data.vlanId }}
-mtu: {{ .Node.Data.mtu }}
-addresses:
-  - address: {{ .Node.IP }}/{{ .Data.networkPrefix }}
-routes:
-  - gateway: {{ .Data.gateway }}
-{{ if eq .Node.Role "control-plane" -}}
+kind: BondConfig
+name: {{ .Data.bondName }}
+links:
+{{- range .Data.bondInterfaces }}
+  - {{ . }}
+{{- end }}
+bondMode: {{ .Data.bondMode }}
+miimon: 100
+updelay: 200
+downdelay: 200
+xmitHashPolicy: layer3+4
+lacpRate: fast
+mtu: {{ .Data.mtu }}
+{{- with index .Node.Data "vlanIds" }}
+{{- range $idx, $item := . }}
 ---
 apiVersion: v1alpha1
-kind: Layer2VIPConfig
-link: {{ .Data.vlanParent }}.{{ .Data.vlanId }}
-name: {{ .Data.vip }}
-{{ end -}}
----
-machine:
-  network:
-    interfaces:
-      - interface: {{ .Data.vlanParent }}
-        mtu: {{ .Node.Data.mtu }}
+kind: VLANConfig
+name: {{ $.Data.bondName }}.{{ $item.id }}
+vlanID: {{ $item.id }}
+parent: {{ $.Data.bondName }}
+mtu: {{ $.Data.mtu }}
+{{- if (index $item "address") }}
+addresses:
+  - address: {{ $item.address }}
+{{- end }}
+{{- if (index $item "routes") }}
+routes:
+{{- range $ri, $r := $item.routes }}
+  - gateway: {{ index $r "gateway" }}
+{{- if (index $r "destination") }}
+    destination: {{ index $r "destination" }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

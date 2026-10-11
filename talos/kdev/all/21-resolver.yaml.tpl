@@ -1,6 +1,9 @@
+---
 apiVersion: v1alpha1
 kind: ResolverConfig
 nameservers:
-  - address: 10.0.200.1
+{{- range .Data.dnsServers }}
+  - address: {{ . }}
+{{- end }}
 searchDomains:
   disableDefault: true

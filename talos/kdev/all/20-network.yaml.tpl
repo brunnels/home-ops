@@ -1,50 +1,39 @@
-machine:
-  network:
-    interfaces:
-      - interface: {{ .Data.bondName }}
-        mtu: {{ .Node.Data.mtu }}
-        bond:
-          mode: {{ .Data.bondMode }}
-          lacpRate: fast
-          xmitHashPolicy: layer3+4
-          miimon: 100
-          updelay: 200
-          downdelay: 200
-          interfaces:
-            {{- range .Node.Data.bondInterfaces }}
-            - {{ . }}
-            {{- end }}
-        vlans:
-          - vlanId: {{ .Data.vlanId }}
-            mtu: {{ .Node.Data.mtu }}
-            addresses: [{{ .Node.IP }}/{{ .Data.networkPrefix }}]
-            routes:
-              - network: 0.0.0.0/0
-                gateway: {{ .Data.gateway }}
-      - interface: eth0
-        dhcp: false
-      - interface: eth1
-        dhcp: false
-      - deviceSelector:
-          busPath: {{ .Node.Data.tb_next.busPath }}
-        dhcp: false
-        mtu: 65520
-        addresses: [{{ .Node.Data.tb_next.addr }}]
-        routes:
-          - network: {{ .Node.Data.tb_next.route }}
-            metric: {{ .Node.Data.tb_next.metric }}
-      - deviceSelector:
-          busPath: {{ .Node.Data.tb_prev.busPath }}
-        dhcp: false
-        mtu: 65520
-        addresses: [{{ .Node.Data.tb_prev.addr }}]
-        routes:
-          - network: {{ .Node.Data.tb_prev.route }}
-            metric: {{ .Node.Data.tb_prev.metric }}
-{{ if eq .Node.Role "control-plane" -}}
 ---
 apiVersion: v1alpha1
-kind: Layer2VIPConfig
-link: {{ .Data.bondName }}.{{ .Data.vlanId }}
-name: {{ .Data.vip }}
-{{ end -}}
+kind: BondConfig
+name: {{ .Data.bondName }}
+links:
+{{- range .Data.bondInterfaces }}
+  - {{ . }}
+{{- end }}
+bondMode: {{ .Data.bondMode }}
+miimon: 100
+updelay: 200
+downdelay: 200
+xmitHashPolicy: layer3+4
+lacpRate: fast
+mtu: {{ .Data.mtu }}
+{{- with index .Node.Data "vlanIds" }}
+{{- range $idx, $item := . }}
+---
+apiVersion: v1alpha1
+kind: VLANConfig
+name: {{ $.Data.bondName }}.{{ $item.id }}
+vlanID: {{ $item.id }}
+parent: {{ $.Data.bondName }}
+mtu: {{ $.Data.mtu }}
+{{- if (index $item "address") }}
+addresses:
+  - address: {{ $item.address }}
+{{- end }}
+{{- if (index $item "routes") }}
+routes:
+{{- range $ri, $r := $item.routes }}
+  - gateway: {{ index $r "gateway" }}
+{{- if (index $r "destination") }}
+    destination: {{ index $r "destination" }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

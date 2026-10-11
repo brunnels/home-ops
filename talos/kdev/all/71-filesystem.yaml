@@ -1,3 +1,4 @@
+---
 # Weekly online maintenance for XFS volumes: trim discards unused blocks
 # (SSDs, thin provisioning) and scrub checks filesystem metadata.
 apiVersion: v1alpha1

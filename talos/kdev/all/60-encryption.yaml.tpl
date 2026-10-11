@@ -1,4 +1,5 @@
-{{- if .Node.Data.encryptDisk }}
+{{- if (index .Data "encryptDisk") }}
+---
 # Encrypt system disk with TPM
 apiVersion: v1alpha1
 kind: VolumeConfig

@@ -1,0 +1,29 @@
+customization:
+  extraKernelArgs:
+    - -init_on_alloc # Less security, faster puter
+    - -init_on_free # Less security, faster puter
+    - -selinux # Less security, faster puter
+    - -lockdown # Cilium BPF
+    - apparmor=0 # Less security, faster puter
+    - init_on_alloc=0 # Less security, faster puter
+    - init_on_free=0 # Less security, faster puter
+    - lockdown=integrity # Cilium BPF
+    - mitigations=off # Less security, faster puter
+    - security=none # Less security, faster puter
+    - talos.auditd.disabled=1 # Less security, faster puter
+    - i915.modeset=1 # Meteor Lake CPU / iGPU
+    - i915.enable_guc=3 # Meteor Lake CPU / iGPU
+    - sysctl.kernel.kexec_load_disabled=1 # Meteor Lake CPU / iGPU
+    - intel_iommu=on # PCI Passthrough
+    - iommu=pt # PCI Passthrough
+    - pci=realloc # PCI Passthrough
+    - net.ifnames=0 # Normalize interface names
+  systemExtensions:
+    officialExtensions:
+      - siderolabs/drbd
+      - siderolabs/i915
+      - siderolabs/intel-ice-firmware
+      - siderolabs/intel-ucode
+      - siderolabs/mei
+      - siderolabs/nfs-utils
+      - siderolabs/nfsrahead

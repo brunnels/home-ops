@@ -1,3 +1,4 @@
+---
 apiVersion: v1alpha1
 kind: KubeletConfig
 config:
@@ -9,11 +10,16 @@ config:
   maxParallelImagePulls: 3
   maxPods: 150
   serializeImagePulls: false
-  shutdownGracePeriod: 90s
+  shutdownGracePeriod: 120s
   shutdownGracePeriodCriticalPods: 60s
 ---
 apiVersion: v1alpha1
 kind: KubeNodeConfig
 nodeIP:
   validSubnets:
-    - 10.0.150.0/24
+    - {{ .Data.nodeCidr }}
+labels:
+  intel.feature.node.kubernetes.io/gpu: "true"
+{{- if (index .Node.Data "thunderboltRing") }}
+  miroir.home-operations.com/address: "{{ (index .Node.Data.thunderboltRing 0).addr | trimSuffix "/32" }}"
+{{- end }}

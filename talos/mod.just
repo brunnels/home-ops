@@ -7,6 +7,49 @@ set working-directory := "../talos"
 default:
     just -l talos
 
+[private]
+[script]
+nodeip cluster node:
+    cd "{{ cluster }}"
+    topf nodes --nodes-filter "^{{ node }}$" -o yaml | yq .[].node.ip
+
+[private]
+[script]
+talosctl cluster node command:
+    cd "{{ cluster }}"
+    talosctl --talosconfig=talosconfig --nodes "$(just talos nodeip {{ cluster }} {{ node }})" {{ command }}
+
+[private]
+[script]
+schematic-id cluster:
+    cd "{{ cluster }}"
+
+    # Retry logic for curl request
+    MAX_RETRIES=10
+    RETRY_COUNT=0
+    PAYLOAD="$(yq schematic.yaml)"
+    RESPONSE=""
+    while [[ $RETRY_COUNT -lt $MAX_RETRIES ]]; do
+        if RESPONSE=$(curl -sX POST -f --connect-timeout 3 --max-time 5 \
+          -d "$PAYLOAD" \
+          https://factory.talos.dev/schematics); then
+            break
+        fi
+
+        RETRY_COUNT=$((RETRY_COUNT + 1))
+        if [[ $RETRY_COUNT -lt $MAX_RETRIES ]]; then
+            just log info "  Request failed, retrying... (attempt $((RETRY_COUNT + 1))/$MAX_RETRIES)" >&2
+            sleep 2
+        fi
+    done
+
+    if [[ -z "$RESPONSE" ]]; then
+        just log error "Failed to get response from factory.talos.dev after $MAX_RETRIES attempts" >&2
+        exit 1
+    fi
+    SCHEMATIC_ID=$(echo "$RESPONSE" | jq -r '.id')
+    echo "$SCHEMATIC_ID"
+
 [doc('Apply Talos config to all nodes (shows a diff and asks first)')]
 [group('talos')]
 [script]
@@ -36,29 +79,31 @@ nodes cluster:
     cd "{{ cluster }}"
     topf nodes
 
-[doc('Render Talos machine configs to ./rendered (2-space indented)')]
+[doc('Render Talos machine configs to ./rendered')]
 [group('talos')]
 [script]
 render cluster:
     cd "{{ cluster }}"
+    mkdir -p ./rendered
     topf render --output ./rendered
+    topf talosconfig > ./talosconfig
     yamlfmt -formatter indent=2,retain_line_breaks=true ./rendered/*.yaml
 
 [confirm("This will destroy your cluster and reset all nodes to maintenance mode — continue? [y/N]")]
 [doc('Reset all nodes back to maintenance mode (DESTRUCTIVE)')]
 [group('talos')]
 [script]
-reset cluster:
+reset cluster full='false':
     cd "{{ cluster }}"
-    topf reset --confirm=false
+    topf reset --confirm=false --full={{ full }} --graceful=false --wait-for-maintenance=true
 
 [confirm("This will reset the specified node to maintenance mode — continue? [y/N]")]
 [doc('Reset a single node back to maintenance mode (DESTRUCTIVE)')]
 [group('talos')]
 [script]
-reset-node node cluster:
+reset-node cluster node full='false':
     cd "{{ cluster }}"
-    topf reset --nodes-filter "^{{ node }}$" --confirm=false
+    topf reset --nodes-filter "^{{ node }}$" --confirm=false --full={{ full }} --graceful=false --wait-for-maintenance=true
 
 # topf intentionally does not manage Kubernetes upgrades
 [doc('Upgrade Kubernetes')]
@@ -79,6 +124,18 @@ upgrade cluster:
 [doc('Upgrade Talos on a single node (asks first)')]
 [group('talos')]
 [script]
-upgrade-node node cluster:
+upgrade-node cluster node:
     cd "{{ cluster }}"
-    topf upgrade --nodes-filter "^{{ node }}$"
+    topf upgrade --submit-to-factory --nodes-filter "^{{ node }}$"
+
+[doc('Shutdown a single Talos node using talosctl')]
+[group('talos')]
+[script]
+shutdown-node cluster node:
+    just talos talosctl {{ cluster }} {{ node }} shutdown
+
+[doc('Reboot a single Talos node using talosctl')]
+[group('talos')]
+[script]
+reboot-node cluster node:
+    just talos talosctl {{ cluster }} {{ node }} reboot

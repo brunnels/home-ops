@@ -3,7 +3,7 @@ cluster:
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
     advertisedSubnets:
-      - 10.0.150.0/24
+      - {{ .Data.nodeCidr }}
 ---
 # Allow scheduling on control-plane nodes
 apiVersion: v1alpha1
@@ -13,16 +13,33 @@ taints:
     $patch: delete
 ---
 apiVersion: v1alpha1
+kind: KubeletConfig
+config:
+  systemReserved:
+    cpu: 500m
+    memory: 1Gi
+    ephemeral-storage: 2Gi
+  kubeReserved:
+    cpu: 500m
+    memory: 1Gi
+    ephemeral-storage: 2Gi
+  evictionHard:
+    memory.available: 512Mi
+    nodefs.available: 10%
+    imagefs.available: 15%
+  evictionSoft:
+    memory.available: 1Gi
+  evictionSoftGracePeriod:
+    memory.available: 1m
+  evictionPressureTransitionPeriod: 30s
+---
+apiVersion: v1alpha1
 kind: KubeAdmissionControlConfig
 name: PodSecurity
 $patch: delete
 ---
 apiVersion: v1alpha1
 kind: KubeAPIServerConfig
-certExtraSANs:
-  - "127.0.0.1"
-  - "10.0.150.100"
-  - "korg.lan.kraven.org"
 extraArgs:
   # https://kubernetes.io/docs/tasks/extend-kubernetes/configure-aggregation-layer/
   enable-aggregator-routing: "true"
@@ -31,6 +48,7 @@ apiVersion: v1alpha1
 kind: KubeControllerManagerConfig
 extraArgs:
   bind-address: 0.0.0.0
+  feature-gates: HPAScaleToZero=true
 ---
 apiVersion: v1alpha1
 kind: KubeCoreDNSConfig
@@ -52,6 +70,10 @@ extraArgs:
 config:
   profiles:
     - schedulerName: default-scheduler
+      plugins:
+        score:
+          disabled:
+            - name: ImageLocality
       pluginConfig:
         - name: PodTopologySpread
           args:
@@ -60,3 +82,17 @@ config:
               - maxSkew: 1
                 topologyKey: kubernetes.io/hostname
                 whenUnsatisfiable: ScheduleAnyway
+---
+apiVersion: v1alpha1
+kind: KubeTalosAPIAccessConfig
+allowedRoles:
+  - os:admin
+  - os:reader
+allowedKubernetesNamespaces:
+  - system-upgrade
+  - mcp-system
+---
+apiVersion: v1alpha1
+kind: Layer2VIPConfig
+link: {{ .Data.bondName }}.{{ .Data.vipVlan }}
+name: {{ .Data.vip }}

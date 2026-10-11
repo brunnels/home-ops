@@ -1,133 +1,140 @@
 ---
 clusterName: kdev
 clusterEndpoint: https://10.0.150.200:6443
-
 # renovate: datasource=github-releases depName=siderolabs/talos
 talosVersion: v1.14.2
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.37.1
-
-secretsPath: ../kdev/talsecret.sops.yaml
-
+secretsPath: talsecret.sops.yaml
+schematicId: "@schematic.yaml"
 data:
-  vlanId: 150
-  networkPrefix: "24"
-  gateway: 10.0.150.1
   vip: 10.0.150.200
+  vipVlan: 150
   bondName: bond0
   bondMode: 802.3ad
-
+  bondInterfaces:
+    - eth2
+    - eth3
+  mtu: 9000
+  certSans:
+    - 127.0.0.1
+    - 10.0.150.200
+    - kdev.lan.kraven.org
+  podCidr: 10.42.0.0/16
+  svcCidr: 10.43.0.0/16
+  nodeCidr: 10.0.150.0/24
+  dnsServers:
+    - 10.0.200.1
+  ntpServers:
+    - 10.0.200.1
+  sysCtls:
+    fs.inotify.max_user_instances: "8192" # Watchdog
+    fs.inotify.max_user_watches: "1048576" # Watchdog
+    net.core.default_qdisc: fq # 10Gb/s
+    net.core.netdev_max_backlog: "16384" # Raise kernel ingress queue depth
+    net.core.rmem_max: "67108864" # 10Gb/s | Cloudflared / QUIC
+    net.core.somaxconn: "8192" # Raise listen backlog for burst handling
+    net.core.wmem_max: "67108864" # 10Gb/s | Cloudflared / QUIC
+    net.ipv4.neigh.default.gc_thresh1: "4096" # Prevent ARP cache overflows
+    net.ipv4.neigh.default.gc_thresh2: "8192" # Prevent ARP cache overflows
+    net.ipv4.neigh.default.gc_thresh3: "16384" # Prevent ARP cache overflows
+    net.ipv4.ping_group_range: 0 2147483647 # Allow Ping
+    net.ipv4.tcp_congestion_control: bbr # 10Gb/s
+    net.ipv4.tcp_fastopen: "3" # Send and accept data in the opening SYN packet
+    net.ipv4.tcp_max_syn_backlog: "8192" # Larger SYN queue for bursty connection rates
+    net.ipv4.tcp_mtu_probing: "1" # 10Gb/s | Jumbo frames
+    net.ipv4.tcp_notsent_lowat: "131072" # Allow Ping
+    net.ipv4.tcp_rmem: 4096 87380 33554432 # 10Gb/s
+    net.ipv4.tcp_slow_start_after_idle: "0" # Allow Ping
+    net.ipv4.tcp_window_scaling: "1" # 10Gb/s
+    net.ipv4.tcp_wmem: 4096 87380 33554432 # 10Gb/s
+    sunrpc.tcp_max_slot_table_entries: "128" # 10Gb/s | NFS
+    sunrpc.tcp_slot_table_entries: "128" # 10Gb/s | NFS
+    user.max_user_namespaces: "11255" # User Namespaces
+    vm.dirty_background_bytes: "268435456" # 256MiB | Byte-based writeback start; protect etcd fdatasync on shared NVMe
+    vm.dirty_bytes: "536870912" # 512MiB | Cap dirty buildup (ratio 5%/20% on 134GB RAM allowed multi-GB flush storms)
+    vm.dirty_expire_centisecs: "3000" # Expire dirty data after 30s
+    vm.dirty_writeback_centisecs: "500" # Flush dirty pages every 5s
+    vm.nr_hugepages: "1024" # PostgreSQL
 nodes:
-  - host: "kdev-n1"
-    ip: "10.0.150.254"
+  - host: kdev-n1
+    ip: 10.0.150.254
     role: control-plane
-    schematicId: ""
     data:
-      installDisk: "/dev/disk/by-id/nvme-SK_hynix_BC511_HFM256GDJTNI-82A0A_NJ02N76261100320B"
-      installDiskSerial: ""
-      macAddr: ""
-      mtu: 9000
-      encryptDisk: false
-      kernelModules:
-        [
-          joydev,
-          nbd,
-          nvidia,
-          nvidia_drm,
-          nvidia_modeset,
-          nvidia_uvm,
-          thunderbolt,
-          thunderbolt_net,
-          uinput,
-          uhid,
-          uio_pci_generic,
-          vfio_iommu_type1,
-          vfio_pci,
-        ]
-      bondInterfaces: [eth2, eth3]
-      tb_next:
-        busPath: "1-1.0"
-        addr: 169.254.255.101/32
-        route: 169.254.255.103/32
-        metric: 2048
-      tb_prev:
-        busPath: "0-1.0"
-        addr: 169.254.255.101/32
-        route: 169.254.255.102/32
-        metric: 2048
-
-  - host: "kdev-n2"
-    ip: "10.0.150.253"
+      installDisk: /dev/disk/by-id/nvme-SK_hynix_BC511_HFM256GDJTNI-82A0A_NJ02N76261100320B
+      vlanIds:
+        - id: 150
+          address: 10.0.150.254/24
+          routes:
+            - gateway: 10.0.150.1
+        - id: 160
+          address: 10.0.160.254/24
+          routes:
+            - destination: 10.0.160.0/24
+              gateway: 10.0.160.1
+      kernelModules: &kernelModules
+        - dm_thin_pool
+        - drbd
+        - drbd_transport_tcp
+        - nbd
+        - thunderbolt
+        - thunderbolt_net
+      thunderboltRing:
+        - name: tb-kdev-n3
+          busPath: 1-1.0
+          addr: 169.254.255.101/32
+          destination: 169.254.255.103/32
+        - name: tb-kdev-n2
+          busPath: 0-1.0
+          addr: 169.254.255.101/32
+          destination: 169.254.255.102/32
+  - host: kdev-n2
+    ip: 10.0.150.253
     role: control-plane
-    schematicId: ""
     data:
-      installDisk: "/dev/disk/by-id/nvme-BPX_8B71077C060891075911"
-      installDiskSerial: ""
-      macAddr: ""
-      mtu: 9000
-      encryptDisk: false
-      kernelModules:
-        [
-          joydev,
-          nbd,
-          nvidia,
-          nvidia_drm,
-          nvidia_modeset,
-          nvidia_uvm,
-          thunderbolt,
-          thunderbolt_net,
-          uinput,
-          uhid,
-          uio_pci_generic,
-          vfio_iommu_type1,
-          vfio_pci,
-        ]
-      bondInterfaces: [eth2, eth3]
-      tb_next:
-        busPath: "1-1.0"
-        addr: 169.254.255.102/32
-        route: 169.254.255.101/32
-        metric: 2048
-      tb_prev:
-        busPath: "0-1.0"
-        addr: 169.254.255.102/32
-        route: 169.254.255.103/32
-        metric: 2048
-
-  - host: "kdev-n3"
-    ip: "10.0.150.252"
+      installDisk: /dev/disk/by-id/nvme-BPX_8B71077C060891075911
+      vlanIds:
+        - id: 150
+          address: 10.0.150.253/24
+          routes:
+            - gateway: 10.0.150.1
+        - id: 160
+          address: 10.0.160.253/24
+          routes:
+            - destination: 10.0.160.0/24
+              gateway: 10.0.160.1
+      kernelModules: *kernelModules
+      thunderboltRing:
+        - name: tb-kdev-n1
+          busPath: 1-1.0
+          addr: 169.254.255.102/32
+          destination: 169.254.255.101/32
+        - name: tb-kdev-n3
+          busPath: 0-1.0
+          addr: 169.254.255.102/32
+          destination: 169.254.255.103/32
+  - host: kdev-n3
+    ip: 10.0.150.252
     role: control-plane
-    schematicId: ""
     data:
-      installDisk: "/dev/disk/by-id/nvme-Samsung_SSD_950_PRO_256GB_S2GLNCAGB26901M"
-      installDiskSerial: ""
-      macAddr: ""
-      mtu: 9000
-      encryptDisk: false
-      kernelModules:
-        [
-          joydev,
-          nbd,
-          nvidia,
-          nvidia_drm,
-          nvidia_modeset,
-          nvidia_uvm,
-          thunderbolt,
-          thunderbolt_net,
-          uinput,
-          uhid,
-          uio_pci_generic,
-          vfio_iommu_type1,
-          vfio_pci,
-        ]
-      bondInterfaces: [eth2, eth3]
-      tb_next:
-        busPath: "1-1.0"
-        addr: 169.254.255.103/32
-        route: 169.254.255.101/32
-        metric: 2048
-      tb_prev:
-        busPath: "0-1.0"
-        addr: 169.254.255.103/32
-        route: 169.254.255.102/32
-        metric: 2048
+      installDisk: /dev/disk/by-id/nvme-Samsung_SSD_950_PRO_256GB_S2GLNCAGB26901M
+      vlanIds:
+        - id: 150
+          address: 10.0.150.252/24
+          routes:
+            - gateway: 10.0.150.1
+        - id: 160
+          address: 10.0.160.252/24
+          routes:
+            - destination: 10.0.160.0/24
+              gateway: 10.0.160.1
+      kernelModules: *kernelModules
+      thunderboltRing:
+        - name: tb-kdev-n1
+          busPath: 1-1.0
+          addr: 169.254.255.103/32
+          destination: 169.254.255.101/32
+        - name: tb-kdev-n2
+          busPath: 0-1.0
+          addr: 169.254.255.103/32
+          destination: 169.254.255.102/32
