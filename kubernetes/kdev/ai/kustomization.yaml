@@ -16,4 +16,4 @@ resources:
   #- ./homebox-companion.yaml
   #- ./homebox.yaml
   - ../../common/ai/llmkube.yaml
-  #- ./omniroute.yaml
+  - ./omniroute.yaml
