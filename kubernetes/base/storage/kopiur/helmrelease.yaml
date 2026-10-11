@@ -49,3 +49,4 @@ spec:
         acknowledgeNoProxySecret: true
         anonymous:
           enabled: true
+          user: kopiur
