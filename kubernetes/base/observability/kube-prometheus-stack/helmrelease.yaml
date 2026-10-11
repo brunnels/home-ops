@@ -9,7 +9,7 @@ spec:
     kind: OCIRepository
     name: *app
   dependsOn:
-    - name: ${KOPIUR_STORAGECLASS:=rook-ceph-cluster}
+    - name: ${STORAGE_PROVIDER:=rook-ceph-cluster}
       namespace: storage
   interval: 1h
   values:

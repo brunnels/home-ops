@@ -11,7 +11,7 @@ spec:
   dependsOn:
     - name: ${LOCAL_STORAGE_PROVIDER:=openebs-hostpath}
     - name: snapshot-controller
-    - name: ${KOPIUR_STORAGECLASS:=rook-ceph-cluster}
+    - name: ${STORAGE_PROVIDER:=rook-ceph-cluster}
   interval: 1h
   path: ./kubernetes/base/storage/volsync
   postBuild:

@@ -31,9 +31,9 @@ data:
   GIT_REPO: "github.com/brunnels/home-ops"
   GIT_REPO_REF: "refs/heads/main"
 
+  LOCAL_STORAGE_PROVIDER: "miroir"
+  STORAGE_PROVIDER: "miroir"
+
   KOPIUR_SNAPSHOTCLASS: "miroir-snap"
   KOPIUR_STORAGECLASS: "miroir"
   LOCAL_STORAGECLASS: "miroir-local"
-  LOCAL_STORAGE_PROVIDER: "miroir"
-
-  SVC_DIREWOLF_ADDR: "10.0.150.135"

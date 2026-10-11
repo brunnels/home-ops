@@ -10,7 +10,7 @@ spec:
     name: app-template
   interval: 1h
   dependsOn:
-    - name: ${KOPIUR_STORAGECLASS:=rook-ceph-cluster}
+    - name: ${STORAGE_PROVIDER:=rook-ceph-cluster}
       namespace: storage
   values:
     defaultPodOptions:

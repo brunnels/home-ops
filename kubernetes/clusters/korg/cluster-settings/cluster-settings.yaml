@@ -34,10 +34,12 @@ data:
   GIT_REPO: "github.com/brunnels/home-ops"
   GIT_REPO_REF: "refs/heads/main"
 
+  LOCAL_STORAGE_PROVIDER: "openebs-hostpath"
+  STORAGE_PROVIDER: "rook-ceph-cluster"
+
   KOPIUR_SNAPSHOTCLASS: "csi-ceph-blockpool"
   KOPIUR_STORAGECLASS: "ceph-block"
   LOCAL_STORAGECLASS: "openebs-hostpath"
-  LOCAL_STORAGE_PROVIDER: "openebs-hostpath"
 
   SVC_MQTT_ADDR: "10.0.150.14"
   SVC_PLEX_ADDR: "10.0.150.20"
