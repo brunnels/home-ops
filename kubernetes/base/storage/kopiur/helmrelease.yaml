@@ -47,7 +47,7 @@ spec:
       enabled: true
       auth:
         acknowledgeNoProxySecret: true
-        userHeader: x-user-fullname
+        userHeader: x-user-username
         groupsHeader: x-user-groups
         emailHeader: x-user-email
         allowedGroups:
