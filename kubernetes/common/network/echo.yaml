@@ -8,6 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../components/envoy-gateway-oidc
   interval: 1h
   path: ./kubernetes/base/network/echo
   prune: true
