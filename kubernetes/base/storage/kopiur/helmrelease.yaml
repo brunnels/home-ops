@@ -46,9 +46,31 @@ spec:
     ui:
       enabled: true
       auth:
-        acknowledgeNoProxySecret: true
-        userHeader: x-user-username
-        groupsHeader: x-user-groups
-        emailHeader: x-user-email
         allowedGroups:
           - Admins
+          - Domain Users
+        emailHeader: x-user-email
+        groupsFormat: base64Json
+        groupsHeader: x-user-groups
+        proxySecret:
+          existingSecret: *app
+          key: credential
+        userHeader: x-user-username
+      rbac:
+        userRoles: true
+        bindings:
+          - groups:
+              - Admins
+            role: user
+          - groups:
+              - Domain Users
+            role: viewer
+      networkPolicy:
+        enabled: true
+        proxySelector:
+          namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: network
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/component: proxy

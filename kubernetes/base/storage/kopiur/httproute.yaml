@@ -14,3 +14,9 @@ spec:
     - backendRefs:
         - name: *app
           port: 8090
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.envoyproxy.io
+            kind: HTTPRouteFilter
+            name: *app
