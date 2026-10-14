@@ -10,13 +10,34 @@ spec:
     name: *app
   interval: 1h
   values:
-    domain: "${SECRET_DOMAIN}"
     fullnameOverride: *app
+    serviceType: LoadBalancer
     service:
       annotations:
         lbipam.cilium.io/ips: "${CLUSTER_DNS_GATEWAY_ADDR}"
       externalTrafficPolicy: Cluster
-      port: 53
-      type: LoadBalancer
-    ttl: 1
-    watchedResources: ["HTTPRoute", "Service"]
+    servers:
+      - zones:
+          - zone: .
+            scheme: dns://
+            use_tcp: true
+        port: 53
+        plugins:
+          - name: errors
+          - name: health
+            configBlock: |-
+              lameduck 5s
+          - name: ready
+          - name: k8s_gateway
+            parameters: "${SECRET_DOMAIN}"
+            configBlock: |-
+              apex k8s-gateway.network
+              ttl 1
+              resources Service HTTPRoute
+          - name: forward
+            parameters: . /etc/resolv.conf
+          - name: loop
+          - name: reload
+          - name: loadbalance
+          - name: prometheus
+            parameters: 0.0.0.0:9153
