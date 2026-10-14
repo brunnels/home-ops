@@ -3,7 +3,7 @@
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: HTTPRouteFilter
 metadata:
-  name: &name kopiur
+  name: &name kopiur-ui
 spec:
   credentialInjection:
     credential:
