@@ -53,7 +53,7 @@ spec:
         groupsFormat: base64Json
         groupsHeader: x-user-groups
         proxySecret:
-          existingSecret: *app
+          existingSecret: kopiur-ui
           key: credential
         userHeader: x-user-username
       rbac:
