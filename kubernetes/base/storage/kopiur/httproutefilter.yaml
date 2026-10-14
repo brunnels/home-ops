@@ -6,8 +6,7 @@ metadata:
   name: &name kopiur
 spec:
   credentialInjection:
-    overwrite: true
     credential:
-      valueRef:
-        name: *name
-        header: X-Kopiur-Proxy-Token
+      name: *name
+    header: X-Kopiur-Proxy-Token
+    overwrite: true
