@@ -6,5 +6,6 @@ metadata:
   name: media
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
+    kopiur.home-operations.com/privileged-movers: "true"
   labels:
     resource.kubernetes.io/admin-access: "true"
