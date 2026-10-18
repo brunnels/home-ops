@@ -5,9 +5,13 @@ kind: HelmRelease
 metadata:
   name: &app truenas-csi
 spec:
-  chartRef:
-    kind: GitRepository
-    name: *app
+  chart:
+    spec:
+      chart: ./charts/truenas-csi
+      version: 1.4.0
+      sourceRef:
+        kind: GitRepository
+        name: *app
   interval: 1h
   values:
     truenas:
