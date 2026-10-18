@@ -22,7 +22,7 @@ spec:
       runtimeClassName: nvidia
       containers:
         - name: app
-          image: ghcr.io/games-on-whales/firefox:edge@sha256:1ea7331934d31d346079fb67462b371586d65b5ebb792acee8c0e64e87c185b1
+          image: ghcr.io/games-on-whales/firefox:edge@sha256:495c17c919689a6b4cb8a16411944b02410e96420b7df29f82db841312778f08
           resources:
             limits:
               nvidia.com/gpu: "1"
