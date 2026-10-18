@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/source.toolkit.fluxcd.io/gitrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: truenas-csi
+spec:
+  interval: 15m
+  url: https://github.com/truenas/truenas-csi
+  ref:
+    tag: v1.4.0
+  ignore: |
+    # exclude all
+    /*
+    # include charts directory
+    !/charts/truenas-csi/

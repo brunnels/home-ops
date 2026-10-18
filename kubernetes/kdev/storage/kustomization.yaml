@@ -16,5 +16,6 @@ resources:
   - ../../common/storage/kopiur-repository.yaml
   - ../../common/storage/kopiur.yaml
   - ../../common/storage/snapshot-controller.yaml
+  - ../../common/storage/truenas-csi.yaml
   - ./miroir.yaml
   - ./miroir-config.yaml
