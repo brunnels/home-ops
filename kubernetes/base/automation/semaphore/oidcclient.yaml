@@ -7,6 +7,13 @@ metadata:
   annotations:
     authelia.milas.dev/oidc-provider: security/default
 spec:
+  claims:
+    policy:
+      id_token:
+        - email
+        - groups
+        - name
+        - preferred_username
   description: Semaphore
   preconfigured_consent_duration: 1y
   redirect_uris:
