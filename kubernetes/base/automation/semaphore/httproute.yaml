@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: &app semaphore
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Automation
+    gethomepage.dev/name: Semaphore
+    gethomepage.dev/icon: https://raw.githubusercontent.com/semaphoreui/semaphore/develop/web/public/favicon.svg
+    gethomepage.dev/description: Modern UI for Ansible, Terraform/OpenTofu, Bash and Pulumi
+    gethomepage.dev/pod-selector: app.kubernetes.io/instance=semaphore
+spec:
+  hostnames:
+    - semaphore.${SECRET_DOMAIN}
+  parentRefs:
+    - name: envoy-internal
+      namespace: network
+  rules:
+    - backendRefs:
+        - name: *app
+          port: 3000
