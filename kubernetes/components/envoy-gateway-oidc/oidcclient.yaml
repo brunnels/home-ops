@@ -23,13 +23,13 @@ spec:
     - https://${APP_SUBDOMAIN:-${APP}}.${SECRET_DOMAIN}/oauth2/callback
   response_types:
     - code
-  secret_ref:
-    name: ${APP_SUBDOMAIN:-${APP}}-oidc
-    fields:
-      client_id: client-id
-      client_secret: client-secret
   scopes:
     - email
     - groups
     - openid
     - profile
+  secret_ref:
+    name: ${APP_SUBDOMAIN:-${APP}}-oidc
+    fields:
+      client_id: client-id
+      client_secret: client-secret

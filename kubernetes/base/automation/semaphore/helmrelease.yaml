@@ -45,23 +45,24 @@ spec:
       enable: true
       providers:
         authelia:
+          color: red darken-4
           display_name: Login with Authelia
-          provider_url: https://auth.${SECRET_DOMAIN}
-          redirect_url: https://semaphore.${SECRET_DOMAIN}/api/auth/oidc/authelia/redirect
+          email_claim: email
           endpoint:
             auth: https://auth.${SECRET_DOMAIN}/api/oidc/authorization
             token: https://auth.${SECRET_DOMAIN}/api/oidc/token
             userinfo: https://auth.${SECRET_DOMAIN}/api/oidc/userinfo
-          username_claim: preferred_username
-          name_claim: name
-          email_claim: email
-          color: red darken-4
+          groups_claim: groups
           icon: openid
+          name_claim: name
+          provider_url: https://auth.${SECRET_DOMAIN}
+          redirect_url: https://semaphore.${SECRET_DOMAIN}/api/auth/oidc/authelia/redirect
           scopes:
             - email
             - groups
             - openid
             - profile
+          username_claim: preferred_username
     email:
       alert: true
       host: mail.smtp2go.com
