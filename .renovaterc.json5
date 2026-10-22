@@ -1,8 +1,8 @@
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
-    "github>home-operations/renovate-presets#8.1.0",
-    "github>home-operations/renovate-presets//apps/grafanaDashboards.json5#8.1.0",
+    "github>home-operations/renovate-presets#10.0.1",
+    "github>home-operations/renovate-presets//apps/grafanaDashboards.json5#10.0.1",
     "github>brunnels/home-ops//.renovate/autoMerge.json5",
     "github>brunnels/home-ops//.renovate/changelogs.json5",
     "github>brunnels/home-ops//.renovate/customManagers.json5",
