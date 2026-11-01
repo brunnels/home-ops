@@ -63,11 +63,11 @@ nodes:
           address: 10.0.150.99/24
           routes:
             - gateway: 10.0.150.1
-        - id: 160
-          address: 10.0.160.99/24
-          routes:
-            - destination: 10.0.160.0/24
-              gateway: 10.0.160.1
+        #- id: 160
+        #  address: 10.0.160.99/24
+        #  routes:
+        #    - destination: 10.0.160.0/24
+        #      gateway: 10.0.160.1
       kernelModules: &kernelModules
         - dm_thin_pool
         - drbd
@@ -83,11 +83,11 @@ nodes:
           address: 10.0.150.98/24
           routes:
             - gateway: 10.0.150.1
-        - id: 160
-          address: 10.0.160.98/24
-          routes:
-            - destination: 10.0.160.0/24
-              gateway: 10.0.160.1
+        #- id: 160
+        #  address: 10.0.160.98/24
+        #  routes:
+        #    - destination: 10.0.160.0/24
+        #      gateway: 10.0.160.1
       kernelModules: *kernelModules
   - host: korg-n3
     ip: 10.0.150.97
@@ -99,11 +99,11 @@ nodes:
           address: 10.0.150.97/24
           routes:
             - gateway: 10.0.150.1
-        - id: 160
-          address: 10.0.160.97/24
-          routes:
-            - destination: 10.0.160.0/24
-              gateway: 10.0.160.1
+        #- id: 160
+        #  address: 10.0.160.97/24
+        #  routes:
+        #    - destination: 10.0.160.0/24
+        #      gateway: 10.0.160.1
       kernelModules: *kernelModules
   - host: korg-n4
     ip: 10.0.150.96
@@ -115,9 +115,9 @@ nodes:
           address: 10.0.150.96/24
           routes:
             - gateway: 10.0.150.1
-        - id: 160
-          address: 10.0.160.96/24
-          routes:
-            - destination: 10.0.160.0/24
-              gateway: 10.0.160.1
+        #- id: 160
+        #  address: 10.0.160.96/24
+        #  routes:
+        #    - destination: 10.0.160.0/24
+        #      gateway: 10.0.160.1
       kernelModules: *kernelModules
