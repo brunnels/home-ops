@@ -14,7 +14,7 @@ spec:
       value: http://seerr.media
   groupRef:
     name: mcp-tools
-  image: docker.io/node:24-alpine
+  image: docker.io/node:26-alpine
   podTemplateSpec:
     spec:
       containers:
@@ -23,7 +23,7 @@ spec:
             - "@jhomen368/overseerr-mcp"
           command:
             - npx
-          image: docker.io/node:24-alpine
+          image: docker.io/node:26-alpine
           name: mcp
           volumeMounts:
             - mountPath: /tmp

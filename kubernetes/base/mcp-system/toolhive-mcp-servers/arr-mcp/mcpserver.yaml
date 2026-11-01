@@ -18,7 +18,7 @@ spec:
       value: http://prowlarr.downloads
   groupRef:
     name: mcp-tools
-  image: docker.io/node:24-alpine
+  image: docker.io/node:26-alpine
   podTemplateSpec:
     spec:
       containers:
@@ -27,7 +27,7 @@ spec:
             - mcp-arr-server@1.5.4
           command:
             - npx
-          image: docker.io/node:24-alpine
+          image: docker.io/node:26-alpine
           name: mcp
           volumeMounts:
             - mountPath: /tmp
