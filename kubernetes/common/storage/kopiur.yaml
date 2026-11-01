@@ -8,11 +8,11 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  #components:
-  #  - ../../../components/envoy-gateway-oidc
+  components:
+    - ../../../components/envoy-gateway-oidc
   dependsOn:
-    #- name: authelia-oidc-operator
-    #  namespace: security
+    - name: authelia-oidc-operator
+      namespace: security
     - name: ${LOCAL_STORAGE_PROVIDER:=openebs-hostpath}
     - name: snapshot-controller
   interval: 1h
