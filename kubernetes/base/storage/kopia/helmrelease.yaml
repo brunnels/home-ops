@@ -85,7 +85,7 @@ spec:
       repository:
         type: nfs
         path: "/appdata/${VAULT_PREFIX}-kopia"
-        server: ${QNAP_HOSTNAME}
+        server: 10.0.160.2
       tmpfs:
         type: emptyDir
         advancedMounts:
