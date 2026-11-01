@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: docker.io/jesec/flood
-              tag: 4.16.3@sha256:241f172786fe958a09a55615cb4cd1b15d0aec9751f2d87dd8d7a67bcd24f0fa
+              tag: 4.16.4@sha256:72bdc95ff160e1f6b8ad72c171eff53f0bab8aa651389ca710ffff170278390a
             env:
               FLOOD_OPTION_noauth: "true"
               FLOOD_OPTION_port: &port 80
