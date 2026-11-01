@@ -1,26 +1,16 @@
 ---
 apiVersion: v1alpha1
-kind: BondConfig
-name: {{ .Data.bondName }}
-links:
-{{- range .Data.bondInterfaces }}
-  - {{ . }}
-{{- end }}
-bondMode: {{ .Data.bondMode }}
-miimon: 100
-updelay: 200
-downdelay: 200
-xmitHashPolicy: layer3+4
-lacpRate: fast
+kind: LinkConfig
+name: {{ .Data.networkInterface }}
 mtu: {{ .Data.mtu }}
 {{- with index .Node.Data "vlanIds" }}
 {{- range $idx, $item := . }}
 ---
 apiVersion: v1alpha1
 kind: VLANConfig
-name: {{ $.Data.bondName }}.{{ $item.id }}
+name: {{ $.Data.networkInterface }}.{{ $item.id }}
 vlanID: {{ $item.id }}
-parent: {{ $.Data.bondName }}
+parent: {{ $.Data.networkInterface }}
 mtu: {{ $.Data.mtu }}
 {{- if (index $item "address") }}
 addresses:

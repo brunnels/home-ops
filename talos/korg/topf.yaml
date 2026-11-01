@@ -2,7 +2,7 @@
 clusterName: korg
 clusterEndpoint: https://10.0.150.100:6443
 # renovate: datasource=github-releases depName=siderolabs/talos
-talosVersion: v1.14.2
+talosVersion: v1.14.5
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.37.2
 secretsPath: talsecret.sops.yaml
@@ -10,18 +10,14 @@ schematicId: "@schematic.yaml"
 data:
   vip: 10.0.150.200
   vipVlan: 150
-  bondName: bond0
-  bondMode: 802.3ad
-  bondInterfaces:
-    - eth0
-    - eth1
+  networkInterface: eth0
   mtu: 9000
   certSans:
     - 127.0.0.1
     - 10.0.150.200
     - kdev.lan.kraven.org
-  podCidr: 10.42.0.0/16
-  svcCidr: 10.43.0.0/16
+  podCidr: 10.69.0.0/16
+  svcCidr: 10.96.0.0/16
   nodeCidr: 10.0.150.0/24
   dnsServers:
     - 10.0.200.1
@@ -58,6 +54,7 @@ data:
     vm.nr_hugepages: "1024" # PostgreSQL
 nodes:
   - host: korg-n1
+    ip: 10.0.150.99
     role: control-plane
     data:
       installDisk: /dev/disk/by-id/ata-SATA_SSD_DA09079110EC06342341
@@ -77,21 +74,23 @@ nodes:
         - drbd_transport_tcp
         - nbd
   - host: korg-n2
+    ip: 10.0.150.98
     role: control-plane
     data:
       installDisk: /dev/disk/by-id/ata-SATA_SSD_DC4E079110EC06342361
       vlanIds:
         - id: 150
-          address: 10.0.150.253/24
+          address: 10.0.150.98/24
           routes:
             - gateway: 10.0.150.1
         - id: 160
-          address: 10.0.160.253/24
+          address: 10.0.160.98/24
           routes:
             - destination: 10.0.160.0/24
               gateway: 10.0.160.1
       kernelModules: *kernelModules
   - host: korg-n3
+    ip: 10.0.150.97
     role: control-plane
     data:
       installDisk: /dev/disk/by-id/ata-SATA_SSD_DC4E079110EC06341678
@@ -107,6 +106,7 @@ nodes:
               gateway: 10.0.160.1
       kernelModules: *kernelModules
   - host: korg-n4
+    ip: 10.0.150.96
     role: worker
     data:
       installDisk: /dev/disk/by-id/ata-SATA_SSD_B7A307871B5300035278

@@ -61,7 +61,7 @@ apply cluster:
 [doc('Apply Talos config to a node (shows a diff and asks first)')]
 [group('talos')]
 [script]
-apply-node node cluster mode='auto':
+apply-node cluster node mode='auto':
     cd "{{ cluster }}"
     topf apply --nodes-filter "^{{ node }}$" --mode "{{ mode }}"
 
