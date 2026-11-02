@@ -98,5 +98,5 @@ allowedKubernetesNamespaces:
 ---
 apiVersion: v1alpha1
 kind: Layer2VIPConfig
-link: {{ .Data.networkInterface }}.{{ .Data.vipVlan }}
+link: {{ .Data.bondName }}.{{ .Data.vipVlan }}
 name: {{ .Data.vip }}

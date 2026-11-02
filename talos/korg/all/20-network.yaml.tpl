@@ -1,29 +1,18 @@
 ---
 apiVersion: v1alpha1
-kind: LinkConfig
-name: {{ .Data.networkInterface }}
-mtu: {{ .Data.mtu }}
-{{- with index .Node.Data "vlanIds" }}
-{{- range $idx, $item := . }}
+kind: LinkAliasConfig
+name: ethSel0
+selector:
+  match: glob("{{ .Node.Data.macAddr }}", mac(link.hardware_addr))
 ---
 apiVersion: v1alpha1
-kind: VLANConfig
-name: {{ $.Data.networkInterface }}.{{ $item.id }}
-vlanID: {{ $item.id }}
-parent: {{ $.Data.networkInterface }}
-mtu: {{ $.Data.mtu }}
-{{- if (index $item "address") }}
+kind: BondConfig
+name: {{ .Data.bondName }}
+links:
+  - ethSel0
+bondMode: {{ .Data.bondMode }}
+mtu: {{ .Data.mtu }}
 addresses:
-  - address: {{ $item.address }}
-{{- end }}
-{{- if (index $item "routes") }}
+  - address: "{{ .Node.IP }}/24"
 routes:
-{{- range $ri, $r := $item.routes }}
-  - gateway: {{ index $r "gateway" }}
-{{- if (index $r "destination") }}
-    destination: {{ index $r "destination" }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
+  - gateway: "{{ .Node.Data.gateway }}"
