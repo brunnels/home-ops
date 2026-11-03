@@ -63,12 +63,12 @@ nodes:
       bondInterfaces:
         - name: ethSel0
           macAddr: 1c:fd:08:7c:b3:5e
-      vlans:
-        - id: 160
-          address: 10.0.160.99/24
-          routes: &vlan160Routes
-            - destination: 10.0.160.0/24
-              gateway: 10.0.160.1
+      #vlans:
+      #  - id: 160
+      #    address: 10.0.160.99/24
+      #    routes: &vlan160Routes
+      #      - destination: 10.0.160.0/24
+      #        gateway: 10.0.160.1
       kernelModules: &kernelModules
         - dm_thin_pool
         - drbd
@@ -83,10 +83,10 @@ nodes:
       bondInterfaces:
         - name: ethSel0
           macAddr: 1c:fd:08:7c:b3:12
-      vlans:
-        - id: 160
-          address: 10.0.160.98/24
-          routes: *vlan160Routes
+      #vlans:
+      #  - id: 160
+      #    address: 10.0.160.98/24
+      #    routes: *vlan160Routes
       kernelModules: *kernelModules
   - host: korg-n3
     ip: 10.0.150.97
@@ -97,10 +97,10 @@ nodes:
       bondInterfaces:
         - name: ethSel0
           macAddr: 1c:fd:08:7c:b2:3f
-      vlans:
-        - id: 160
-          address: 10.0.160.97/24
-          routes: *vlan160Routes
+      #vlans:
+      #  - id: 160
+      #    address: 10.0.160.97/24
+      #    routes: *vlan160Routes
       kernelModules: *kernelModules
   - host: korg-n4
     ip: 10.0.150.96
@@ -111,8 +111,8 @@ nodes:
       bondInterfaces:
         - name: ethSel0
           macAddr: 1c:fd:08:7c:b2:58
-      vlans:
-        - id: 160
-          address: 10.0.160.96/24
-          routes: *vlan160Routes
+      #vlans:
+      #  - id: 160
+      #    address: 10.0.160.96/24
+      #    routes: *vlan160Routes
       kernelModules: *kernelModules

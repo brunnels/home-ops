@@ -23,7 +23,7 @@ spec:
         enabled: true
     monitoring:
       dashboards:
-        enabled: false
+        enabled: true
         grafanaOperator:
           enabled: true
           matchLabels:
