@@ -5,33 +5,11 @@ cluster:
     advertisedSubnets:
       - {{ .Data.nodeCidr }}
 ---
-# Allow scheduling on control-plane nodes
 apiVersion: v1alpha1
 kind: KubeNodeConfig
 taints:
   node-role.kubernetes.io/control-plane:
     $patch: delete
----
-apiVersion: v1alpha1
-kind: KubeletConfig
-config:
-  systemReserved:
-    cpu: 500m
-    memory: 1Gi
-    ephemeral-storage: 2Gi
-  kubeReserved:
-    cpu: 500m
-    memory: 1Gi
-    ephemeral-storage: 2Gi
-  evictionHard:
-    memory.available: 512Mi
-    nodefs.available: 10%
-    imagefs.available: 15%
-  evictionSoft:
-    memory.available: 1Gi
-  evictionSoftGracePeriod:
-    memory.available: 1m
-  evictionPressureTransitionPeriod: 30s
 ---
 apiVersion: v1alpha1
 kind: KubeAdmissionControlConfig
@@ -97,6 +75,22 @@ allowedKubernetesNamespaces:
   - mcp-system
 ---
 apiVersion: v1alpha1
-kind: Layer2VIPConfig
-link: {{ .Data.bondName }}.{{ .Data.vipVlan }}
-name: {{ .Data.vip }}
+kind: KubeletConfig
+config:
+  systemReserved:
+    cpu: 500m
+    memory: 1Gi
+    ephemeral-storage: 2Gi
+  kubeReserved:
+    cpu: 500m
+    memory: 1Gi
+    ephemeral-storage: 2Gi
+  evictionHard:
+    memory.available: 512Mi
+    nodefs.available: 10%
+    imagefs.available: 15%
+  evictionSoft:
+    memory.available: 1Gi
+  evictionSoftGracePeriod:
+    memory.available: 1m
+  evictionPressureTransitionPeriod: 30s

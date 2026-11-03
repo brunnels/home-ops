@@ -89,6 +89,13 @@ render cluster:
     topf talosconfig > ./talosconfig
     yamlfmt -formatter indent=2,retain_line_breaks=true ./rendered/*.yaml
 
+[doc('Output cluster talosconfig')]
+[group('talos')]
+[script]
+talosconfig cluster:
+    cd "{{ cluster }}"
+    topf talosconfig > ./talosconfig
+
 [confirm("This will destroy your cluster and reset all nodes to maintenance mode — continue? [y/N]")]
 [doc('Reset all nodes back to maintenance mode (DESTRUCTIVE)')]
 [group('talos')]

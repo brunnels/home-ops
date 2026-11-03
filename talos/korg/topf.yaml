@@ -16,7 +16,7 @@ data:
   certSans:
     - 127.0.0.1
     - 10.0.150.100
-    - kdev.lan.kraven.org
+    - korg.lan.kraven.org
   podCidr: 10.69.0.0/16
   svcCidr: 10.96.0.0/16
   nodeCidr: 10.0.150.0/24
@@ -58,9 +58,17 @@ nodes:
     ip: 10.0.150.99
     role: control-plane
     data:
-      gateway: 10.0.150.1
-      macAddr: 1c:fd:08:7c:b3:5e
+      gateway: &gateway 10.0.150.1
       installDisk: /dev/disk/by-id/ata-SATA_SSD_DA09079110EC06342341
+      bondInterfaces:
+        - name: ethSel0
+          macAddr: 1c:fd:08:7c:b3:5e
+      vlans:
+        - id: 160
+          address: 10.0.160.99/24
+          routes: &vlan160Routes
+            - destination: 10.0.160.0/24
+              gateway: 10.0.160.1
       kernelModules: &kernelModules
         - dm_thin_pool
         - drbd
@@ -70,23 +78,41 @@ nodes:
     ip: 10.0.150.98
     role: control-plane
     data:
-      gateway: 10.0.150.1
-      macAddr: 1c:fd:08:7c:b3:12
+      gateway: *gateway
       installDisk: /dev/disk/by-id/ata-SATA_SSD_DC4E079110EC06342361
+      bondInterfaces:
+        - name: ethSel0
+          macAddr: 1c:fd:08:7c:b3:12
+      vlans:
+        - id: 160
+          address: 10.0.160.98/24
+          routes: *vlan160Routes
       kernelModules: *kernelModules
   - host: korg-n3
     ip: 10.0.150.97
     role: control-plane
     data:
-      gateway: 10.0.150.1
-      macAddr: 1c:fd:08:7c:b2:3f
+      gateway: *gateway
       installDisk: /dev/disk/by-id/ata-SATA_SSD_DC4E079110EC06341678
+      bondInterfaces:
+        - name: ethSel0
+          macAddr: 1c:fd:08:7c:b2:3f
+      vlans:
+        - id: 160
+          address: 10.0.160.97/24
+          routes: *vlan160Routes
       kernelModules: *kernelModules
   - host: korg-n4
     ip: 10.0.150.96
     role: worker
     data:
-      gateway: 10.0.150.1
-      macAddr: 1c:fd:08:7c:b2:58
+      gateway: *gateway
       installDisk: /dev/disk/by-id/ata-SATA_SSD_B7A307871B5300035278
+      bondInterfaces:
+        - name: ethSel0
+          macAddr: 1c:fd:08:7c:b2:58
+      vlans:
+        - id: 160
+          address: 10.0.160.96/24
+          routes: *vlan160Routes
       kernelModules: *kernelModules
