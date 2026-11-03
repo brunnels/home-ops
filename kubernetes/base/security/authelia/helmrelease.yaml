@@ -176,7 +176,7 @@ spec:
           http:
             port: *port
           metrics:
-            port: *metricsPort
+            port: 8080
     serviceMonitor:
       app:
         endpoints:
