@@ -10,6 +10,9 @@ spec:
     name: miroir
   interval: 1h
   values:
+    agent:
+      loopfileBaseDirs:
+        - /var/mnt/miroir-local
     autoEvictAfter: 1h
     drbd:
       alExtents: 6007
