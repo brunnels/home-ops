@@ -81,40 +81,40 @@ spec:
                 memory: 128Mi
             securityContext:
               allowPrivilegeEscalation: false
-              capabilities: { drop: [ "ALL" ] }
+              capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
-          anubis:
-            image:
-              repository: ghcr.io/techarohq/anubis
-              tag: v1.28.2@sha256:5fcbce70ee6168be5b226d19bec90111d0acd0daf13028fa06b044cf3ebbbd5f
-            env:
-              ED25519_PRIVATE_KEY_HEX:
-                valueFrom:
-                  secretKeyRef:
-                    name: authelia-anubis
-                    key: ANUBIUS_PRIVATE_KEY_HEX
-              TZ: ${TIMEZONE}
-              BIND: ":8923"
-              DIFFICULTY: "4"
-              SERVE_ROBOTS_TXT: "true"
-              TARGET: "http://localhost:80"
-            ports:
-              - name: *app
-                containerPort: *port
-              - name: metrics
-                containerPort: &metricsPort 8080
-              - name: anubis
-                containerPort: &anubisPort 8923
-            resources:
-              limits:
-                memory: 256Mi
-              requests:
-                cpu: 26m
-                memory: 256Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: [ "ALL" ] }
+          #anubis:
+          #  image:
+          #    repository: ghcr.io/techarohq/anubis
+          #    tag: v1.28.2@sha256:5fcbce70ee6168be5b226d19bec90111d0acd0daf13028fa06b044cf3ebbbd5f
+          #  env:
+          #    ED25519_PRIVATE_KEY_HEX:
+          #      valueFrom:
+          #        secretKeyRef:
+          #          name: authelia-anubis
+          #          key: ANUBIUS_PRIVATE_KEY_HEX
+          #    TZ: ${TIMEZONE}
+          #    BIND: ":8923"
+          #    DIFFICULTY: "4"
+          #    SERVE_ROBOTS_TXT: "true"
+          #    TARGET: "http://localhost:80"
+          #  ports:
+          #    - name: *app
+          #      containerPort: *port
+          #    - name: metrics
+          #      containerPort: &metricsPort 8080
+          #    - name: anubis
+          #      containerPort: &anubisPort 8923
+          #  resources:
+          #    limits:
+          #      memory: 256Mi
+          #    requests:
+          #      cpu: 26m
+          #      memory: 256Mi
+          #  securityContext:
+          #    allowPrivilegeEscalation: false
+          #    readOnlyRootFilesystem: true
+          #    capabilities: { drop: [ "ALL" ] }
     persistence:
       config:
         type: configMap
@@ -165,13 +165,14 @@ spec:
         rules:
           - backendRefs:
               - identifier: app
-                port: anubis
+                port: http
+                #port: anubis
     service:
       app:
         controller: *app
         ports:
-          anubis:
-            port: *anubisPort
+          #anubis:
+          #  port: *anubisPort
           http:
             port: *port
           metrics:
