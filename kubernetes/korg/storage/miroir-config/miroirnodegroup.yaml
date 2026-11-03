@@ -5,10 +5,12 @@ kind: MiroirNodeGroup
 metadata:
   name: default
 spec:
-  pools:
-    - name: miroir-local
-      loopfile:
-        baseDir: /var/mnt/miroir-local
-    - name: miroir
-      lvmthin:
-        device: /dev/nvme0n1
+  nodeSelector: {}
+  template:
+    pools:
+      - name: miroir-local
+        loopfile:
+          baseDir: /var/mnt/miroir-local
+      - name: miroir
+        lvmthin:
+          device: /dev/nvme0n1
