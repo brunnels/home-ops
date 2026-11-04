@@ -14,30 +14,30 @@ spec:
       containers:
         - env:
             - name: MCP_SERVER_TRANSPORT
-            - value: streamable-http
+              value: streamable-http
             - name: MCP_SERVER_HOST
-            - value: 0.0.0.0
+              value: 0.0.0.0
             - name: MCP_SERVER_PORT
-            - value: "8000"
+              value: "8000"
             - name: MCP_ALLOW_UNAUTHENTICATED
-            - value: "true"
+              value: "true"
             # Read-only safety mode blocks every state-changing tool server-side
             # (2.0 finally enforces this). Toolsets restore our surface: default
             # (core+helm) = generic kubectl verbs + diagnose_pod_crash; diagnostics =
             # check_pod_health/get_nodes_summary; security = analyze_network_policies;
             # gitops = the Flux/Argo readers.
             - name: MCP_SAFETY_MODE
-            - value: read-only
+              value: read-only
             - name: MCP_TOOLSETS
-            - value: "default,diagnostics,security,gitops"
+              value: "default,diagnostics,security,gitops"
             - name: MCP_MASK_SECRETS
-            - value: "true"
+              value: "true"
             # Gateway forwards a non-loopback Host/Origin; 2.0 defaults these to
             # loopback-only and would 400. Narrow once the forwarded Host is confirmed.
             - name: MCP_ALLOWED_HOSTS
-            - value: "*"
+              value: "*"
             - name: MCP_ALLOWED_ORIGINS
-            - value: "*"
+              value: "*"
             - name: PYTHONUNBUFFERED
               value: "1"
             #- name: MCP_K8S_PROVIDER
