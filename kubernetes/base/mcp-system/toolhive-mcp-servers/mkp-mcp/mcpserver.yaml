@@ -5,27 +5,31 @@ kind: MCPServer
 metadata:
   name: &app mkp-mcp
 spec:
-  name: k8s
-  transport:
-    http:
-      url: http://cluster.local
-  deployment:
-    podTemplate:
-      spec:
-        serviceAccountName: *app
-        containers:
-          - name: server
-            image: ghcr.io/stackloklabs/mkp/server:0.4.5@sha256:13dc7703d2a1a241feb685faafa4b04353d9efc6c33cd816196523987e9a0e25
-            ports:
-              - containerPort: 8080
-                name: http
-            resources:
-              requests:
-                cpu: 50m
-                memory: 64Mi
-              limits:
-                cpu: 100m
-                memory: 128Mi
-            env:
-              - name: LOG_LEVEL
-                value: "info"
+  groupRef:
+    name: mcp-tools
+  image: ghcr.io/stackloklabs/mkp/server:0.4.5@sha256:13dc7703d2a1a241feb685faafa4b04353d9efc6c33cd816196523987e9a0e25
+  mcpPort: 8080
+  podTemplateSpec:
+    spec:
+      containers:
+        - env:
+            - name: LOG_LEVEL
+              value: "info"
+          name: mkp
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+      securityContext:
+        runAsGroup: 0
+        runAsNonRoot: true
+        runAsUser: 0
+  proxyMode: streamable-http
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  serviceAccount: *app
+  transport: streamable-http
