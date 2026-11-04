@@ -14,7 +14,7 @@ spec:
       containers:
         - env:
             - name: MCP_SERVER_TRANSPORT
-              value: http
+              value: streamable-http
             - name: MCP_SERVER_HOST
               value: 0.0.0.0
             - name: MCP_SERVER_PORT
@@ -81,4 +81,4 @@ spec:
   serviceAccount: *app
   toolConfigRef:
     name: *app
-  transport: http
+  transport: streamable-http
