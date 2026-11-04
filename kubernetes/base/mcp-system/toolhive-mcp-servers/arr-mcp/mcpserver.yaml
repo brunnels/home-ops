@@ -14,6 +14,8 @@ spec:
       value: http://sonarr.downloads
     - name: RADARR_URL
       value: http://radarr.downloads
+    - name: LIDARR_URL
+      value: http://lidarr.downloads
     - name: PROWLARR_URL
       value: http://prowlarr.downloads
   groupRef:
@@ -50,6 +52,9 @@ spec:
     - key: RADARR_API_KEY
       name: toolhive-radarr
       targetEnvName: RADARR_API_KEY
+    - key: LIDARR_API_KEY
+      name: toolhive-lidarr
+      targetEnvName: LIDARR_API_KEY
     - key: PROWLARR_API_KEY
       name: toolhive-prowlarr
       targetEnvName: PROWLARR_API_KEY
