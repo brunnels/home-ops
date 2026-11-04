@@ -8,10 +8,12 @@ spec:
   env:
     - name: LOG_LEVEL
       value: "info"
+    - name: MCP_PORT
+      value: "8000"
   groupRef:
     name: mcp-tools
   image: &image ghcr.io/stackloklabs/mkp/server:0.4.5@sha256:13dc7703d2a1a241feb685faafa4b04353d9efc6c33cd816196523987e9a0e25
-  mcpPort: 8080
+  mcpPort: 8000
   podTemplateSpec:
     spec:
       containers:
