@@ -21,9 +21,7 @@ spec:
             allowPrivilegeEscalation: false
             capabilities: { drop: ["ALL"] }
       securityContext:
-        runAsGroup: 0
         runAsNonRoot: true
-        runAsUser: 0
   proxyMode: streamable-http
   resources:
     limits:
