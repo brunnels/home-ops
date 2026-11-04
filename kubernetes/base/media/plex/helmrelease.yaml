@@ -75,7 +75,7 @@ spec:
                 memory: 4Gi
             securityContext:
               allowPrivilegeEscalation: false
-              capabilities: { drop: [ "ALL" ] }
+              capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
     persistence:
       config:
@@ -149,7 +149,7 @@ spec:
                   - ReadWriteOnce
                 resources:
                   requests:
-                    storage: 500Gi
+                    storage: 100Gi
                 storageClassName: ${LOCAL_STORAGECLASS:=openebs-hostpath}
     route:
       app:
