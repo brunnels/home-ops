@@ -50,6 +50,9 @@ spec:
             - mountPath: /tmp
               name: tmpfs
               subPath: tmp
+            - mountPath: /home/mcp
+              name: tmpfs
+              subPath: home
             - mountPath: /home/mcp/.cache
               name: tmpfs
               subPath: cache
@@ -60,14 +63,14 @@ spec:
               name: tmpfs
               subPath: kube
       securityContext:
-        runAsGroup: 0
+        fsGroup: 10001
+        runAsGroup: 10001
         runAsNonRoot: true
-        runAsUser: 0
+        runAsUser: 10001
       volumes:
         - name: tmpfs
           emptyDir:
             medium: Memory
-
   resources:
     limits:
       cpu: 500m
