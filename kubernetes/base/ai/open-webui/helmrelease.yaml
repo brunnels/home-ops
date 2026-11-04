@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: ghcr.io/open-webui/open-webui
-              tag: main@sha256:0b399a8ba34558e181d316750455f2a95376a38cd60a61b9c942e138898944bd
+              tag: main@sha256:975e3965dcf5832804d2f77e167920794757027c5a2046917d42023d75fac431
             env:
               CORS_ALLOW_ORIGIN: https://chat.${SECRET_DOMAIN}
               ENABLE_LOGIN_FORM: false
