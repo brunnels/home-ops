@@ -69,7 +69,7 @@ spec:
         secretRef:
           name: *name
   create:
-    enabled: false
+    enabled: true
   encryption:
     passwordSecretRef:
       name: kopia
