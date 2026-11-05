@@ -14,7 +14,71 @@ spec:
         name: *app
   interval: 1h
   values:
+    controller:
+      defaultFSType: xfs
+
+    logLevel: 2
+
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+
+    storageClasses:
+      - allowVolumeExpansion: true
+        name: truenas-csi-iscsi
+        parameters:
+          protocol: iscsi
+          datasetPath: truenas-csi/iscsi
+          csi.storage.k8s.io/fstype: xfs
+          # chart default false = thick zvol, full size reserved up front
+          sparse: "true"
+        reclaimPolicy: Delete
+        volumeBindingMode: Immediate
+
+      # default share squashes every client to root:wheel (mapall). Apps
+      # that chown their data dir need nfs.rootSquash: "false" + fsGroup.
+      - allowVolumeExpansion: true
+        mountOptions:
+          - noatime
+          - nfsvers=4
+        parameters:
+          protocol: nfs
+          datasetPath: truenas-csi/nfs
+        name: truenas-csi-nfs
+        reclaimPolicy: Retain
+        volumeBindingMode: Immediate
+
     truenas:
       defaultPool: ${TRUENAS_POOLNAME}
       existingSecret: *app
       url: wss://${TRUENAS_HOSTNAME}
+
+    volumeSnapshotClass:
+      deletionPolicy: Delete
+      enabled: true
+      name: truenas-csi
+
+  postRenderers:
+    # Talos: the chart's iscsi-dir hostPath is type Directory and kubelet's
+    # check fails ("/etc/iscsi is not a directory") even with iscsi-tools
+    # installed, so the node pods never start. The mount is unused (iscsiadm
+    # runs on the host via nsenter). truenas/truenas-csi#80, #84.
+    - kustomize:
+        patches:
+          - target:
+              kind: DaemonSet
+              name: truenas-csi-node
+            patch: |-
+              apiVersion: apps/v1
+              kind: DaemonSet
+              metadata:
+                name: truenas-csi-node
+              spec:
+                template:
+                  spec:
+                    volumes:
+                      - name: iscsi-dir
+                        hostPath:
+                          path: /etc/iscsi
+                          type: DirectoryOrCreate
