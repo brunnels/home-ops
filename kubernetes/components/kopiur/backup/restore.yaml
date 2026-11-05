@@ -10,6 +10,5 @@ spec:
   source:
     fromPolicy:
       name: ${APP}-backup
-      offset: 0 # 0 = latest snapshot
   target:
     populator: {}

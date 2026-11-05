@@ -48,7 +48,7 @@ spec:
       accessMode: ReadWriteOnce
       enabled: true
       size: 5Gi
-      storageClass: ${KOPIUR_STORAGECLASS:=ceph-block}
+      storageClass: ${KOPIUR_STORAGECLASS:=miroir}
     resources:
       limits:
         memory: 512Mi

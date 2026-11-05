@@ -11,7 +11,9 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
+  - ./automation-pgo-cluster.yaml
   - ./esphome.yaml
   - ./home-assistant.yaml
   - ./meshcentral.yaml
   - ./mosquitto.yaml
+  - ./semaphore.yaml

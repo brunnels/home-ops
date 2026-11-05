@@ -7,7 +7,7 @@ metadata:
 spec:
   compression:
     compressor: zstd
-    neverCompress: [ "*.zip", "*.gz", "*.jpeg", "*.webp", "*.mp4" ]
+    neverCompress: ["*.zip", "*.gz", "*.jpeg", "*.webp", "*.mp4"]
   copyMethod: Snapshot
   files:
     ignoreRules: ${IGNORE_RULES:-["lost+found", "*/lost+found"]}
@@ -43,4 +43,4 @@ spec:
       schedule:
         cron: H 3 * * *
         timezone: ${TIMEZONE}
-  volumeSnapshotClassName: ${KOPIUR_SNAPSHOTCLASS:=csi-ceph-blockpool}
+  volumeSnapshotClassName: ${KOPIUR_SNAPSHOTCLASS:=miroir-snap}
