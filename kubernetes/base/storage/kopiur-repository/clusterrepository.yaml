@@ -56,7 +56,7 @@ spec:
 apiVersion: kopiur.home-operations.com/v1alpha1
 kind: ClusterRepository
 metadata:
-  name: &name truenas-s3
+  name: truenas-s3
 spec:
   allowedNamespaces:
     all: true
@@ -67,14 +67,14 @@ spec:
       region: us-east
       auth:
         secretRef:
-          name: *name
+          name: kopiur
   create:
     enabled: true
   encryption:
     passwordSecretRef:
-      name: kopia
+      name: kopiur
       namespace: ${NAMESPACE}
-      key: KOPIA_PASSWORD
+      key: KOPIUR_PASSWORD
   maintenance:
     schedule:
       quick:
@@ -95,4 +95,4 @@ spec:
     epoch:
       minDuration: 1h
   scheduleDefaults:
-    timezone: America/New_York
+    timezone: ${TIMEZONE}
