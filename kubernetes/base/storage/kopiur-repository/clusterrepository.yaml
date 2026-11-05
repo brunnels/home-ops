@@ -72,7 +72,7 @@ spec:
     enabled: true
   encryption:
     passwordSecretRef:
-      name: kopia
+      name: kopiur
       namespace: ${NAMESPACE}
       key: KOPIA_PASSWORD
   maintenance:
