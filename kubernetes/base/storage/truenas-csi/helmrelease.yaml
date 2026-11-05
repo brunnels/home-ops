@@ -26,12 +26,25 @@ spec:
 
     storageClasses:
       - allowVolumeExpansion: true
+        mountOptions:
+          - discard
+        name: truenas-csi-nvmeof
+        parameters:
+          protocol: nvmeof
+          datasetPath: truenas-csi/nvmeof
+          volblocksize: 128K
+          sparse: "true"
+          compression: "OFF"
+          sync: DISABLED
+        reclaimPolicy: Delete
+        volumeBindingMode: Immediate
+
+      - allowVolumeExpansion: true
         name: truenas-csi-iscsi
         parameters:
           protocol: iscsi
           datasetPath: truenas-csi/iscsi
           csi.storage.k8s.io/fstype: xfs
-          # chart default false = thick zvol, full size reserved up front
           sparse: "true"
         reclaimPolicy: Delete
         volumeBindingMode: Immediate
@@ -42,10 +55,10 @@ spec:
         mountOptions:
           - noatime
           - nfsvers=4
+        name: truenas-csi-nfs
         parameters:
           protocol: nfs
           datasetPath: truenas-csi/nfs
-        name: truenas-csi-nfs
         reclaimPolicy: Retain
         volumeBindingMode: Immediate
 
