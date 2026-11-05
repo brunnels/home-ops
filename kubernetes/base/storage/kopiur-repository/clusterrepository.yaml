@@ -62,27 +62,27 @@ spec:
     all: true
   backend:
     s3:
-      bucket: ${VAULT_PREFIX}-kopiur
-      endpoint: ${TRUENAS_HOSTNAME}:9000
-      region: us-east
       auth:
         secretRef:
           name: kopiur
+      bucket: ${VAULT_PREFIX}-kopiur
+      endpoint: ${TRUENAS_HOSTNAME}:9000
+      region: us-east
   create:
     enabled: true
   encryption:
     passwordSecretRef:
+      key: KOPIUR_PASSWORD
       name: kopiur
       namespace: ${NAMESPACE}
-      key: KOPIA_PASSWORD
   maintenance:
     schedule:
-      quick:
-        cron: 0 * * * *
-        jitter: 10m
       full:
         cron: 0 3 * * *
         jitter: 1h
+      quick:
+        cron: 0 * * * *
+        jitter: 10m
   moverDefaults:
     cache:
       # Every cache PVC is 5Gi or larger (KOPIUR_CAPACITY default). Kopia's own
