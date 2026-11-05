@@ -52,3 +52,29 @@ spec:
       minDuration: 1h
   scheduleDefaults:
     timezone: ${TIMEZONE}
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: &name truenas-s3
+spec:
+  allowedNamespaces:
+    all: true
+  backend:
+    s3:
+      bucket: ${VAULT_PREFIX}-kopiur
+      endpoint: ${TRUENAS_HOSTNAME}
+      region: us-east
+      auth:
+        secretRef:
+          name: *name
+  create:
+    enabled: true
+  encryption:
+    passwordSecretRef:
+      name: kopiur
+      namespace: ${NAMESPACE}
+      key: KOPIUR_PASSWORD
+  identityDefaults:
+    hostnameExpr: namespace
+    usernameExpr: namespace + '-' + policyName
