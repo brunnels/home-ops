@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotpolicy_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: semaphore-backup-s3
+spec:
+  compression:
+    compressor: zstd
+    neverCompress:
+      - "*.zip"
+      - "*.gz"
+      - "*.jpeg"
+      - "*.webp"
+      - "*.mp4"
+  files:
+    ignoreRules:
+      - lost+found
+      - "*/lost+found"
+  mover:
+    cache:
+      capacity: 5Gi
+      mode: Persistent
+      storageClassName: miroir-local
+    podSecurityContext:
+      fsGroup: 1000
+    securityContext:
+      runAsGroup: 100
+      runAsNonRoot: true
+      runAsUser: 1000
+  repository:
+    kind: ClusterRepository
+    name: truenas-s3
+  retention:
+    keepDaily: 7
+    keepHourly: 24
+    keepLatest: 3
+    keepWeekly: 4
+  sources:
+    - pvc:
+        name: semaphore
+  volumeSnapshotClassName: miroir-snap
