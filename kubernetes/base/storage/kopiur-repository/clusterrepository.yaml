@@ -63,18 +63,18 @@ spec:
   backend:
     s3:
       bucket: ${VAULT_PREFIX}-kopiur
-      endpoint: ${TRUENAS_HOSTNAME}
+      endpoint: ${TRUENAS_HOSTNAME}:9000
       region: us-east
       auth:
         secretRef:
           name: *name
   create:
-    enabled: true
+    enabled: false
   encryption:
     passwordSecretRef:
-      name: kopiur
+      name: kopia
       namespace: ${NAMESPACE}
-      key: KOPIUR_PASSWORD
+      key: KOPIA_PASSWORD
   identityDefaults:
     hostnameExpr: namespace
     usernameExpr: namespace + '-' + policyName
