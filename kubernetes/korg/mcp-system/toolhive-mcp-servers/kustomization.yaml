@@ -3,9 +3,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../../base/mcp-system/toolhive-mcp-servers/arr-mcp
-  - ../../../base/mcp-system/toolhive-mcp-servers/flux-mcp
-  #- ../../../base/mcp-system/toolhive-mcp-servers/grafana-mcp
-  - ../../../base/mcp-system/toolhive-mcp-servers/mkp-mcp
-  - ../../../base/mcp-system/toolhive-mcp-servers/seerr-mcp
-  - ../../../base/mcp-system/toolhive-mcp-servers/talos-mcp
+  - ../../../base/mcp-system/toolhive-mcp-servers/arr
+  - ../../../base/mcp-system/toolhive-mcp-servers/context7
+  - ../../../base/mcp-system/toolhive-mcp-servers/crawl4ai
+  - ../../../base/mcp-system/toolhive-mcp-servers/flux
+  - ../../../base/mcp-system/toolhive-mcp-servers/grafana
+  - ../../../base/mcp-system/toolhive-mcp-servers/mkp
+  - ../../../base/mcp-system/toolhive-mcp-servers/seerr
+  - ../../../base/mcp-system/toolhive-mcp-servers/talos
