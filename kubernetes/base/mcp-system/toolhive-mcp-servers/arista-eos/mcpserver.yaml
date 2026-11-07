@@ -32,4 +32,7 @@ spec:
     - key: EOS_PASSWORD
       name: *secretName
       targetEnvName: EOS_PASSWORD
+    - key: EOS_ENABLE_PASSWORD
+      name: *secretName
+      targetEnvName: EOS_ENABLE_PASSWORD
   transport: streamable-http
