@@ -3,21 +3,12 @@
 apiVersion: toolhive.stacklok.dev/v1beta1
 kind: MCPServer
 metadata:
-  name: &app flux-mcp
+  name: &app mkp
 spec:
-  args:
-    - serve
-    - --transport=http
-    - --port=8000
-  env:
-    - name: RUNTIME_NAMESPACE
-      valueFrom:
-        fieldRef:
-          fieldPath: metadata.namespace
   groupRef:
     name: mcp-tools
-  image: ghcr.io/controlplaneio-fluxcd/flux-operator-mcp:v0.62.1@sha256:0b4181bc9ada80eedf3e9df3355153abc9c3e6d8b913bddebe0b12908309bff6
-  mcpPort: 8000
+  image: ghcr.io/stackloklabs/mkp/server:0.4.5@sha256:13dc7703d2a1a241feb685faafa4b04353d9efc6c33cd816196523987e9a0e25
+  mcpPort: 8080
   podTemplateSpec:
     spec:
       containers:
@@ -26,10 +17,8 @@ spec:
             allowPrivilegeEscalation: false
             capabilities: { drop: ["ALL"] }
       securityContext:
-        runAsGroup: 0
         runAsNonRoot: true
-        runAsUser: 0
-  proxyMode: streamable-http
+  proxyPort: 8080
   resources:
     limits:
       cpu: 500m
@@ -37,5 +26,5 @@ spec:
     requests:
       cpu: 100m
       memory: 128Mi
-  serviceAccount: *app
+  serviceAccount: mkp-mcp
   transport: streamable-http

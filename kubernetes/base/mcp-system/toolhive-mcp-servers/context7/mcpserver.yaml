@@ -1,0 +1,28 @@
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPServer
+metadata:
+  name: context7
+spec:
+  image: ghcr.io/stacklok/dockyard/npx/context7:4.4.4@sha256:82c46c5b77a39432f54e36e315c7a412834236aabcb4e9e67cb0576a29562109
+  proxyPort: 8080
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: *name
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+      securityContext:
+        runAsNonRoot: true
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  secrets:
+    - name: context7-mcp
+      key: CONTEXT7_API_KEY
+      targetEnvName: CONTEXT7_API_KEY
+  transport: stdio

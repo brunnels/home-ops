@@ -3,7 +3,7 @@
 apiVersion: toolhive.stacklok.dev/v1beta1
 kind: MCPServer
 metadata:
-  name: arr-mcp
+  name: arr
 spec:
   args:
     - -y
@@ -23,20 +23,24 @@ spec:
       value: http://prowlarr.downloads
   groupRef:
     name: mcp-tools
-  image: docker.io/node:26-alpine
+  image: docker.io/node:26-alpine@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216
   podTemplateSpec:
     spec:
       containers:
         - command:
             - npx
           name: mcp
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
           volumeMounts:
             - mountPath: /tmp
               name: tmp
+      securityContext:
+        runAsNonRoot: true
       volumes:
         - emptyDir: {}
           name: tmp
-  proxyMode: streamable-http
   proxyPort: 8080
   resources:
     limits:
@@ -46,15 +50,15 @@ spec:
       memory: 128Mi
   secrets:
     - key: SONARR_API_KEY
-      name: toolhive-sonarr
+      name: &secret arr-mcp
       targetEnvName: SONARR_API_KEY
     - key: RADARR_API_KEY
-      name: toolhive-radarr
+      name: *secret
       targetEnvName: RADARR_API_KEY
     - key: LIDARR_API_KEY
-      name: toolhive-lidarr
+      name: *secret
       targetEnvName: LIDARR_API_KEY
     - key: PROWLARR_API_KEY
-      name: toolhive-prowlarr
+      name: *secret
       targetEnvName: PROWLARR_API_KEY
-  transport: stdio
+  transport: streamable-http

@@ -3,27 +3,26 @@
 apiVersion: toolhive.stacklok.dev/v1beta1
 kind: MCPServer
 metadata:
-  name: &app grafana-mcp
+  name: grafana
 spec:
   args:
-    - -t
+    - --transport
     - streamable-http
-    - --address
-    - 0.0.0.0:8000
+    - --allowed-hosts
+    - "*"
   env:
     - name: GRAFANA_URL
       value: http://grafana-service.observability:3000
+    - name: GRAFANA_USAGE_STATS
+      value: disabled
   groupRef:
     name: mcp-tools
-  image: mcp/grafana:latest
+  image: grafana/mcp-grafana:2.2.0@sha256:697336440e34878f8e0b26a69675db8d7e97b4d0daec25ec5441c85ac6c60e81
   mcpPort: 8000
   podTemplateSpec:
     spec:
       containers:
-        - envFrom:
-            - secretRef:
-                name: *app
-          name: mcp
+        - name: mcp
           securityContext:
             allowPrivilegeEscalation: false
             capabilities: { drop: ["ALL"] }
@@ -31,7 +30,7 @@ spec:
         runAsGroup: 0
         runAsNonRoot: true
         runAsUser: 0
-  proxyMode: streamable-http
+  proxyPort: 8080
   resources:
     limits:
       cpu: 500m
@@ -39,5 +38,11 @@ spec:
     requests:
       cpu: 100m
       memory: 128Mi
-  serviceAccount: *app
+  secrets:
+    - key: GRAFANA_PASSWORD
+      name: &secret grafana-mcp
+      targetEnvName: GRAFANA_PASSWORD
+    - key: GRAFANA_USERNAME
+      name: *secret
+      targetEnvName: GRAFANA_USERNAME
   transport: streamable-http

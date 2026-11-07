@@ -3,8 +3,11 @@
 apiVersion: toolhive.stacklok.dev/v1beta1
 kind: MCPServer
 metadata:
-  name: seerr-mcp
+  name: seerr
 spec:
+  args:
+    - -y
+    - "@jhomen368/overseerr-mcp"
   env:
     - name: HOME
       value: /tmp
@@ -14,20 +17,21 @@ spec:
       value: http://seerr.media
   groupRef:
     name: mcp-tools
-  image: docker.io/node:26-alpine
+  image: docker.io/node:26-alpine@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216
   podTemplateSpec:
     spec:
       containers:
-        - args:
-            - -y
-            - "@jhomen368/overseerr-mcp"
-          command:
+        - command:
             - npx
-          image: docker.io/node:26-alpine
           name: mcp
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
           volumeMounts:
             - mountPath: /tmp
               name: tmp
+      securityContext:
+        runAsNonRoot: true
       volumes:
         - emptyDir: {}
           name: tmp
@@ -41,6 +45,6 @@ spec:
       memory: 128Mi
   secrets:
     - key: SEERR_API_KEY
-      name: toolhive-seerr
+      name: seerr-mcp
       targetEnvName: SEERR_API_KEY
   transport: stdio

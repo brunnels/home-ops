@@ -3,7 +3,7 @@
 apiVersion: toolhive.stacklok.dev/v1beta1
 kind: MCPServer
 metadata:
-  name: talos-mcp
+  name: talos
 spec:
   env:
     - name: TALOS_MCP_TRANSPORT
@@ -12,7 +12,7 @@ spec:
       value: ":8080"
   groupRef:
     name: mcp-tools
-  image: registry.erwanleboucher.dev/eleboucher/talos-mcp:0.0.2
+  image: registry.erwanleboucher.dev/eleboucher/talos-mcp:latest@sha256:571d9d6f77221bc7420ac3af44db94dc587c1c13fa4281ba1e6cc8dfbf27381a
   mcpPort: 8080
   permissionProfile:
     name: network
