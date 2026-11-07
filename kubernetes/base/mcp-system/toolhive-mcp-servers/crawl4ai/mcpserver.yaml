@@ -15,8 +15,14 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             capabilities: { drop: ["ALL"] }
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
       securityContext:
         runAsNonRoot: true
+      volumes:
+        - emptyDir: {}
+          name: tmp
   resources:
     limits:
       cpu: 1000m
