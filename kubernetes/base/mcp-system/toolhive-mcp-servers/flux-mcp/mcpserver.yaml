@@ -21,10 +21,10 @@ spec:
   podTemplateSpec:
     spec:
       containers:
-        name: mcp
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities: { drop: ["ALL"] }
+        - name: mcp
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
       securityContext:
         runAsGroup: 0
         runAsNonRoot: true

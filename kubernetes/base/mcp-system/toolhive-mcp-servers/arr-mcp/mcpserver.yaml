@@ -8,8 +8,6 @@ spec:
   args:
     - -y
     - mcp-arr-server@1.5.4
-  command:
-    - npx
   env:
     - name: HOME
       value: /tmp
@@ -29,10 +27,12 @@ spec:
   podTemplateSpec:
     spec:
       containers:
-        name: mcp
-        volumeMounts:
-          - mountPath: /tmp
-            name: tmp
+        - command:
+            - npx
+          name: mcp
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp
       volumes:
         - emptyDir: {}
           name: tmp
