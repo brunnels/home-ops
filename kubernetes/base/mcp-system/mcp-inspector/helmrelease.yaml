@@ -20,7 +20,7 @@ spec:
             args:
               - --transport
               - http
-              - http://vmcp-mcp-gateway-internal.mcp-system:4483/mcp
+              - https://mcp.${SECRET_DOMAIN}/mcp
             env:
               MCP_APP_ORIGIN_FULL_ADDRESS: mcp-inspector.${SECRET_DOMAIN}
               DANGEROUSLY_OMIT_AUTH: "true"
