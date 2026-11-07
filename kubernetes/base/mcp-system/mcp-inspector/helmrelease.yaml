@@ -16,7 +16,7 @@ spec:
           app:
             image:
               repository: ghcr.io/modelcontextprotocol/inspector
-              tag: 2.14.0sha256:3d2834aa15cac87b5d17c680ad8db4e36a0ac2360c270057b80baf96579eeb66
+              tag: 2.14.0@sha256:3d2834aa15cac87b5d17c680ad8db4e36a0ac2360c270057b80baf96579eeb66
             args:
               - --transport
               - sse
