@@ -9,6 +9,11 @@ spec:
     - serve
     - --transport=http
     - --port=8000
+  env:
+    - name: RUNTIME_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
   groupRef:
     name: mcp-tools
   image: ghcr.io/controlplaneio-fluxcd/flux-operator-mcp:v0.62.1@sha256:0b4181bc9ada80eedf3e9df3355153abc9c3e6d8b913bddebe0b12908309bff6
@@ -16,15 +21,10 @@ spec:
   podTemplateSpec:
     spec:
       containers:
-        - env:
-            - name: RUNTIME_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-          name: mcp
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities: { drop: ["ALL"] }
+        name: mcp
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities: { drop: ["ALL"] }
       securityContext:
         runAsGroup: 0
         runAsNonRoot: true
