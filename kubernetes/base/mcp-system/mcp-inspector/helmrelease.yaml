@@ -21,6 +21,9 @@ spec:
               - --transport
               - sse
               - http://vmcp-mcp-gateway-internal.mcp-system:4483/mcp
+            env:
+              MCP_INSPECTOR_ALLOWED_HOSTS: mcp-inspector.${SECRET_DOMAIN}
+              DANGEROUSLY_OMIT_AUTH: "true"
             resources:
               requests:
                 cpu: 10m
