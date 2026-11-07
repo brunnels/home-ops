@@ -46,4 +46,4 @@ spec:
               - type: pushover
         ports:
           http:
-            port: 3000
+            port: 6274
