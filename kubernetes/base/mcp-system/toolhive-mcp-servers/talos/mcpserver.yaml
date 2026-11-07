@@ -29,5 +29,5 @@ spec:
         - name: talosconfig
           secret:
             defaultMode: 400
-            secretName: talos-mcp-talosconfig
+            secretName: talos-mcp
   transport: streamable-http
