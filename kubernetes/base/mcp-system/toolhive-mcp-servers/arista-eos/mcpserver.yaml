@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1beta1.json
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPServer
+metadata:
+  name: arista-eos
+spec:
+  env:
+    - name: EOS_TLS_SKIP_VERIFY
+      value: "true"
+    - name: MCP_TRANSPORT
+      value: http
+  groupRef:
+    name: mcp-tools
+  image: ghcr.io/brunnels/arista-eos-mcp:v1.0.0@sha256:bd100b3465315e25bd7976409795f347fe1fd28452661cf92466b0686059bdce
+  mcpPort: 8080
+  proxyPort: 8080
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+  secrets:
+    - key: EOS_HOST
+      name: &secretName arista-eos-mcp
+      targetEnvName: EOS_HOST
+    - key: EOS_USERNAME
+      name: *secretName
+      targetEnvName: EOS_USERNAME
+    - key: EOS_PASSWORD
+      name: *secretName
+      targetEnvName: EOS_PASSWORD
+  transport: streamable-http
