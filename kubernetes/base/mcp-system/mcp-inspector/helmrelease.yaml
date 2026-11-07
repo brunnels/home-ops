@@ -25,7 +25,7 @@ spec:
               MCP_APP_ORIGIN_FULL_ADDRESS: mcp-inspector.${SECRET_DOMAIN}
               DANGEROUSLY_OMIT_AUTH: "true"
               MCP_INSPECTOR_ALLOWED_HOSTS: .${SECRET_DOMAIN}
-              ALLOWED_ORIGINS: mcp.${SECRET_DOMAIN}
+              ALLOWED_ORIGINS: https://mcp.${SECRET_DOMAIN},https://mcp-inspector.${SECRET_DOMAIN}
             resources:
               requests:
                 cpu: 10m
