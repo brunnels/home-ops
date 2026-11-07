@@ -24,7 +24,7 @@ spec:
             env:
               MCP_APP_ORIGIN_FULL_ADDRESS: mcp-inspector.${SECRET_DOMAIN}
               DANGEROUSLY_OMIT_AUTH: "true"
-              ALLOWED_ORIGINS: "*"
+              MCP_INSPECTOR_ALLOWED_HOSTS: mcp-inspector.${SECRET_DOMAIN}
             resources:
               requests:
                 cpu: 10m
