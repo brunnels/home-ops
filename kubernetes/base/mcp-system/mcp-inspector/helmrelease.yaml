@@ -19,7 +19,7 @@ spec:
               tag: 2.14.0@sha256:3d2834aa15cac87b5d17c680ad8db4e36a0ac2360c270057b80baf96579eeb66
             args:
               - --transport
-              - sse
+              - http
               - http://vmcp-mcp-gateway-internal.mcp-system:4483/mcp
             env:
               MCP_INSPECTOR_ALLOWED_HOSTS: mcp-inspector.${SECRET_DOMAIN}
