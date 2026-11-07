@@ -22,7 +22,7 @@ spec:
               - http
               - http://vmcp-mcp-gateway-internal.mcp-system:4483/mcp
             env:
-              MCP_INSPECTOR_ALLOWED_HOSTS: mcp-inspector.${SECRET_DOMAIN}
+              MCP_APP_ORIGIN_FULL_ADDRESS: mcp-inspector.${SECRET_DOMAIN}
               DANGEROUSLY_OMIT_AUTH: "true"
               ALLOWED_ORIGINS: "*"
             resources:
