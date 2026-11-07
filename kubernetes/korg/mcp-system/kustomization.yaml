@@ -11,6 +11,7 @@ replacements:
 resources:
   - ./namespace.yaml
   # namespace first
+  - ../../common/mcp-system/mcp-inspector.yaml
   - ../../common/mcp-system/toolhive.yaml
   - ../../common/mcp-system/toolhive-config.yaml
   - ../../common/mcp-system/toolhive-crds.yaml
