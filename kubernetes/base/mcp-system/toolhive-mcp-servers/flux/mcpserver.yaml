@@ -11,9 +11,7 @@ spec:
     - --port=8000
   env:
     - name: RUNTIME_NAMESPACE
-      valueFrom:
-        fieldRef:
-          fieldPath: metadata.namespace
+      value: ${NAMESPACE}
   groupRef:
     name: mcp-tools
   image: ghcr.io/controlplaneio-fluxcd/flux-operator-mcp:v0.62.1@sha256:0b4181bc9ada80eedf3e9df3355153abc9c3e6d8b913bddebe0b12908309bff6
