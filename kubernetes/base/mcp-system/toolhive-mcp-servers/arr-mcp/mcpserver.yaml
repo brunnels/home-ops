@@ -5,6 +5,11 @@ kind: MCPServer
 metadata:
   name: arr-mcp
 spec:
+  args:
+    - -y
+    - mcp-arr-server@1.5.4
+  command:
+    - npx
   env:
     - name: HOME
       value: /tmp
@@ -20,23 +25,14 @@ spec:
       value: http://prowlarr.downloads
   groupRef:
     name: mcp-tools
-  image: &image docker.io/node:26-alpine
+  image: docker.io/node:26-alpine
   podTemplateSpec:
     spec:
       containers:
-        - args:
-            - -y
-            - mcp-arr-server@1.5.4
-          command:
-            - npx
-          image: *image
-          name: mcp
-          volumeMounts:
-            - mountPath: /tmp
-              name: tmp
-      volumes:
-        - emptyDir: {}
-          name: tmp
+        name: mcp
+        volumeMounts:
+          - mountPath: /tmp
+            name: tmp
   proxyMode: streamable-http
   proxyPort: 8080
   resources:
@@ -59,3 +55,6 @@ spec:
       name: toolhive-prowlarr
       targetEnvName: PROWLARR_API_KEY
   transport: stdio
+  volumes:
+    - emptyDir: {}
+      name: tmp
