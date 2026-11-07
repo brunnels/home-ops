@@ -3,6 +3,8 @@ kind: MCPServer
 metadata:
   name: crawl4ai
 spec:
+  groupRef:
+    name: mcp-tools
   image: unclecode/crawl4ai:latest
   mcpPort: 11235
   proxyPort: 8080
