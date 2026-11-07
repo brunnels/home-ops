@@ -24,8 +24,7 @@ spec:
             env:
               MCP_APP_ORIGIN_FULL_ADDRESS: mcp-inspector.${SECRET_DOMAIN}
               DANGEROUSLY_OMIT_AUTH: "true"
-              MCP_INSPECTOR_ALLOWED_HOSTS: mcp-inspector.${SECRET_DOMAIN}
-              ALLOWED_ORIGINS: http://vmcp-mcp-gateway-internal.mcp-system:4483
+              ALLOWED_ORIGINS: https://mcp-inspector.${SECRET_DOMAIN},http://vmcp-mcp-gateway-internal.mcp-system:4483
             resources:
               requests:
                 cpu: 10m
