@@ -14,9 +14,6 @@ spec:
       dispatcharr:
         pod:
           hostUsers: false
-          resourceClaims:
-            - name: gpu
-              resourceClaimTemplateName: dispatcharr-gpu
         initContainers:
           chown-dbdir:
             image:
@@ -50,6 +47,10 @@ spec:
                 memory: 1Gi
               limits:
                 memory: 3Gi
+    defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: dispatcharr-gpu
     persistence:
       data:
         existingClaim: dispatcharr
