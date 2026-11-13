@@ -33,8 +33,11 @@ spec:
               readOnlyRootFilesystem: true
     defaultPodOptions:
       securityContext:
+        fsGroup: 100
         fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 100
         runAsNonRoot: true
+        runAsUser: 1000
     route:
       app:
         hostnames:
