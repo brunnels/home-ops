@@ -12,6 +12,11 @@ spec:
   values:
     controllers:
       dispatcharr:
+        pod:
+          hostUsers: false
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: dispatcharr-gpu
         initContainers:
           chown-dbdir:
             image:
@@ -49,16 +54,6 @@ spec:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
-    defaultPodOptions:
-      resourceClaims:
-        - name: gpu
-          resourceClaimTemplateName: dispatcharr-gpu
-      securityContext:
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-        runAsGroup: 100
-        runAsNonRoot: true
-        runAsUser: 1000
     persistence:
       data:
         existingClaim: dispatcharr
