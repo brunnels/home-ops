@@ -12,11 +12,9 @@ spec:
     - ../../../components/igpu-spread
     - ../../../components/intel-gpu
     - ../../../components/kopiur/backup
-  #dependsOn:
-  #  #- name: intel-gpu-resource-driver
-  #  #  namespace: kube-system
-  #  - name: kopiur-repository
-  #    namespace: storage
+  dependsOn:
+    - name: kopiur-repository
+      namespace: storage
   interval: 1h
   path: ./kubernetes/base/media/plex
   postBuild:
