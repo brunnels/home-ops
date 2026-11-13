@@ -11,6 +11,7 @@ replacements:
   - path: ../../components/replacements/ks.yaml
 resources:
   - ./namespace.yaml
+  - ./dispatcharr.yaml
   - ./hdhomerunsignal.yaml
   - ./plex.yaml
   - ./seerr.yaml
