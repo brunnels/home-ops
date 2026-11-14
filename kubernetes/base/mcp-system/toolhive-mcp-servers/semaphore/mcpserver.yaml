@@ -8,10 +8,16 @@ spec:
   env:
     - name: SEMAPHORE_URL
       value: http://semaphore.automation:3000
+    - name: MCP_TRANSPORT
+      value: http
+    - name: MCP_HOST
+      value: 0.0.0.0
+    - name: MCP_PORT
+      value: 8080
   groupRef:
     name: mcp-tools
   image: ghcr.io/cloin/semaphore-mcp:1.0.6@sha256:feba1b701192aa2e5624294c9d461af5d5b020def7ae698be25d1eeaf1fe6fae
-  mcpPort: 8500
+  mcpPort: 8080
   proxyPort: 8080
   resources:
     limits:
