@@ -86,8 +86,8 @@ spec:
         subPath: EOS_LOGIN
         readOnly: true
       - name: semaphore-files
-        mountPath: /secrets/ENABLE_PASSWORD
-        subPath: ENABLE_PASSWORD
+        mountPath: /secrets/EOS_ENABLE
+        subPath: EOS_ENABLE
         readOnly: true
     ldap:
       enable: false
