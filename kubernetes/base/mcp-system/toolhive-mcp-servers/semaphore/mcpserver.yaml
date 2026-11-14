@@ -7,9 +7,9 @@ metadata:
 spec:
   env:
     - name: SEMAPHORE_URL
-      value: http://semaphore.automation:3000
-    - name: MCP_TRANSPORT
-      value: http
+      value: https://semaphore.${SECRET_DOMAIN}
+    #- name: MCP_TRANSPORT
+    #  value: http
     - name: MCP_HOST
       value: 0.0.0.0
     - name: MCP_PORT
@@ -32,4 +32,4 @@ spec:
     - key: SEMAPHORE_API_TOKEN
       name: &secretName semaphore-mcp
       targetEnvName: SEMAPHORE_API_TOKEN
-  transport: streamable-http
+  transport: stdio
