@@ -21,13 +21,13 @@ spec:
   image: ghcr.io/cloin/semaphore-mcp:1.0.6@sha256:feba1b701192aa2e5624294c9d461af5d5b020def7ae698be25d1eeaf1fe6fae
   mcpPort: 8080
   proxyPort: 8080
-  resources:
-    limits:
-      cpu: 100m
-      memory: 128Mi
-    requests:
-      cpu: 50m
-      memory: 64Mi
+  #resources:
+  #  limits:
+  #    cpu: 100m
+  #    memory: 128Mi
+  #  requests:
+  #    cpu: 50m
+  #    memory: 64Mi
   secrets:
     - key: SEMAPHORE_API_TOKEN
       name: &secretName semaphore-mcp
