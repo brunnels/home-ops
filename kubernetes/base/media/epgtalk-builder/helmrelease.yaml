@@ -38,6 +38,10 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
     persistence:
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /.cache
       config:
         existingClaim: *app
         globalMounts:
