@@ -81,6 +81,14 @@ spec:
         mountPath: /secrets/GITHUB_SSH_KEY
         subPath: GITHUB_SSH_KEY
         readOnly: true
+      - name: semaphore-files
+        mountPath: /secrets/EOS_LOGIN
+        subPath: EOS_LOGIN
+        readOnly: true
+      - name: semaphore-files
+        mountPath: /secrets/ENABLE_PASSWORD
+        subPath: ENABLE_PASSWORD
+        readOnly: true
     ldap:
       enable: false
     service:
