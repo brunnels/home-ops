@@ -71,6 +71,16 @@ spec:
       usernameKey: SMTP_USER
       passwordKey: SMTP_PASSWORD
       existingSecret: *app
+    extraVolumes:
+      - name: semaphore-files
+        secret:
+          secretName: semaphore-files
+          defaultMode: 0400
+    extraVolumeMounts:
+      - name: semaphore-files
+        mountPath: /secrets/GITHUB_SSH_KEY
+        subPath: GITHUB_SSH_KEY
+        readOnly: true
     ldap:
       enable: false
     service:
