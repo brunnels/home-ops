@@ -78,15 +78,15 @@ spec:
           defaultMode: 0400
     extraVolumeMounts:
       - name: semaphore-files
-        mountPath: /secrets/GITHUB_SSH_KEY
+        mountPath: /tmp/semaphore/GITHUB_SSH_KEY
         subPath: GITHUB_SSH_KEY
         readOnly: true
       - name: semaphore-files
-        mountPath: /secrets/EOS_LOGIN
+        mountPath: /tmp/semaphore/EOS_LOGIN
         subPath: EOS_LOGIN
         readOnly: true
       - name: semaphore-files
-        mountPath: /secrets/EOS_ENABLE
+        mountPath: /tmp/semaphore/EOS_ENABLE
         subPath: EOS_ENABLE
         readOnly: true
     ldap:
