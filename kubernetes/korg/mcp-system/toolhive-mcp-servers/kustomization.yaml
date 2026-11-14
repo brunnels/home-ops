@@ -11,4 +11,5 @@ resources:
   - ../../../base/mcp-system/toolhive-mcp-servers/grafana
   - ../../../base/mcp-system/toolhive-mcp-servers/mkp
   - ../../../base/mcp-system/toolhive-mcp-servers/seerr
+  - ../../../base/mcp-system/toolhive-mcp-servers/semaphore
   - ../../../base/mcp-system/toolhive-mcp-servers/talos

@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1beta1.json
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPServer
+metadata:
+  name: semaphore
+spec:
+  env:
+    - name: SEMAPHORE_URL
+      value: http://semaphore.automation:3000
+  groupRef:
+    name: mcp-tools
+  image: ghcr.io/cloin/semaphore-mcp:1.0.6@sha256:feba1b701192aa2e5624294c9d461af5d5b020def7ae698be25d1eeaf1fe6fae
+  mcpPort: 8500
+  proxyPort: 8080
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+  secrets:
+    - key: SEMAPHORE_API_TOKEN
+      name: &secretName semaphore-mcp
+      targetEnvName: SEMAPHORE_API_TOKEN
+  transport: streamable-http
