@@ -12,6 +12,7 @@ replacements:
 resources:
   - ./namespace.yaml
   - ./dispatcharr.yaml
+  - ./epgtalk-builder.yaml
   - ./hdhomerunsignal.yaml
   - ./plex.yaml
   - ./seerr.yaml
