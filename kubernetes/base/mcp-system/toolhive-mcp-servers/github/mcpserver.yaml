@@ -5,18 +5,13 @@ kind: MCPServer
 metadata:
   name: github
 spec:
-  args:
-    - http
-    - --port
-    - "8000"
   env:
     - name: GITHUB_READ_ONLY
       value: "0"
   groupRef:
     name: mcp-tools
-  image: ghcr.io/github/github-mcp-server:latest
-  mcpPort: 8000
-  proxyMode: streamable-http
+  image: ghcr.io/github/github-mcp-server:v2.1.0@sha256:f6056fc10bfffcc8c81a6417a2e9ca12808647e8dd6049642a4feaadee0e0f8a
+  proxyPort: 8080
   resources:
     limits:
       cpu: 500m
@@ -28,4 +23,4 @@ spec:
     - key: GITHUB_MCP_TOKEN
       name: github-mcp
       targetEnvName: GITHUB_PERSONAL_ACCESS_TOKEN
-  transport: streamable-http
+  transport: stdio
