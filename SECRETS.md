@@ -420,20 +420,32 @@ These clients should be registered in your OIDC provider (e.g., Authelia, Keyclo
 # Create a secret
 akeyless create-secret \
   --name "kdev-cluster/SECRET_DOMAIN" \
-  --secret-value "kraven.org" \
-  --secret-type "generic"
+  --value "kraven.org" \
+  --type "generic"
 
 # Create a JSON secret (for multiple keys)
 akeyless create-secret \
   --name "kdev/cloudflare" \
-  --secret-value '{"CF_API_TOKEN":"token123","CF_ZONE_ID":"zone456","CF_TUNNEL_TOKEN":"tunnel789"}' \
-  --secret-type "generic"
+  --value '{"CF_API_TOKEN":"token123","CF_ZONE_ID":"zone456","CF_TUNNEL_TOKEN":"tunnel789"}' \
+  --type "generic" \
+  --format "json"
 
 # Update an existing secret
-akeyless update-secret \
+akeyless update-secret-val \
   --name "kdev/cloudflare" \
-  --secret-value '{"CF_API_TOKEN":"new_token",...}'
+  --value '{"CF_API_TOKEN":"new_token",...}'
 ```
+
+Create an Authelia OIDC client secret for an app using credentials generated in a
+running Authelia pod:
+
+```bash
+./scripts/create_oidc_secret.sh kdev my-app
+```
+
+The script creates the Akeyless static secret at `kdev/my-app` with `client-id`
+and `client-secret` properties. Use the cluster name and app name expected by
+the app's `ExternalSecret`.
 
 ## Validation
 

@@ -233,7 +233,9 @@ See **[SECRETS.md](./SECRETS.md)** for complete list. Quick example:
 # Create a secret in Akeyless
 akeyless create-secret \
   --name "kdev/cloudflare" \
-  --secret-value '{"CF_API_TOKEN":"token123","CF_ZONE_ID":"zone456"}'
+  --value '{"CF_API_TOKEN":"token123","CF_ZONE_ID":"zone456"}' \
+  --type "generic" \
+  --format "json"
 
 # Secret is automatically fetched by ExternalSecret during bootstrap
 ```

@@ -9,6 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
+    - ../../../components/envoy-gateway-oidc
     - ../../../components/kopiur/backup
   interval: 1h
   path: ./kubernetes/base/media/epgtalk-builder

@@ -46,3 +46,8 @@ yoink url dest='.':
 [script]
 set-cluster cluster:
     kubectl config use-context {{ cluster }}
+
+[doc('Creates an Authelia OIDC secret in Akeyless. Usage: just create-oidc-secret CLUSTER APP')]
+[group('utilities')]
+create-oidc-secret cluster app:
+    "{{ justfile_dir() }}/scripts/create_oidc_secret.sh" "{{ cluster }}" "{{ app }}"
