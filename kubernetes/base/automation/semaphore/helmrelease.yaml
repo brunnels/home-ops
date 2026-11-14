@@ -19,6 +19,7 @@ spec:
     extraEnvVariables:
       SEMAPHORE_SCHEDULE_TIMEZONE: ${TIMEZONE}
       ANSIBLE_HOST_KEY_CHECKING: false
+      GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     general:
       host: &host https://semaphore.${SECRET_DOMAIN}
       tmp_path: /tmp/semaphore/
