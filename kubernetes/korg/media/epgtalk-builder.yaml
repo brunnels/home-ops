@@ -16,6 +16,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      APP_SUBDOMAIN: epgtalk
   prune: true
   sourceRef:
     kind: GitRepository
