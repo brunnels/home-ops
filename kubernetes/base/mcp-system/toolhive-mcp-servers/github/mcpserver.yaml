@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1beta1.json
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPServer
+metadata:
+  name: github
+spec:
+  args:
+    - http
+    - --port
+    - "8000"
+  env:
+    - name: GITHUB_READ_ONLY
+      value: "0"
+  groupRef:
+    name: mcp-tools
+  image: ghcr.io/github/github-mcp-server:latest
+  mcpPort: 8000
+  proxyMode: streamable-http
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  secrets:
+    - key: GITHUB_MCP_TOKEN
+      name: github-mcp
+      targetEnvName: GITHUB_PERSONAL_ACCESS_TOKEN
+  transport: streamable-http

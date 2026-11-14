@@ -9,6 +9,7 @@ resources:
   #- ../../../base/mcp-system/toolhive-mcp-servers/crawl4ai
   - ../../../base/mcp-system/toolhive-mcp-servers/flux
   - ../../../base/mcp-system/toolhive-mcp-servers/grafana
+  - ../../../base/mcp-system/toolhive-mcp-servers/github
   - ../../../base/mcp-system/toolhive-mcp-servers/mkp
   - ../../../base/mcp-system/toolhive-mcp-servers/seerr
   - ../../../base/mcp-system/toolhive-mcp-servers/semaphore
