@@ -14,6 +14,8 @@ spec:
       value: 0.0.0.0
     - name: MCP_PORT
       value: 8080
+    - name: MCP_LOG_LEVEL
+      value: DEBUG
   groupRef:
     name: mcp-tools
   image: ghcr.io/cloin/semaphore-mcp:1.0.6@sha256:feba1b701192aa2e5624294c9d461af5d5b020def7ae698be25d1eeaf1fe6fae
