@@ -15,6 +15,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      APP_SUBDOMAIN: hdhomerun
   prune: true
   sourceRef:
     kind: GitRepository
