@@ -30,4 +30,11 @@ spec:
           secret:
             defaultMode: 400
             secretName: talos-mcp
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
   transport: streamable-http

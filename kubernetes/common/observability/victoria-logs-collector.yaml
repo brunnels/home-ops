@@ -3,13 +3,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app node-exporter
+  name: &app victoria-logs-collector
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: victoria-logs
   interval: 1h
-  path: ./kubernetes/base/observability/node-exporter
+  path: ./kubernetes/base/observability/victoria-logs-collector
   prune: true
   sourceRef:
     kind: GitRepository
