@@ -90,7 +90,7 @@ spec:
       app:
         annotations:
           gatus.home-operations.com/endpoint: |
-            group: infrastructure
+            group: internal
             alerts:
               - type: pushover
         ports:
