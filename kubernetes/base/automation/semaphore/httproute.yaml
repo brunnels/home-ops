@@ -5,6 +5,10 @@ kind: HTTPRoute
 metadata:
   name: &app semaphore
   annotations:
+    gatus.home-operations.com/endpoint: |
+      group: internal
+      alerts:
+        - type: pushover
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Automation
     gethomepage.dev/name: Semaphore
