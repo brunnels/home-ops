@@ -32,3 +32,9 @@ spec:
             namespace: network
       serviceMonitor:
         enabled: true
+      service:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            group: internal
+            alerts:
+              - type: pushover
