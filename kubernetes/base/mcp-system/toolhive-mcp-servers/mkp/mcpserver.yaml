@@ -7,7 +7,7 @@ metadata:
 spec:
   groupRef:
     name: mcp-tools
-  image: ghcr.io/stackloklabs/mkp/server:0.4.5@sha256:13dc7703d2a1a241feb685faafa4b04353d9efc6c33cd816196523987e9a0e25
+  image: ghcr.io/stackloklabs/mkp/server:0.4.6@sha256:c357525c56705eabd2d308c0ae0e1920da95f97a6a8bca37ba95138ab4b899f3
   mcpPort: 8080
   podTemplateSpec:
     spec:
