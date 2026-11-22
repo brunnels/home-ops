@@ -68,15 +68,15 @@ url_api = "https://api.github.com/repos/cli/cli/releases/assets/679195621"
 provenance = "github-attestations"
 
 [[tools."github:home-operations/flate"]]
-version = "0.7.3"
+version = "0.8.0"
 backend = "github:home-operations/flate"
-specifiers = ["v0.7.3"]
+specifiers = ["v0.8.0"]
 
 [tools."github:home-operations/flate"."platforms.linux-x64"]
-checksum = "sha256:05d3c79447647e95329aa45c7035e7ebac3a120942972e78819deadc3bf0afeb"
+checksum = "sha256:76940fb6ff060e09a40e1a835fc9c5cd24e18fdd29e4e79382852821e0ac01c2"
 checksum_source = "mise-versions"
-url = "https://github.com/home-operations/flate/releases/download/v0.7.3/flate_0.7.3_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/727305354"
+url = "https://github.com/home-operations/flate/releases/download/v0.8.0/flate_0.8.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/768879874"
 
 [[tools."github:postfinance/topf"]]
 version = "0.6.2"
