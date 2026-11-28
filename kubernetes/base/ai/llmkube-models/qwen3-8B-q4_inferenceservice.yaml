@@ -9,7 +9,7 @@ metadata:
 spec:
   modelRef: llama-nvidia-qwen3-8b-q4
   runtime: llamacpp
-  image: ghcr.io/ggml-org/llama.cpp:server-cuda@sha256:22bd49f4cf68236a63c5a187d7d1867ffb08472611ddfbf0392b6842a1b30d44
+  image: ghcr.io/ggml-org/llama.cpp:server-cuda@sha256:a328222479b6f95db0ffc1a3c2410d0f9cfaf86303b0966beb3e0a29daad5e9c
   rolloutPolicy:
     waitForIdle: false
     idleTimeoutSeconds: 86400
